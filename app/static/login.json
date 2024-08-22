@@ -1,0 +1,87 @@
+{
+    "swagger": "2.0",
+    "info": {
+      "title": "Mi ERP API",
+      "description": "API para el ERP",
+      "version": "1.0.0"
+    },
+    "basePath": "/",
+    "schemes": [
+      "http"
+    ],
+    "paths": {
+      "/login": {
+        "post": {
+          "tags": ["Login"],
+          "summary": "Login",
+          "description": "Este endpoint inicia sesion en la aplicacion.",
+          "parameters": [
+            {
+              "name": "body",
+              "in": "body",
+              "required": true,
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "param1": {
+                    "type": "string"
+                  },
+                  "param2": {
+                    "type": "string"
+                  },
+                  "param3": {
+                    "type": "integer"
+                  }
+                }
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "inicio de sesion correcto"
+            },
+            "400": {
+              "description": "Faltan datos requeridos"
+            }
+          }
+        }
+      },
+      "/login/Empresas": {
+        "post": {
+          "tags": ["Login"],
+          "summary": "Login",
+          "description": "Este endpoint inicia sesion en la aplicacion.",
+          "parameters": [
+            {
+              "name": "body",
+              "in": "body",
+              "required": true,
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "param1": {
+                    "type": "string"
+                  },
+                  "param2": {
+                    "type": "string"
+                  },
+                  "param3": {
+                    "type": "integer"
+                  }
+                }
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "inicio de sesion correcto"
+            },
+            "400": {
+              "description": "Faltan datos requeridos"
+            }
+          }
+        }
+      }
+    }
+  }
+  
