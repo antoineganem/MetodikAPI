@@ -9,3 +9,4 @@ class Config:
     SQL_USER = os.getenv('SQL_USER')
     SQL_PASSWORD = os.getenv('SQL_PASSWORD')
     SECRET_KEY = os.getenv('SECRET_KEY')
+    JWT_SECRET_KEY = os.getenv('SECRET_KEY')
