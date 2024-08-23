@@ -1,11 +1,14 @@
 import os
+from dotenv import load_dotenv
 import pyodbc
+
+load_dotenv()
 
 def get_db_connection():
     conn = pyodbc.connect(
         'DRIVER={ODBC Driver 17 for SQL Server};'
         'SERVER=' + os.getenv('SQL_SERVER') + ';'
-        'DATABASE=' + os.getenv('SQL_DATABASE') + ';'
+        'DATABASE=' + 'Metodik30' + ';'
         'UID=' + os.getenv('SQL_USER') + ';'
         'PWD=' + os.getenv('SQL_PASSWORD') + ';'
     )

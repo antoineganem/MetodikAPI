@@ -9,18 +9,16 @@ def login_route():
     data = request.json
     print("Datos recibidos:", data)  # Esto mostrará los datos recibidos en la consola
 
-    param1 = data.get('param1')
-    param2 = data.get('param2')
-    param3 = data.get('param3')
+    Correo = data.get('Correo')
+    Contrasena = data.get('Contrasena')
+    Empresa = data.get('Empresa')
 
-    print("Datos recibidos:", param1, param2, param3)  
+    print("Datos recibidos:", Correo, Contrasena, Empresa)  
 
-    # Cambia la condición para verificar si alguno es None en lugar de usar all()
-    if param1 is None or param2 is None or param3 is None:
+    if Correo is None or Contrasena is None or Empresa is None:
         return jsonify({"error": "Faltan datos requeridos"}), 400
 
-    # Llama al servicio de login para validar las credenciales
-    user_response = login(param1, param2, param3)
+    user_response = login(Correo, Contrasena, Empresa)
     if not user_response:
         return jsonify({"error": "Credenciales inválidas"}), 401
 
@@ -28,16 +26,26 @@ def login_route():
     if isinstance(user_response, Response):
         user_response = user_response.get_json()
 
-    # Genera un token JWT
-    access_token = create_access_token(identity={'param1': param1})
+    # Verificar si 'user_response' es una lista y contiene un diccionario
+    if isinstance(user_response, list) and len(user_response) > 0:
+        user_data = user_response[0]
+    else:
+        return jsonify({"error": "Respuesta inválida del servicio de login"}), 500
 
-    # Combina la respuesta del servicio `login` con el token JWT
-    response = {
-        "user_data": user_response,
-        "access_token": access_token
-    }
+    # Verificar si 'Ok' es 0 en el diccionario dentro de la lista
+    if user_data.get('Ok') == 0:
+        # Genera un token JWT
+        access_token = create_access_token(identity={'Correo': Correo})
 
-    return jsonify(response), 200
+        # Combina la respuesta del servicio `login` con el token JWT
+        response = {
+            "user_data": user_data,
+            "access_token": access_token
+        }
+        return jsonify(response), 200
+    else:
+        # Retorna la respuesta del servicio directamente
+        return jsonify(user_data), 404
 
 # Ejemplo de una ruta protegida con JWT
 @login_bp.route('/protected', methods=['GET'])

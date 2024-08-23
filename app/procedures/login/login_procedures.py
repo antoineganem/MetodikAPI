@@ -2,14 +2,14 @@ import pyodbc
 from flask import jsonify
 from app.utils.db import get_db_connection, close_db_connection
 
-def login(param1, param2, param3):
+def login(Correo, Contrasena, Empresa):
     conn = None
     try:
         conn = get_db_connection()
         cursor = conn.cursor()
 
         # Pasa los parámetros al procedimiento almacenado
-        cursor.execute("EXEC spUsuarioAcceso ?, ?, ?", param1, param2, param3)
+        cursor.execute("EXEC spUsuarioAcceso ?, ?, ?", Correo, Contrasena, Empresa)
 
         # Obtén las columnas de la consulta
         columns = [column[0] for column in cursor.description]

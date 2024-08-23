@@ -23,13 +23,13 @@
             "schema": {
               "type": "object",
               "properties": {
-                "param1": {
+                "Correo": {
                   "type": "string"
                 },
-                "param2": {
+                "Contrasena": {
                   "type": "string"
                 },
-                "param3": {
+                "Empresa": {
                   "type": "integer"
                 }
               }

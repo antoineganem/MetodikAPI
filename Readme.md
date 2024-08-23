@@ -22,3 +22,6 @@ pip install flask-swagger-ui
 instalar servicio sqlserver en mac
 
 brew install msodbcsql17 mssql-tools
+
+instalar flask-jwt-extended 
+pip install flask-jwt-extended    
