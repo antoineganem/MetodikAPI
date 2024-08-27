@@ -25,3 +25,6 @@ brew install msodbcsql17 mssql-tools
 
 instalar flask-jwt-extended 
 pip install flask-jwt-extended    
+
+CORS
+pip install flask-cors
