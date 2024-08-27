@@ -3,10 +3,14 @@ from app.config import Config
 from app.routes.__init_ import register_routes
 from flask_swagger_ui import get_swaggerui_blueprint
 from flask_jwt_extended import JWTManager
+from flask_cors import CORS  # Importa CORS
 
 def create_app():
     app = Flask(__name__)
     app.config.from_object(Config)
+
+    # Habilitar CORS para toda la aplicación
+    CORS(app)  # Esto habilita CORS para toda la API
 
     # Inicializar JWTManager
     jwt = JWTManager(app)
