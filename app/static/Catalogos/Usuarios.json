@@ -83,6 +83,36 @@
             }
           }
         }
+      },
+      "/verUsuariosResumen": {
+        "get": {
+          "tags": ["verUsuariosResumen"],
+          "summary": "verUsuariosResumen",
+          "security": [
+            {
+              "BearerAuth": []
+            }
+          ],
+          "description": "ver informacion del usuario.",
+          "parameters": [
+            {
+              "name": "ID",
+              "in": "query",
+              "required": true,
+              "schema": {
+                "type": "integer"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Datos obtenidos correctamente"
+            },
+            "400": {
+              "description": "Faltan datos requeridos"
+            }
+          }
+        }
       }
     },
     "securityDefinitions": {  
