@@ -6,7 +6,7 @@ def verUsuarios(EmpresaID, EstatusID):
 def verUsuariosResumen(ID):
     return VerUsuariosResumen(ID)
 
-def ActUsuarios(data):
+def ActualizarUsuarios(data):
     return actUsuario(data)
 
 def VerUsuarioID(ID):

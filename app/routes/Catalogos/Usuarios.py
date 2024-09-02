@@ -1,11 +1,11 @@
 from flask import request, Blueprint, jsonify, Response
 from flask_jwt_extended import jwt_required
-from app.services.Catalogos.Usuarios.usuarios_service import verUsuarios, verUsuariosResumen, actUsuario, VerUsuarioID  
+from app.services.Catalogos.Usuarios.usuarios_service import verUsuarios, verUsuariosResumen, ActualizarUsuarios, VerUsuarioID  
 
 
 usuarios_bp = Blueprint('verUsuarios', __name__)
 usuariosResumen_bp = Blueprint('verUsuariosResumen', __name__)
-actUsuario_bp = Blueprint('actUsuario', __name__)
+actUsuario_bp = Blueprint('ActualizarUsuarios', __name__)
 verUsuarioID_bp = Blueprint('VerUsuarioID', __name__)
 
 
@@ -50,7 +50,7 @@ def actUsuarios_route():
     if data is None:
         return jsonify({"error": "Faltan datos requeridos"}), 400
     
-    actUsuarios_response, status_code = actUsuario(data)
+    actUsuarios_response, status_code = ActualizarUsuarios(data)
     
     return jsonify(actUsuarios_response), status_code
 
