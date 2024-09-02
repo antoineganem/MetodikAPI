@@ -61,6 +61,8 @@ def actUsuario(data):
                        data.get("Sucursales"), data.get("Almacenes"), data.get("PerfilID"), data.get("PersonalID"), data.get("Nombre"), 
                        data.get("ApellidoPaterno"), data.get("ApellidoMaterno"), data.get("ClienteID"))
         
+        conn.commit()  # Hacer commit de la transacción
+
         while cursor.description is None:
             cursor.nextset()
 
@@ -71,10 +73,13 @@ def actUsuario(data):
         results = [dict(zip(columns, row)) for row in cursor.fetchall()]
         return results, 200  
     except pyodbc.Error as e:
+        if conn:
+            conn.rollback()  # En caso de error, revertir la transacción
         return {"error": str(e)}, 500  
     finally:
         if conn:
             close_db_connection(conn)
+
 
 def verUsuarioID(ID):
     conn = None
@@ -93,7 +98,7 @@ def verUsuarioID(ID):
 
         columns = [column[0] for column in cursor.description]
         results = [dict(zip(columns, row)) for row in cursor.fetchall()]
-        return jsonify(results)
+        return results
     except pyodbc.Error as e:
         return jsonify({"error": str(e)}), 500
     finally:

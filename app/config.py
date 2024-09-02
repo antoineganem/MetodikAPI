@@ -10,3 +10,5 @@ class Config:
     SQL_PASSWORD = os.getenv('SQL_PASSWORD')
     SECRET_KEY = os.getenv('SECRET_KEY')
     JWT_SECRET_KEY = os.getenv('SECRET_KEY')
+    JWT_ACCESS_TOKEN_EXPIRES = False
+

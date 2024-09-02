@@ -66,4 +66,4 @@ def usuarios_route():
 
     user_response = VerUsuarioID(ID)
     
-    return user_response
+    return jsonify(user_response)

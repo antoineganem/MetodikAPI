@@ -58,6 +58,8 @@ def actEmpresa(data):
         cursor.execute(query, data.get("ID"), data.get("EstatusID"), data.get("Empresa"), data.get("Nombre"), data.get("Direccion"),
                        data.get("DireccionNumero"), data.get("DireccionNumeroINT"), data.get("Colonia"), data.get("Poblacion"), data.get("Estado"),
                        data.get("Pais"), data.get("CodigoPostal"), data.get("Telefonos"), data.get("RFC"))
+        conn.commit()  # Hacer commit de la transacción
+
         
         while cursor.description is None:
             cursor.nextset()
