@@ -30,7 +30,6 @@ def ver_Indicadores(data):
     finally:
         if conn:
             close_db_connection(conn)
-            
 
 
 

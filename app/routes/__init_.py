@@ -5,6 +5,7 @@ from app.routes.Catalogos.Usuarios import usuarios_bp, usuariosResumen_bp, actUs
 from app.routes.Catalogos.Empresas import empresas_bp, empresasResumen_bp, actEmpresa_bp, verEmpresaID_bp
 from app.routes.Filtros.Filtros import verFiltrosCatalogos_bp
 from app.routes.Comercial.Reservas.Reservas import verReservas_bp, nvaReserva_bp
+from app.routes.Comercial.Reservas.ReservasD import verReservaID_bp
 
 
 def register_routes(app: Flask):
@@ -34,6 +35,9 @@ def register_routes(app: Flask):
     ##Reservas
     app.register_blueprint(verReservas_bp)  
     app.register_blueprint(nvaReserva_bp)  
+    
+    ##ReservasD
+    app.register_blueprint(verReservaID_bp)  
 
 
 
