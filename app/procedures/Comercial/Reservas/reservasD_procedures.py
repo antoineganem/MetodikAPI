@@ -32,15 +32,16 @@ def ver_ReservaID(ID):
             close_db_connection(conn)
             
 
-def nva_reserva(data):
+def avanza_reserva(data):
     conn = None
     try:
         conn = get_db_connection()
         cursor = conn.cursor()
         conn.autocommit = True  
 
-        query = "EXEC spNvaReserva ?,?"
-        cursor.execute(query, data.get("PersonaID"), data.get("EmpresaID"))
+        query = "EXEC spAvanzarReserva ?,?,?,?,? ,?"
+        cursor.execute(query, data.get("ID"), data.get("Movimiento"),  data.get("OrigenID"),  data.get("DestinoID"),  data.get("FechaSalida"),
+                        data.get("FechaRegreso"))
         
 
         while cursor.description is None:
