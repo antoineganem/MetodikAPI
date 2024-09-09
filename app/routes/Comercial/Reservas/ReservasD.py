@@ -1,6 +1,6 @@
 from flask import request, Blueprint, jsonify, Response
 from flask_jwt_extended import jwt_required
-from app.services.Comercial.Reservas.reservasD_service import verReservaID, avanzaReserva, verViajesDisponibles, verViajesDisponiblesVuelta, ActReservaD, VerReservaDetalle
+from app.services.Comercial.Reservas.reservasD_service import *
 
 verReservaID_bp = Blueprint('verReservaID', __name__)
 avanzaReserva_bp = Blueprint('avanzaReserva', __name__)
@@ -8,6 +8,8 @@ verViajesDisponibles_bp = Blueprint('verViajesDisponibles', __name__)
 verViajesDisponiblesVuelta_bp = Blueprint('verViajesDisponiblesVuelta', __name__)
 actReservaD_bp = Blueprint('ActReservaD', __name__)
 verReservaDetalle_bp = Blueprint('VerReservaDetalle', __name__)
+eliminarRenglonReserva_bp = Blueprint('EliminarRenglonReserva', __name__)
+
 
 
 
@@ -66,4 +68,14 @@ def verReservaDetalle_route():
     if ID is None:
         return jsonify({"error": "Faltan datos requeridos"}), 400
     response = VerReservaDetalle(ID)
+    return response
+
+@eliminarRenglonReserva_bp.route('/Comercial/Reservas/eliminarRenglonReserva', methods=['DELETE'])
+@jwt_required()
+def eliminarRenglonReserva_route():
+    ID = request.args.get('ID')
+    RenglonID = request.args.get('RenglonID')
+    if ID is None:
+        return jsonify({"error": "Faltan datos requeridos"}), 400
+    response = EliminarRenglonReserva(ID, RenglonID)
     return response

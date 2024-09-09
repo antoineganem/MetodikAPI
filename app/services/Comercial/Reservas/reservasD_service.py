@@ -1,4 +1,4 @@
-from app.procedures.Comercial.Reservas.reservasD_procedures import ver_ReservaID, avanza_reserva, ver_ViajesDispIda, ver_ViajesDispVuelta, act_ReservaD, ver_ReservaDetalle
+from app.procedures.Comercial.Reservas.reservasD_procedures import *
 
 def verReservaID(ID):
     return ver_ReservaID(ID)
@@ -17,3 +17,9 @@ def ActReservaD(data):
 
 def VerReservaDetalle(ID):
     return ver_ReservaDetalle(ID)
+
+def VerReservaDetalle(ID):
+    return ver_ReservaDetalle(ID)
+
+def EliminarRenglonReserva(ID, RenglonID):
+    return eliminar_RenglonReserva(ID, RenglonID)
