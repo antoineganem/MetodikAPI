@@ -5,9 +5,10 @@ from app.routes.Catalogos.Usuarios import usuarios_bp, usuariosResumen_bp, actUs
 from app.routes.Catalogos.Empresas import empresas_bp, empresasResumen_bp, actEmpresa_bp, verEmpresaID_bp
 from app.routes.Catalogos.Sucursales import sucursales_bp, sucursalResumen_bp, actSucursal_bp, verSucursalID_bp
 from app.routes.Catalogos.Vehiculos import vehiculos_bp, vehiculoResumen_bp, actVehiculo_bp, verVehiculoID_bp
+from app.routes.Catalogos.Perfiles import verPerfiles_bp 
 from app.routes.Filtros.Filtros import verFiltrosCatalogos_bp, verFiltrosModulo_bp
 from app.routes.Comercial.Reservas.Reservas import verReservas_bp, nvaReserva_bp
-from app.routes.Comercial.Reservas.ReservasD import verReservaID_bp, avanzaReserva_bp
+from app.routes.Comercial.Reservas.ReservasD import *
 
 
 def register_routes(app: Flask):
@@ -22,14 +23,35 @@ def register_routes(app: Flask):
     app.register_blueprint(usuarios_bp)
     app.register_blueprint(usuariosResumen_bp)
     app.register_blueprint(actUsuario_bp)
-    app.register_blueprint(verUsuarioID_bp)
+    app.register_blueprint(verUsuarioID_bp) 
+    
+    ##Catalogo Perfiles
 
-    # Catalogo Empresas
+    app.register_blueprint(verPerfiles_bp)  
+    
+    ##Catalogo Empresas
+ 
+    app.register_blueprint(empresas_bp)  
+    app.register_blueprint(empresasResumen_bp)  
+    app.register_blueprint(actEmpresa_bp)  
+    app.register_blueprint(verEmpresaID_bp)  
+    
+    ##Filtros
+    app.register_blueprint(verFiltrosCatalogos_bp)  
+    app.register_blueprint(verFiltrosModulo_bp)  
 
-    app.register_blueprint(empresas_bp)
-    app.register_blueprint(empresasResumen_bp)
-    app.register_blueprint(actEmpresa_bp)
-    app.register_blueprint(verEmpresaID_bp)
+    ##Reservas
+    app.register_blueprint(verReservas_bp)  
+    app.register_blueprint(nvaReserva_bp)  
+    
+    ##ReservasD
+    app.register_blueprint(verReservaID_bp)  
+    app.register_blueprint(avanzaReserva_bp)  
+    app.register_blueprint(verViajesDisponibles_bp)  
+    app.register_blueprint(verViajesDisponiblesVuelta_bp)  
+    app.register_blueprint(actReservaD_bp)  
+    app.register_blueprint(verReservaDetalle_bp)  
+    app.register_blueprint(eliminarRenglonReserva_bp)  
 
     # Catalogo Sucursales
 
