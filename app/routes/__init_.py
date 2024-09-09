@@ -3,6 +3,7 @@ from app.routes.login.login import login_bp
 from app.routes.Indicadores.indicadores import verIndicadores_bp 
 from app.routes.Catalogos.Usuarios import usuarios_bp, usuariosResumen_bp, actUsuario_bp, verUsuarioID_bp
 from app.routes.Catalogos.Empresas import empresas_bp, empresasResumen_bp, actEmpresa_bp, verEmpresaID_bp
+from app.routes.Catalogos.Perfiles import verPerfiles_bp 
 from app.routes.Filtros.Filtros import verFiltrosCatalogos_bp, verFiltrosModulo_bp
 from app.routes.Comercial.Reservas.Reservas import verReservas_bp, nvaReserva_bp
 from app.routes.Comercial.Reservas.ReservasD import *
@@ -21,6 +22,10 @@ def register_routes(app: Flask):
     app.register_blueprint(usuariosResumen_bp)  
     app.register_blueprint(actUsuario_bp)
     app.register_blueprint(verUsuarioID_bp) 
+    
+    ##Catalogo Perfiles
+
+    app.register_blueprint(verPerfiles_bp)  
     
     ##Catalogo Empresas
  
