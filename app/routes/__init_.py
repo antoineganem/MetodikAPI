@@ -5,7 +5,7 @@ from app.routes.Catalogos.Usuarios import usuarios_bp, usuariosResumen_bp, actUs
 from app.routes.Catalogos.Empresas import empresas_bp, empresasResumen_bp, actEmpresa_bp, verEmpresaID_bp
 from app.routes.Filtros.Filtros import verFiltrosCatalogos_bp, verFiltrosModulo_bp
 from app.routes.Comercial.Reservas.Reservas import verReservas_bp, nvaReserva_bp
-from app.routes.Comercial.Reservas.ReservasD import verReservaID_bp, avanzaReserva_bp, verViajesDisponibles_bp, verViajesDisponiblesVuelta_bp
+from app.routes.Comercial.Reservas.ReservasD import verReservaID_bp, avanzaReserva_bp, verViajesDisponibles_bp, verViajesDisponiblesVuelta_bp, actReservaD_bp, verReservaDetalle_bp
 
 
 def register_routes(app: Flask):
@@ -42,6 +42,8 @@ def register_routes(app: Flask):
     app.register_blueprint(avanzaReserva_bp)  
     app.register_blueprint(verViajesDisponibles_bp)  
     app.register_blueprint(verViajesDisponiblesVuelta_bp)  
+    app.register_blueprint(actReservaD_bp)  
+    app.register_blueprint(verReservaDetalle_bp)  
 
 
 
