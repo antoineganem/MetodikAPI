@@ -1,6 +1,7 @@
 from flask import Flask
 from app.routes.login.login import login_bp 
 from app.routes.Indicadores.indicadores import verIndicadores_bp 
+from app.routes.Configuracion.Modulos import verModulos_bp, verModuloID_bp, actModulo_bp, eliminarModulo_bp
 from app.routes.Catalogos.Usuarios import usuarios_bp, usuariosResumen_bp, actUsuario_bp, verUsuarioID_bp
 from app.routes.Catalogos.Empresas import empresas_bp, empresasResumen_bp, actEmpresa_bp, verEmpresaID_bp
 from app.routes.Catalogos.Sucursales import sucursales_bp, sucursalResumen_bp, actSucursal_bp, verSucursalID_bp
@@ -17,6 +18,12 @@ def register_routes(app: Flask):
 
     # Indicadores
     app.register_blueprint(verIndicadores_bp)
+    
+    # Configuracion modulos
+    app.register_blueprint(verModulos_bp)
+    app.register_blueprint(verModuloID_bp)
+    app.register_blueprint(actModulo_bp)
+    app.register_blueprint(eliminarModulo_bp)
 
     # Catalogo Usuarios
 

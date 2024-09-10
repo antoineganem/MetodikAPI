@@ -69,7 +69,7 @@ def act_Perfil(data):
 
 
         query = "EXEC spActPerfiles ?,?,?,?,?"
-        cursor.execute(query, data.get("ID"), data.get("Nombre"), data.get("Notas"), data.get("EstatusID"), data.get("Empresa"))
+        cursor.execute(query, data.get("ID"), data.get("Nombre"), data.get("Notas"), data.get("EstatusID"), data.get("EmpresaID"))
 
         
         while cursor.description is None:
