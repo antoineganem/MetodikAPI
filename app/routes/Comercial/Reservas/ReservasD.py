@@ -9,6 +9,8 @@ verViajesDisponiblesVuelta_bp = Blueprint('verViajesDisponiblesVuelta', __name__
 actReservaD_bp = Blueprint('ActReservaD', __name__)
 verReservaDetalle_bp = Blueprint('VerReservaDetalle', __name__)
 eliminarRenglonReserva_bp = Blueprint('EliminarRenglonReserva', __name__)
+afectarReserva_bp = Blueprint('afectarReserva', __name__)
+cancelarReserva_bp = Blueprint('cancelarReserva', __name__)
 
 
 
@@ -78,4 +80,22 @@ def eliminarRenglonReserva_route():
     if ID is None:
         return jsonify({"error": "Faltan datos requeridos"}), 400
     response = EliminarRenglonReserva(ID, RenglonID)
+    return response
+
+@afectarReserva_bp.route('/Comercial/Reservas/afectarReserva', methods=['POST'])
+@jwt_required()
+def afectarReserva_route():
+    data = request.json
+    if data is None:
+        return jsonify({"error": "Faltan datos requeridos"}), 400
+    response = afectarReserva(data)
+    return response
+
+@cancelarReserva_bp.route('/Comercial/Reservas/cancelarReserva', methods=['POST'])
+@jwt_required()
+def cancelarReserva_route():
+    data = request.json
+    if data is None:
+        return jsonify({"error": "Faltan datos requeridos"}), 400
+    response = cancelarReserva(data)
     return response

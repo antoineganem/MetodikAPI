@@ -23,3 +23,9 @@ def VerReservaDetalle(ID):
 
 def EliminarRenglonReserva(ID, RenglonID):
     return eliminar_RenglonReserva(ID, RenglonID)
+
+def afectarReserva(data):
+    return afectar_reserva(data)
+
+def cancelarReserva(data):
+    return cancelar_reserva(data)
