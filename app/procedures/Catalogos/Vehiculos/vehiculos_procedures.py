@@ -47,7 +47,7 @@ def verVehiculoResumen(ID):
 
         columns = [column[0] for column in cursor.description]
         results = [dict(zip(columns, row)) for row in cursor.fetchall()]
-        return jsonify(results)
+        return jsonify(results[0])
     except pyodbc.Error as e:
         return jsonify({"error": str(e)}), 500
     finally:

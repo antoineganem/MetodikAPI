@@ -30,8 +30,8 @@ def register_routes(app: Flask):
     app.register_blueprint(usuarios_bp)
     app.register_blueprint(usuariosResumen_bp)
     app.register_blueprint(actUsuario_bp)
-    app.register_blueprint(verUsuarioID_bp) 
-    
+    app.register_blueprint(verUsuarioID_bp)
+
     ##Catalogo Perfiles
 
     app.register_blueprint(verPerfiles_bp)  
@@ -39,19 +39,19 @@ def register_routes(app: Flask):
     app.register_blueprint(actPerfil_bp)  
 
     ##Catalogo Empresas
- 
-    app.register_blueprint(empresas_bp)  
-    app.register_blueprint(empresasResumen_bp)  
-    app.register_blueprint(actEmpresa_bp)  
-    app.register_blueprint(verEmpresaID_bp)  
-    
+
+    app.register_blueprint(empresas_bp)
+    app.register_blueprint(empresasResumen_bp)
+    app.register_blueprint(actEmpresa_bp)
+    app.register_blueprint(verEmpresaID_bp)
+
     ##Filtros
-    app.register_blueprint(verFiltrosCatalogos_bp)  
-    app.register_blueprint(verFiltrosModulo_bp)  
+    app.register_blueprint(verFiltrosCatalogos_bp)
+    app.register_blueprint(verFiltrosModulo_bp)
 
     ##Reservas
-    app.register_blueprint(verReservas_bp)  
-    app.register_blueprint(nvaReserva_bp)  
+    app.register_blueprint(verReservas_bp)
+    app.register_blueprint(nvaReserva_bp)
     
     ##ReservasD
     app.register_blueprint(verReservaID_bp)  
@@ -76,4 +76,5 @@ def register_routes(app: Flask):
     app.register_blueprint(vehiculoResumen_bp)
     app.register_blueprint(actVehiculo_bp)
     app.register_blueprint(verVehiculoID_bp)
+
 
