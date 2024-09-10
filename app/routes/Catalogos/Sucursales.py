@@ -16,7 +16,7 @@ def sucursales_route():
     return response
 
 
-@sucursalResumen_bp.route('/Catalogos/Sucursal/verSucursalResumen', methods=['GET'])
+@sucursalResumen_bp.route('/Catalogos/Sucursales/verSucursalResumen', methods=['GET'])
 @jwt_required()
 def sucursalResumen_route():
     ID = request.args.get('ID')
