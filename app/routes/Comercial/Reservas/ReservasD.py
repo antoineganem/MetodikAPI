@@ -102,6 +102,15 @@ def cancelarReserva_route():
     response = cancelarReserva(data)
     return response
 
+@verAsientosDispoblesRuta_bp.route('/Comercial/Reservas/verAsientosDispoblesRuta', methods=['POST'])
+@jwt_required()
+def verAsientosDispoblesRuta_route():
+    data = request.json
+    if data is None:
+        return jsonify({"error": "Faltan datos requeridos"}), 400
+    response = verAsientosDispoblesRuta(data)
+    return response
+
 @agregarAsientosReserva_bp.route('/Comercial/Reservas/agregarAsientos', methods=['POST'])
 @jwt_required()
 def agregarAsientosReserva_route():
