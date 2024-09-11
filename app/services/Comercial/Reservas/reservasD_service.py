@@ -32,3 +32,7 @@ def cancelarReserva(data):
 
 def verAsientosDispoblesRuta(data):
     return ver_AsientosDispoblesRuta(data)
+
+
+def agregarAsientosReserva(data):
+    return agregar_AsientosReserva(data)
