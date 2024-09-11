@@ -259,3 +259,31 @@ def cancelar_reserva(data):
     finally:
         if conn:
             close_db_connection(conn)
+            
+def ver_AsientosDispoblesRuta(data):
+    conn = None
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        conn.autocommit = True  
+
+        query = "EXEC spVerAsientosDisponiblesRuta ?,?,?"
+        cursor.execute(query, data.get("ID"), data.get("HorarioRutaID"), data.get("RenglonID"))
+        
+
+        while cursor.description is None:
+            cursor.nextset()
+
+        if cursor.description is None:
+            return {"error": "No data returned from the procedure."}, 500
+
+        columns = [column[0] for column in cursor.description]
+        results = [dict(zip(columns, row)) for row in cursor.fetchall()]
+        return results, 200  
+    except pyodbc.Error as e:
+        if conn:
+            conn.rollback()  # En caso de error, revertir la transacción
+        return {"error": str(e)}, 500  
+    finally:
+        if conn:
+            close_db_connection(conn)
