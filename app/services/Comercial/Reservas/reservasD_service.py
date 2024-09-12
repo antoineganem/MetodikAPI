@@ -36,3 +36,9 @@ def verAsientosDispoblesRuta(data):
 
 def agregarAsientosReserva(data):
     return agregar_AsientosReserva(data)
+
+def guardarDatosPersonasReserva(data):
+    return guardar_DatosPersonaReserva(data)
+
+def verPersonasReserva(ID, HorarioRutaID, RenglonID):
+    return ver_PersonasReserva(ID, HorarioRutaID, RenglonID)

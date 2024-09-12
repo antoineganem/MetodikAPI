@@ -315,3 +315,60 @@ def agregar_AsientosReserva(data):
     finally:
         if conn:
             close_db_connection(conn)
+            
+def guardar_DatosPersonaReserva(data):
+    conn = None
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        conn.autocommit = True  
+
+        query = "EXEC spGuardarDatosPersonaReserva ?,?,?,?,? ,?,?,?,?"
+        cursor.execute(query, data.get("ID"), data.get("RenglonID"), data.get("HorarioRutaID"), data.get("Asiento"), data.get("Nombre"),
+                    data.get("Email"), data.get("FechaNacimiento"), data.get("Telefono"), data.get("Curp"))
+        
+
+        while cursor.description is None:
+            cursor.nextset()
+
+        if cursor.description is None:
+            return {"error": "No data returned from the procedure."}, 500
+
+        columns = [column[0] for column in cursor.description]
+        results = [dict(zip(columns, row)) for row in cursor.fetchall()]
+        return results, 200  
+    except pyodbc.Error as e:
+        if conn:
+            conn.rollback()  # En caso de error, revertir la transacción
+        return {"error": str(e)}, 500  
+    finally:
+        if conn:
+            close_db_connection(conn)
+            
+def ver_PersonasReserva(ID, HorarioRutaID, RenglonID):
+    conn = None
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        conn.autocommit = True  
+
+        query = "EXEC spVerPersonasReserva ?,?,?"
+        cursor.execute(query, ID, HorarioRutaID, RenglonID)
+        
+
+        while cursor.description is None:
+            cursor.nextset()
+
+        if cursor.description is None:
+            return {"error": "No data returned from the procedure."}, 500
+
+        columns = [column[0] for column in cursor.description]
+        results = [dict(zip(columns, row)) for row in cursor.fetchall()]
+        return results, 200  
+    except pyodbc.Error as e:
+        if conn:
+            conn.rollback()  # En caso de error, revertir la transacción
+        return {"error": str(e)}, 500  
+    finally:
+        if conn:
+            close_db_connection(conn)

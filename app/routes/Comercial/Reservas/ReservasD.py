@@ -13,6 +13,8 @@ afectarReserva_bp = Blueprint('afectarReserva', __name__)
 cancelarReserva_bp = Blueprint('cancelarReserva', __name__)
 verAsientosDispoblesRuta_bp = Blueprint('verAsientosDispoblesRuta', __name__)
 agregarAsientosReserva_bp = Blueprint('agregarAsientosReserva', __name__)
+guardarDatosPersonasReserva_bp = Blueprint('guardarDatosPersonasReserva', __name__)
+verPersonasReserva_bp = Blueprint('verPersonasReserva', __name__)
 
 
 
@@ -118,4 +120,25 @@ def agregarAsientosReserva_route():
     if data is None:
         return jsonify({"error": "Faltan datos requeridos"}), 400
     response = agregarAsientosReserva(data)
+    return response
+
+@guardarDatosPersonasReserva_bp.route('/Comercial/Reservas/guardarDatosPersona', methods=['POST'])
+@jwt_required()
+def guardarDatosPersonasReserva_route():
+    data = request.json
+    if data is None:
+        return jsonify({"error": "Faltan datos requeridos"}), 400
+    response = guardarDatosPersonasReserva(data)
+    return response
+
+@verPersonasReserva_bp.route('/Comercial/Reservas/verPersonasReserva', methods=['GET'])
+@jwt_required()
+def verPersonasReserva_route():
+    ID = request.args.get('ID')
+    HorarioRutaID = request.args.get('HorarioRutaID')
+    RenglonID = request.args.get('RenglonID')
+
+    if ID is None:
+        return jsonify({"error": "Faltan datos requeridos"}), 400
+    response = verPersonasReserva(ID, HorarioRutaID, RenglonID)
     return response
