@@ -61,9 +61,9 @@ def actVehiculo(data):
         conn = get_db_connection()
         cursor = conn.cursor()
         conn.autocommit = True
-        query = "EXEC spActVehiculo ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?"
+        query = "EXEC spActVehiculo ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?"
         cursor.execute(query,
-                       data.get("ID"), data.get("Vehiculo"),
+                       data.get("ID"),
                        data.get("Descripcion"), data.get("Placas"),
                        data.get("Volumen"), data.get("Peso"),
                        data.get("Agente"), data.get("RutaID"),
