@@ -69,7 +69,9 @@ def register_routes(app: Flask):
     app.register_blueprint(verAsientosDispoblesRuta_bp)  
     app.register_blueprint(agregarAsientosReserva_bp)  
     app.register_blueprint(guardarDatosPersonasReserva_bp)  
-    app.register_blueprint(verPersonasReserva_bp)  
+    app.register_blueprint(verPersonasReserva_bp)
+    app.register_blueprint(agregarFormaPagoReserva_bp)    
+    app.register_blueprint(cambiarSituacion_bp)  
 
     # Catalogo Sucursales
 

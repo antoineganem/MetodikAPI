@@ -16,6 +16,7 @@ agregarAsientosReserva_bp = Blueprint('agregarAsientosReserva', __name__)
 guardarDatosPersonasReserva_bp = Blueprint('guardarDatosPersonasReserva', __name__)
 verPersonasReserva_bp = Blueprint('verPersonasReserva', __name__)
 agregarFormaPagoReserva_bp = Blueprint('agregarFormaPagoReserva', __name__)
+cambiarSituacion_bp = Blueprint('cambiarSituacion', __name__)
 
 
 
@@ -150,4 +151,13 @@ def gregarFormaPagoReserva_route():
     if data is None:
         return jsonify({"error": "Faltan datos requeridos"}), 400
     response = agregarFormaPagoReserva(data)
+    return response
+
+@cambiarSituacion_bp.route('/Comercial/Reservas/cambiarSituacion', methods=['POST'])
+@jwt_required()
+def cambiarSituacion_route():
+    data = request.json
+    if data is None:
+        return jsonify({"error": "Faltan datos requeridos"}), 400
+    response = cambiarSituacion(data)
     return response

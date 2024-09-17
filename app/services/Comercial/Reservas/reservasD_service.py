@@ -45,3 +45,6 @@ def verPersonasReserva(ID, HorarioRutaID, RenglonID):
 
 def agregarFormaPagoReserva(data):
     return agregar_FormaPagoReserva(data)
+
+def cambiarSituacion(data):
+    return cambiar_situacion(data)
