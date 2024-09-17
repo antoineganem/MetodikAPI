@@ -19,6 +19,8 @@ def login_route():
         return jsonify({"error": "Faltan datos requeridos"}), 400
 
     user_response = login(Correo, Contrasena, Empresa)
+    
+    
     if not user_response:
         return jsonify({"error": "Credenciales inválidas"}), 401
 
@@ -44,8 +46,7 @@ def login_route():
         }
         return jsonify(response), 200
     else:
-        # Retorna la respuesta del servicio directamente
-        return jsonify(user_data), 404
+        return jsonify(user_data), 400
 
 # Ejemplo de una ruta protegida con JWT
 @login_bp.route('/protected', methods=['GET'])
