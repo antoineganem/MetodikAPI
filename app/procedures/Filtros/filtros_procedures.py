@@ -13,7 +13,6 @@ def verFiltros_Catalogos(data):
         query = "EXEC spVerFiltroCatalogo ?,?,?,?"
         cursor.execute(query, data.get("Tipo"), data.get("PersonaID"), data.get("Modulo"), data.get("ModuloID"))
         
-
         while cursor.description is None:
             cursor.nextset()
 
@@ -21,7 +20,9 @@ def verFiltros_Catalogos(data):
             return {"error": "No data returned from the procedure."}, 500
 
         columns = [column[0] for column in cursor.description]
+
         results = [dict(zip(columns, row)) for row in cursor.fetchall()]
+
         return results, 200  
     except pyodbc.Error as e:
         if conn:
