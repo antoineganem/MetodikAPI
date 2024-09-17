@@ -10,6 +10,7 @@ from app.routes.Catalogos.Perfiles import verPerfiles_bp, verPerfilID_bp, actPer
 from app.routes.Filtros.Filtros import verFiltrosCatalogos_bp, verFiltrosModulo_bp
 from app.routes.Comercial.Reservas.Reservas import verReservas_bp, nvaReserva_bp
 from app.routes.Comercial.Reservas.ReservasD import *
+from app.routes.Exploradores.RutasExplorador import verExploradorRutas_bp, verExploradorRutasID_bp
 
 
 def register_routes(app: Flask):
@@ -82,3 +83,6 @@ def register_routes(app: Flask):
     app.register_blueprint(verVehiculoID_bp)
 
 
+    # Explorador rutas
+    app.register_blueprint(verExploradorRutas_bp)
+    app.register_blueprint(verExploradorRutasID_bp)

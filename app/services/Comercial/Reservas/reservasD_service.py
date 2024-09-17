@@ -42,3 +42,6 @@ def guardarDatosPersonasReserva(data):
 
 def verPersonasReserva(ID, HorarioRutaID, RenglonID):
     return ver_PersonasReserva(ID, HorarioRutaID, RenglonID)
+
+def agregarFormaPagoReserva(data):
+    return agregar_FormaPagoReserva(data)

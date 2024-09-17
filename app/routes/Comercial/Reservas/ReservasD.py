@@ -15,7 +15,7 @@ verAsientosDispoblesRuta_bp = Blueprint('verAsientosDispoblesRuta', __name__)
 agregarAsientosReserva_bp = Blueprint('agregarAsientosReserva', __name__)
 guardarDatosPersonasReserva_bp = Blueprint('guardarDatosPersonasReserva', __name__)
 verPersonasReserva_bp = Blueprint('verPersonasReserva', __name__)
-
+agregarFormaPagoReserva_bp = Blueprint('agregarFormaPagoReserva', __name__)
 
 
 
@@ -141,4 +141,13 @@ def verPersonasReserva_route():
     if ID is None:
         return jsonify({"error": "Faltan datos requeridos"}), 400
     response = verPersonasReserva(ID, HorarioRutaID, RenglonID)
+    return response
+
+@agregarFormaPagoReserva_bp.route('/Comercial/Reservas/agregarPagoReserva', methods=['POST'])
+@jwt_required()
+def gregarFormaPagoReserva_route():
+    data = request.json
+    if data is None:
+        return jsonify({"error": "Faltan datos requeridos"}), 400
+    response = agregarFormaPagoReserva(data)
     return response
