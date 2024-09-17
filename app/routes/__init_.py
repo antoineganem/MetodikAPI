@@ -7,6 +7,8 @@ from app.routes.Catalogos.Empresas import empresas_bp, empresasResumen_bp, actEm
 from app.routes.Catalogos.Sucursales import sucursales_bp, sucursalResumen_bp, actSucursal_bp, verSucursalID_bp
 from app.routes.Catalogos.Vehiculos import vehiculos_bp, vehiculoResumen_bp, actVehiculo_bp, verVehiculoID_bp
 from app.routes.Catalogos.Perfiles import verPerfiles_bp, verPerfilID_bp, actPerfil_bp
+from app.routes.Catalogos.Almacenes import almacenes_bp, almacenResumen_bp, actAlmacen_bp, verAlmacenID_bp
+from app.routes.Catalogos.Destinos import destinos_bp, destinoResumen_bp, actDestino_bp, verDestinoID_bp
 from app.routes.Filtros.Filtros import verFiltrosCatalogos_bp, verFiltrosModulo_bp
 from app.routes.Comercial.Reservas.Reservas import verReservas_bp, nvaReserva_bp
 from app.routes.Comercial.Reservas.ReservasD import *
@@ -81,6 +83,21 @@ def register_routes(app: Flask):
     app.register_blueprint(vehiculoResumen_bp)
     app.register_blueprint(actVehiculo_bp)
     app.register_blueprint(verVehiculoID_bp)
+
+    # Catalogo Almacenes
+    
+    app.register_blueprint(almacenes_bp)
+    app.register_blueprint(almacenResumen_bp)
+    app.register_blueprint(actAlmacen_bp)
+    app.register_blueprint(verAlmacenID_bp)
+
+    # Catalogo Destinos
+
+    app.register_blueprint(destinos_bp)
+    app.register_blueprint(destinoResumen_bp)
+    app.register_blueprint(actDestino_bp)
+    app.register_blueprint(verDestinoID_bp)
+
 
 
     # Explorador rutas

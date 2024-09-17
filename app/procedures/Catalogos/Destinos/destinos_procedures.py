@@ -3,12 +3,12 @@ from flask import jsonify
 from app.utils.db import get_db_connection, close_db_connection
 
 
-def verVehiculos():
+def verDestinos():
     conn = None
     try:
         conn = get_db_connection()
         cursor = conn.cursor()
-        query = "EXEC spVerVehiculos"
+        query = "EXEC spVerDestinos"
         cursor.execute(query)
 
         while cursor.description is None:
@@ -29,12 +29,12 @@ def verVehiculos():
             close_db_connection(conn)
 
 
-def verVehiculoResumen(ID):
+def verDestinoResumen(ID):
     conn = None
     try:
         conn = get_db_connection()
         cursor = conn.cursor()
-        query = "EXEC spVerVehiculoResumen ?"
+        query = "EXEC spVerDestinoResumen ?"
         cursor.execute(query, ID)
 
         while cursor.description is None:
@@ -55,24 +55,18 @@ def verVehiculoResumen(ID):
             close_db_connection(conn)
 
 
-def actVehiculo(data):
+def actDestino(data):
     conn = None
     try:
         conn = get_db_connection()
         cursor = conn.cursor()
         conn.autocommit = True
-        query = "EXEC spActVehiculo ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?"
+        query = "EXEC spActDestino ?,?,?,?,?,?,?,?"
         cursor.execute(query,
-                       data.get("ID"),
-                       data.get("Descripcion"), data.get("Placas"),
-                       data.get("Volumen"), data.get("Peso"),
-                       data.get("Agente"), data.get("RutaID"),
-                       data.get("EstatusID"), data.get("Proveedor"),
-                       data.get("Condicion"), data.get("Concepto"),
-                       data.get("serie"), data.get("Marca"),
-                       data.get("NoEco"), data.get("Ano"),
-                       data.get("CapacidadPeso"), data.get("CapacidadVol"),
-                       data.get("EmpresaID"), data.get("TipoVehiculo")
+                       data.get("ID"), data.get("Nombre"),
+                       data.get("Ciudad"), data.get("Pais"),
+                       data.get("CodigoPostal"), data.get("Descripcion"),
+                       data.get("EstatusID"), data.get("EmpresaID"),
                        )
 
         while cursor.description is None:
@@ -93,12 +87,12 @@ def actVehiculo(data):
             close_db_connection(conn)
 
 
-def verVehiculoID(ID):
+def verDestinoID(ID):
     conn = get_db_connection()
     try:
         conn = get_db_connection()
         cursor = conn.cursor()
-        query = "EXEC spVerVehiculoID ?"
+        query = "EXEC spVerDestinoID ?"
         cursor.execute(query, ID)
 
         while cursor.description is None:
