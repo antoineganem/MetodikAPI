@@ -61,9 +61,9 @@ def actSucursal(data):
         conn = get_db_connection()
         cursor = conn.cursor()
         conn.autocommit = True
-        query = "EXEC spActSucursal ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?"
+        query = "EXEC spActSucursal ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?"
         cursor.execute(query,
-                       data.get("ID"), data.get("Sucursal"),
+                       data.get("ID"),
                        data.get("Nombre"), data.get("Prefijo"),
                        data.get("Direccion"), data.get("DireccionNumero"),
                        data.get("DireccionNumeroInt"), data.get("Delegacion"),

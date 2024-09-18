@@ -61,9 +61,9 @@ def actAlmacen(data):
         conn = get_db_connection()
         cursor = conn.cursor()
         conn.autocommit = True
-        query = "EXEC spActAlmacen ?,?,?,?,?,?,?,?"
+        query = "EXEC spActAlmacen ?,?,?,?,?,?,?"
         cursor.execute(query,
-                       data.get("ID"), data.get("Almacen"),
+                       data.get("ID"), 
                        data.get("Nombre"), data.get("GrupoID"),
                        data.get("TipoID"), data.get("SucursalID"),
                        data.get("EstatusID"), data.get("EmpresaID"),
