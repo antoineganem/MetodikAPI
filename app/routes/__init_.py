@@ -15,6 +15,8 @@ from app.routes.Comercial.Reservas.ReservasD import *
 from app.routes.Exploradores.RutasExplorador import verExploradorRutas_bp, verExploradorRutasID_bp
 from app.routes.Catalogos.Rutas import rutas_bp, rutasResumen_bp, actRuta_bp, verHorarios_bp, actHorarioRuta_bp, verRutasHorarios_bp, eliminarRutaHorario_bp
 from app.routes.Catalogos.Choferes import choferes_bp, choferesResumen_bp, actChoferes_bp, verChoferID_bp
+from app.routes.Catalogos.Agentes import agentes_bp, agentesResumen_bp, actAgente_bp, verAgenteID_bp
+
 
 def register_routes(app: Flask):
     # Login
@@ -101,7 +103,12 @@ def register_routes(app: Flask):
     app.register_blueprint(actDestino_bp)
     app.register_blueprint(verDestinoID_bp)
 
+    # Catalogo Agentes
 
+    app.register_blueprint(agentes_bp)
+    app.register_blueprint(agentesResumen_bp)
+    app.register_blueprint(actAgente_bp)
+    app.register_blueprint(verAgenteID_bp)
 
     # Explorador rutas
     app.register_blueprint(verExploradorRutas_bp)
