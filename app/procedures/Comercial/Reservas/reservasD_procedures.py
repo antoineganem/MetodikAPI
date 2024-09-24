@@ -428,3 +428,31 @@ def cambiar_situacion(data):
     finally:
         if conn:
             close_db_connection(conn)
+            
+def eliminar_reserva(ID, UsuarioID):
+    conn = None
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        conn.autocommit = True  
+
+        query = "EXEC spEliminarReserva ?,?"
+        cursor.execute(query, ID, UsuarioID)
+        
+
+        while cursor.description is None:
+            cursor.nextset()
+
+        if cursor.description is None:
+            return {"error": "No data returned from the procedure."}, 500
+
+        columns = [column[0] for column in cursor.description]
+        results = [dict(zip(columns, row)) for row in cursor.fetchall()]
+        return results, 200  
+    except pyodbc.Error as e:
+        if conn:
+            conn.rollback()  # En caso de error, revertir la transacción
+        return {"error": str(e)}, 500  
+    finally:
+        if conn:
+            close_db_connection(conn)

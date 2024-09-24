@@ -48,3 +48,6 @@ def agregarFormaPagoReserva(data):
 
 def cambiarSituacion(data):
     return cambiar_situacion(data)
+
+def eliminarReserva(ID, UsuarioID):
+    return eliminar_reserva(ID, UsuarioID)
