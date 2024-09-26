@@ -1,7 +1,7 @@
 from app.procedures.Catalogos.Perfiles.perfiles_procedures import ver_Perfiles, ver_PerfilID, act_Perfil, ver_ModulosAcceso
 
-def verPerfiles(EstatusID, EmpresaID):
-    return ver_Perfiles(EstatusID, EmpresaID)
+def verPerfiles(EstatusID, EmpresaID, Buscar):
+    return ver_Perfiles(EstatusID, EmpresaID, Buscar)
 
 def verPerfilID(ID):
     return ver_PerfilID(ID)

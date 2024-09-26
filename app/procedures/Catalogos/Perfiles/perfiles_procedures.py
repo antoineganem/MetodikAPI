@@ -3,15 +3,15 @@ from flask import jsonify
 from app.utils.db import get_db_connection, close_db_connection
 import logging
 
-def ver_Perfiles(EstatusID, EmpresaID):
+def ver_Perfiles(EstatusID, EmpresaID, Buscar):
     conn = None
     try:
         conn = get_db_connection()
         cursor = conn.cursor()
         conn.autocommit = True  
 
-        query = "EXEC spVerPerfiles ?,?"
-        cursor.execute(query, EstatusID, EmpresaID)
+        query = "EXEC spVerPerfiles ?,?,?"
+        cursor.execute(query, EstatusID, EmpresaID, Buscar)
         
 
         while cursor.description is None:

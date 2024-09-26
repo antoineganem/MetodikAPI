@@ -13,9 +13,11 @@ verModulosAcceso_bp = Blueprint('verModulosAcceso', __name__)
 def perfiles_route():
     EstatusID = request.args.get('EstatusID')
     EmpresaID = request.args.get('EmpresaID')
+    Buscar = request.args.get('SearchText')
+
     if EstatusID is None or EmpresaID is None:
         return jsonify({"error": "Faltan datos requeridos"}), 400
-    response = verPerfiles(EstatusID, EmpresaID)
+    response = verPerfiles(EstatusID, EmpresaID, Buscar)
     return response
 
 
