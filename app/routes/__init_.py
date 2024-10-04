@@ -12,6 +12,7 @@ from app.routes.Catalogos.Destinos import destinos_bp, destinoResumen_bp, actDes
 from app.routes.Filtros.Filtros import verFiltrosCatalogos_bp, verFiltrosModulo_bp
 from app.routes.Comercial.Reservas.Reservas import verReservas_bp, nvaReserva_bp
 from app.routes.Comercial.Reservas.ReservasD import *
+from app.routes.Comercial.Paqueteria.Paqueteria import *
 from app.routes.Exploradores.RutasExplorador import verExploradorRutas_bp, verExploradorRutasID_bp
 from app.routes.Catalogos.Rutas import rutas_bp, rutasResumen_bp, actRuta_bp, verHorarios_bp, actHorarioRuta_bp, verRutasHorarios_bp, eliminarRutaHorario_bp
 from app.routes.Catalogos.Choferes import choferes_bp, choferesResumen_bp, actChoferes_bp, verChoferID_bp
@@ -74,6 +75,14 @@ def register_routes(app: Flask):
     app.register_blueprint(verPersonasReserva_bp)
     app.register_blueprint(agregarFormaPagoReserva_bp)    
     app.register_blueprint(cambiarSituacion_bp)  
+
+    ##Paqueteria
+    app.register_blueprint(verPaqueteria_bp)
+    app.register_blueprint(nuevaPaqueteria_bp)
+    
+    ##PaqueteriaD
+    app.register_blueprint(verPaqueteriaID_bp)
+    app.register_blueprint(verArtDispPaqueteria_bp)
 
     # Catalogo Sucursales
 

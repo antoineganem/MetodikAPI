@@ -1,0 +1,13 @@
+from app.procedures.Comercial.Paqueteria.paqueteria_procedures import *
+
+def verPaqueteria():
+    return ver_paqueteria()
+
+def nuevaPaqueteria(data):
+    return nueva_paqueteria(data)
+
+def verPaqueteriaID(ID):
+    return ver_paqueteriaID(ID)
+
+def verArtDispPaqueteria(EmpresaID):
+    return ver_ArtDispPaqueteria(EmpresaID)

@@ -10,9 +10,9 @@ def ver_Reservas(data):
         cursor = conn.cursor()
         conn.autocommit = True  
 
-        query = "EXEC spVerReservas ?,?,?,?,? ,?"
+        query = "EXEC spVerReservas ?,?,?,?,? ,?,?,?"
         cursor.execute(query, data.get("PersonaID"), data.get("EmpresaID"), data.get("EstatusID"), data.get("Movimiento"), data.get("FechaD"), 
-                       data.get("FechaH"))
+                       data.get("FechaH"), data.get("Situacion"), data.get("Usuario"))
         
 
         while cursor.description is None:
