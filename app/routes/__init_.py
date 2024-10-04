@@ -16,6 +16,7 @@ from app.routes.Comercial.Paqueteria.Paqueteria import *
 from app.routes.Exploradores.RutasExplorador import verExploradorRutas_bp, verExploradorRutasID_bp
 from app.routes.Catalogos.Rutas import rutas_bp, rutasResumen_bp, actRuta_bp, verHorarios_bp, actHorarioRuta_bp, verRutasHorarios_bp, eliminarRutaHorario_bp
 from app.routes.Catalogos.Choferes import choferes_bp, choferesResumen_bp, actChoferes_bp, verChoferID_bp
+from app.routes.Whatsapp.whatsapp import whatsapp_bp, get_message_data_bp
 
 def register_routes(app: Flask):
     # Login
@@ -132,3 +133,6 @@ def register_routes(app: Flask):
     app.register_blueprint(actChoferes_bp)
     app.register_blueprint(verChoferID_bp)
     
+    #Whatsapp api 
+    app.register_blueprint(whatsapp_bp)
+    app.register_blueprint(get_message_data_bp)
