@@ -20,3 +20,6 @@ def agregarPaqueteriaDetalle(data):
 
 def verPaqueteriaDetalle(ID):
     return verPaqueteria_detalle(ID)
+
+def actPaqueteriaDetalle(ID):
+    return act_paqueteriaDetalle(ID)

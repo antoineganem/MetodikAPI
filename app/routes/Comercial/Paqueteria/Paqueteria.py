@@ -9,6 +9,7 @@ verArtDispPaqueteria_bp = Blueprint('verArtDispPaqueteria', __name__)
 avanzarPaqueteria_bp = Blueprint('avanzarPaqueteria', __name__)
 agregarPaqueteriaDetalle_bp = Blueprint('agregarPaqueteriaDetalle', __name__)
 verPaqueteriaDetalle_bp = Blueprint('verPaqueteriaDetalle', __name__)
+actPaqueteriaDetalle_bp = Blueprint('actPaqueteriaDetalle', __name__)
 
 
 @verPaqueteria_bp.route('/Comercial/Paqueteria/verPaqueterias', methods=['GET'])
@@ -74,4 +75,13 @@ def verPaqueteriaDetalle_route():
     if ID is None:
         return jsonify({"error": "Faltan datos requeridos"}), 400
     response = verPaqueteriaDetalle(ID)
+    return response
+
+@actPaqueteriaDetalle_bp.route('/Comercial/Paqueteria/actPaqueteriaDetalle', methods=['POST'])
+@jwt_required()
+def ctPaqueteriaDetalle_route():
+    data = request.json
+    if data is None:
+        return jsonify({"error": "Faltan datos requeridos"}), 400
+    response = actPaqueteriaDetalle(data)
     return response
