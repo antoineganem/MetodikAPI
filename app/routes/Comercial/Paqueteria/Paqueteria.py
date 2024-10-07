@@ -6,6 +6,9 @@ verPaqueteria_bp = Blueprint('verPaqueteria', __name__)
 nuevaPaqueteria_bp = Blueprint('nuevaPaqueteria', __name__)
 verPaqueteriaID_bp = Blueprint('verPaqueteriaID', __name__)
 verArtDispPaqueteria_bp = Blueprint('verArtDispPaqueteria', __name__)
+avanzarPaqueteria_bp = Blueprint('avanzarPaqueteria', __name__)
+agregarPaqueteriaDetalle_bp = Blueprint('agregarPaqueteriaDetalle', __name__)
+verPaqueteriaDetalle_bp = Blueprint('verPaqueteriaDetalle', __name__)
 
 
 @verPaqueteria_bp.route('/Comercial/Paqueteria/verPaqueterias', methods=['GET'])
@@ -43,4 +46,32 @@ def verArtDispPaqueteria_route():
     if EmpresaID is None:
         return jsonify({"error": "Faltan datos requeridos"}), 400
     response = verArtDispPaqueteria(EmpresaID)
+    return response
+
+@avanzarPaqueteria_bp.route('/Comercial/Paqueteria/AvanzarPaqueteria', methods=['POST'])
+@jwt_required()
+def avanzarPaqueteria_route():
+    data = request.json
+    if data is None:
+        return jsonify({"error": "Faltan datos requeridos"}), 400
+    response = avanzarPaqueteria(data)
+    return response
+
+@agregarPaqueteriaDetalle_bp.route('/Comercial/Paqueteria/agregarPaqueteriaDetalle', methods=['POST'])
+@jwt_required()
+def agregarPaqueteriaDetalle_route():
+    data = request.json
+    if data is None:
+        return jsonify({"error": "Faltan datos requeridos"}), 400
+    response = agregarPaqueteriaDetalle(data)
+    return response
+
+@verPaqueteriaDetalle_bp.route('/Comercial/Paqueteria/verPaqueteriaDetalle', methods=['GET'])
+@jwt_required()
+def verPaqueteriaDetalle_route():
+    ID = request.args.get('ID')
+    
+    if ID is None:
+        return jsonify({"error": "Faltan datos requeridos"}), 400
+    response = verPaqueteriaDetalle(ID)
     return response

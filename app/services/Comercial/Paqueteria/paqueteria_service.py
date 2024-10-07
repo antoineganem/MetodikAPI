@@ -11,3 +11,12 @@ def verPaqueteriaID(ID):
 
 def verArtDispPaqueteria(EmpresaID):
     return ver_ArtDispPaqueteria(EmpresaID)
+
+def avanzarPaqueteria(data):
+    return avanza_paqueteria(data)
+
+def agregarPaqueteriaDetalle(data):
+    return agregar_paqueteriaDetalle(data)
+
+def verPaqueteriaDetalle(ID):
+    return verPaqueteria_detalle(ID)
