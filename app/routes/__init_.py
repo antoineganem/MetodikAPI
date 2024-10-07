@@ -83,11 +83,15 @@ def register_routes(app: Flask):
     ##PaqueteriaD
     app.register_blueprint(verPaqueteriaID_bp)
     app.register_blueprint(verArtDispPaqueteria_bp)
-
     app.register_blueprint(avanzarPaqueteria_bp)
     app.register_blueprint(agregarPaqueteriaDetalle_bp)
     app.register_blueprint(verPaqueteriaDetalle_bp)
     app.register_blueprint(actPaqueteriaDetalle_bp)
+    app.register_blueprint(eliminarRenglonPaqueteria_bp)
+    app.register_blueprint(cambiarSituacionPaqueteria_bp)
+    app.register_blueprint(afectarPaqueteria_bp)
+    app.register_blueprint(eliminarPaqueteria_bp)
+    app.register_blueprint(cancelarPaqueteria_bp)
 
     # Catalogo Sucursales
 
