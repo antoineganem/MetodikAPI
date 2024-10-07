@@ -17,6 +17,8 @@ guardarDatosPersonasReserva_bp = Blueprint('guardarDatosPersonasReserva', __name
 verPersonasReserva_bp = Blueprint('verPersonasReserva', __name__)
 agregarFormaPagoReserva_bp = Blueprint('agregarFormaPagoReserva', __name__)
 cambiarSituacion_bp = Blueprint('cambiarSituacion', __name__)
+eliminarReserva_bp = Blueprint('eliminarReserva', __name__)
+
 
 
 
@@ -160,4 +162,14 @@ def cambiarSituacion_route():
     if data is None:
         return jsonify({"error": "Faltan datos requeridos"}), 400
     response = cambiarSituacion(data)
+    return response
+
+@eliminarReserva_bp.route('/Comercial/Reservas/eliminarReserva', methods=['DELETE'])
+@jwt_required()
+def eliminarReserva_route():
+    ID = request.args.get('ID')
+    UsuarioID = request.args.get('UsuarioID')
+    if ID is None:
+        return jsonify({"error": "Faltan datos requeridos"}), 400
+    response = eliminarReserva(ID, UsuarioID)
     return response

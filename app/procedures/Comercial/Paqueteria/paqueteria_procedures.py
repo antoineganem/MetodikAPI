@@ -3,14 +3,71 @@ from flask import jsonify
 from app.utils.db import get_db_connection, close_db_connection
 import logging
 
-def ver_ReservaID(ID):
+
+def ver_paqueteria():
     conn = None
     try:
         conn = get_db_connection()
         cursor = conn.cursor()
         conn.autocommit = True  
 
-        query = "EXEC spVerReservaID ?"
+        query = "EXEC spVerPaqueteria"
+        cursor.execute(query)
+        
+
+        while cursor.description is None:
+            cursor.nextset()
+
+        if cursor.description is None:
+            return {"error": "No data returned from the procedure."}, 500
+
+        columns = [column[0] for column in cursor.description]
+        results = [dict(zip(columns, row)) for row in cursor.fetchall()]
+        return results, 200  
+    except pyodbc.Error as e:
+        if conn:
+            conn.rollback()  # En caso de error, revertir la transacción
+        return {"error": str(e)}, 500  
+    finally:
+        if conn:
+            close_db_connection(conn)
+            
+def nueva_paqueteria(data):
+    conn = None
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        conn.autocommit = True  
+
+        query = "EXEC spNvaPaqueteria ?,?"
+        cursor.execute(query, data.get("PersonaID"), data.get("EmpresaID"))
+        
+
+        while cursor.description is None:
+            cursor.nextset()
+
+        if cursor.description is None:
+            return {"error": "No data returned from the procedure."}, 500
+
+        columns = [column[0] for column in cursor.description]
+        results = [dict(zip(columns, row)) for row in cursor.fetchall()]
+        return results, 200  
+    except pyodbc.Error as e:
+        if conn:
+            conn.rollback()  # En caso de error, revertir la transacción
+        return {"error": str(e)}, 500  
+    finally:
+        if conn:
+            close_db_connection(conn)
+            
+def ver_paqueteriaID(ID):
+    conn = None
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        conn.autocommit = True  
+
+        query = "EXEC spVerPaqueteriaID ?"
         cursor.execute(query, ID)
         
 
@@ -31,17 +88,15 @@ def ver_ReservaID(ID):
         if conn:
             close_db_connection(conn)
             
-
-def avanza_reserva(data):
+def ver_ArtDispPaqueteria(EmpresaID):
     conn = None
     try:
         conn = get_db_connection()
         cursor = conn.cursor()
         conn.autocommit = True  
 
-        query = "EXEC spAvanzarReserva ?,?,?,?,? ,?,?,?,?"
-        cursor.execute(query, data.get("ID"), data.get("Movimiento"),  data.get("OrigenID"),  data.get("DestinoID"),  data.get("FechaSalida"),
-                        data.get("FechaRegreso"), data.get("Referencia"), data.get("Observaciones"), data.get("Ruta"))
+        query = "EXEC spVerArticulosPaqueteria ?"
+        cursor.execute(query, EmpresaID)
         
 
         while cursor.description is None:
@@ -60,16 +115,73 @@ def avanza_reserva(data):
     finally:
         if conn:
             close_db_connection(conn)
-
-
-def ver_ViajesDispIda(ID):
+            
+def avanza_paqueteria(data):
     conn = None
     try:
         conn = get_db_connection()
         cursor = conn.cursor()
         conn.autocommit = True  
 
-        query = "EXEC spVerViajesdisponibles ?"
+        query = "EXEC spAvanzarPaqueteria ?,?,?,?,? ,?,?,?,?,? ,?"
+        cursor.execute(query, data.get("ID"), data.get("Movimiento"), data.get("ClienteID"), data.get("TerminalOrigenID"), data.get("TerminalDestinoID")
+                       , data.get("FechaEnvio"), data.get("FormaPagoID"), data.get("ReferenciaPago"), data.get("TelefonoDest"), data.get("NombreDest")
+                       , data.get("PersonaID"))
+        
+
+        while cursor.description is None:
+            cursor.nextset()
+
+        if cursor.description is None:
+            return {"error": "No data returned from the procedure."}, 500
+
+        columns = [column[0] for column in cursor.description]
+        results = [dict(zip(columns, row)) for row in cursor.fetchall()]
+        return results, 200  
+    except pyodbc.Error as e:
+        if conn:
+            conn.rollback()  # En caso de error, revertir la transacción
+        return {"error": str(e)}, 500  
+    finally:
+        if conn:
+            close_db_connection(conn)
+            
+def agregar_paqueteriaDetalle(data):
+    conn = None
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        conn.autocommit = True  
+
+        query = "EXEC spAgregarPaqueteriaDetalle ?,?,?"
+        cursor.execute(query, data.get("ID"), data.get("UsuarioID"), data.get("Articulo"))
+        
+
+        while cursor.description is None:
+            cursor.nextset()
+
+        if cursor.description is None:
+            return {"error": "No data returned from the procedure."}, 500
+
+        columns = [column[0] for column in cursor.description]
+        results = [dict(zip(columns, row)) for row in cursor.fetchall()]
+        return results, 200  
+    except pyodbc.Error as e:
+        if conn:
+            conn.rollback()  # En caso de error, revertir la transacción
+        return {"error": str(e)}, 500  
+    finally:
+        if conn:
+            close_db_connection(conn)
+            
+def verPaqueteria_detalle(ID):
+    conn = None
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        conn.autocommit = True  
+
+        query = "EXEC spVerPaqueteriaDetalle ?"
         cursor.execute(query, ID)
         
 
@@ -90,16 +202,17 @@ def ver_ViajesDispIda(ID):
         if conn:
             close_db_connection(conn)
             
-
-def ver_ViajesDispVuelta(ID):
+            
+def act_paqueteriaDetalle(data):
     conn = None
     try:
         conn = get_db_connection()
         cursor = conn.cursor()
         conn.autocommit = True  
 
-        query = "EXEC spVerViajesdisponiblesVuelta ?"
-        cursor.execute(query, ID)
+        query = "EXEC spActDetallePaqueteria ?,?,?,?,? ,?"
+        cursor.execute(query, data.get("ID"), data.get("RenglonID"), data.get("UsuarioID"), data.get("Cantidad"), data.get("Peso")
+                       , data.get("Precio"))
         
 
         while cursor.description is None:
@@ -119,269 +232,16 @@ def ver_ViajesDispVuelta(ID):
         if conn:
             close_db_connection(conn)
             
-
-def act_ReservaD(data):
-    conn = None
-    try:
-        conn = get_db_connection()
-        cursor = conn.cursor()
-        conn.autocommit = True  
-
-        query = "EXEC spActReservaD ?,?,?,?"
-        cursor.execute(query, data.get("ID"), data.get("HorarioRutaID"),  data.get("Cantidad"), data.get("TipoViaje"))
-        
-
-        while cursor.description is None:
-            cursor.nextset()
-
-        if cursor.description is None:
-            return {"error": "No data returned from the procedure."}, 500
-
-        columns = [column[0] for column in cursor.description]
-        results = [dict(zip(columns, row)) for row in cursor.fetchall()]
-        return results, 200  
-    except pyodbc.Error as e:
-        if conn:
-            conn.rollback()  # En caso de error, revertir la transacción
-        return {"error": str(e)}, 500  
-    finally:
-        if conn:
-            close_db_connection(conn)
             
-def ver_ReservaDetalle(ID):
+def eliminar_renglonPaqueteria(ID, RenglonID, PersonaID):
     conn = None
     try:
         conn = get_db_connection()
         cursor = conn.cursor()
         conn.autocommit = True  
 
-        query = "EXEC spVerReservaDetalle ?"
-        cursor.execute(query, ID)
-        
-
-        while cursor.description is None:
-            cursor.nextset()
-
-        if cursor.description is None:
-            return {"error": "No data returned from the procedure."}, 500
-
-        columns = [column[0] for column in cursor.description]
-        results = [dict(zip(columns, row)) for row in cursor.fetchall()]
-        return results, 200  
-    except pyodbc.Error as e:
-        if conn:
-            conn.rollback()  # En caso de error, revertir la transacción
-        return {"error": str(e)}, 500  
-    finally:
-        if conn:
-            close_db_connection(conn)
-            
-def eliminar_RenglonReserva(ID, RenglonID):
-    conn = None
-    try:
-        conn = get_db_connection()
-        cursor = conn.cursor()
-        conn.autocommit = True  
-
-        query = "EXEC spEliminarRenglonReservaDetalle ?,?"
-        cursor.execute(query, ID, RenglonID)
-        
-
-        while cursor.description is None:
-            cursor.nextset()
-
-        if cursor.description is None:
-            return {"error": "No data returned from the procedure."}, 500
-
-        columns = [column[0] for column in cursor.description]
-        results = [dict(zip(columns, row)) for row in cursor.fetchall()]
-        return results, 200  
-    except pyodbc.Error as e:
-        if conn:
-            conn.rollback()  # En caso de error, revertir la transacción
-        return {"error": str(e)}, 500  
-    finally:
-        if conn:
-            close_db_connection(conn)
-            
-def afectar_reserva(data):
-    conn = None
-    try:
-        conn = get_db_connection()
-        cursor = conn.cursor()
-        conn.autocommit = True  
-
-        query = "EXEC spAfectarReserva ?,?"
-        cursor.execute(query, data.get("ID"), data.get("UsuarioID"))
-        
-
-        while cursor.description is None:
-            cursor.nextset()
-
-        if cursor.description is None:
-            return {"error": "No data returned from the procedure."}, 500
-
-        columns = [column[0] for column in cursor.description]
-        results = [dict(zip(columns, row)) for row in cursor.fetchall()]
-        return results, 200  
-    except pyodbc.Error as e:
-        if conn:
-            conn.rollback()  # En caso de error, revertir la transacción
-        return {"error": str(e)}, 500  
-    finally:
-        if conn:
-            close_db_connection(conn)
-            
-def cancelar_reserva(data):
-    conn = None
-    try:
-        conn = get_db_connection()
-        cursor = conn.cursor()
-        conn.autocommit = True  
-
-        query = "EXEC spCancelarReserva ?,?"
-        cursor.execute(query, data.get("ID"), data.get("UsuarioID"))
-        
-
-        while cursor.description is None:
-            cursor.nextset()
-
-        if cursor.description is None:
-            return {"error": "No data returned from the procedure."}, 500
-
-        columns = [column[0] for column in cursor.description]
-        results = [dict(zip(columns, row)) for row in cursor.fetchall()]
-        return results, 200  
-    except pyodbc.Error as e:
-        if conn:
-            conn.rollback()  # En caso de error, revertir la transacción
-        return {"error": str(e)}, 500  
-    finally:
-        if conn:
-            close_db_connection(conn)
-            
-def ver_AsientosDispoblesRuta(data):
-    conn = None
-    try:
-        conn = get_db_connection()
-        cursor = conn.cursor()
-        conn.autocommit = True  
-
-        query = "EXEC spVerAsientosDisponiblesRuta ?,?,?"
-        cursor.execute(query, data.get("ID"), data.get("HorarioRutaID"), data.get("RenglonID"))
-        
-
-        while cursor.description is None:
-            cursor.nextset()
-
-        if cursor.description is None:
-            return {"error": "No data returned from the procedure."}, 500
-
-        columns = [column[0] for column in cursor.description]
-        results = [dict(zip(columns, row)) for row in cursor.fetchall()]
-        return results, 200  
-    except pyodbc.Error as e:
-        if conn:
-            conn.rollback()  # En caso de error, revertir la transacción
-        return {"error": str(e)}, 500  
-    finally:
-        if conn:
-            close_db_connection(conn)
-            
-def agregar_AsientosReserva(data):
-    conn = None
-    try:
-        conn = get_db_connection()
-        cursor = conn.cursor()
-        conn.autocommit = True  
-
-        query = "EXEC spAgregarAsientosReserva ?,?,?,?"
-        cursor.execute(query, data.get("ID"), data.get("HorarioRutaID"), data.get("RenglonID"), data.get("Asientos"))
-        
-
-        while cursor.description is None:
-            cursor.nextset()
-
-        if cursor.description is None:
-            return {"error": "No data returned from the procedure."}, 500
-
-        columns = [column[0] for column in cursor.description]
-        results = [dict(zip(columns, row)) for row in cursor.fetchall()]
-        return results, 200  
-    except pyodbc.Error as e:
-        if conn:
-            conn.rollback()  # En caso de error, revertir la transacción
-        return {"error": str(e)}, 500  
-    finally:
-        if conn:
-            close_db_connection(conn)
-            
-def guardar_DatosPersonaReserva(data):
-    conn = None
-    try:
-        conn = get_db_connection()
-        cursor = conn.cursor()
-        conn.autocommit = True  
-
-        query = "EXEC spGuardarDatosPersonaReserva ?,?,?,?,? ,?,?,?,?"
-        cursor.execute(query, data.get("ID"), data.get("RenglonID"), data.get("HorarioRutaID"), data.get("Asiento"), data.get("Nombre"),
-                    data.get("Email"), data.get("FechaNacimiento"), data.get("Telefono"), data.get("Curp"))
-        
-
-        while cursor.description is None:
-            cursor.nextset()
-
-        if cursor.description is None:
-            return {"error": "No data returned from the procedure."}, 500
-
-        columns = [column[0] for column in cursor.description]
-        results = [dict(zip(columns, row)) for row in cursor.fetchall()]
-        return results, 200  
-    except pyodbc.Error as e:
-        if conn:
-            conn.rollback()  # En caso de error, revertir la transacción
-        return {"error": str(e)}, 500  
-    finally:
-        if conn:
-            close_db_connection(conn)
-            
-def ver_PersonasReserva(ID, HorarioRutaID, RenglonID):
-    conn = None
-    try:
-        conn = get_db_connection()
-        cursor = conn.cursor()
-        conn.autocommit = True  
-
-        query = "EXEC spVerPersonasReserva ?,?,?"
-        cursor.execute(query, ID, HorarioRutaID, RenglonID)
-        
-
-        while cursor.description is None:
-            cursor.nextset()
-
-        if cursor.description is None:
-            return {"error": "No data returned from the procedure."}, 500
-
-        columns = [column[0] for column in cursor.description]
-        results = [dict(zip(columns, row)) for row in cursor.fetchall()]
-        return results, 200  
-    except pyodbc.Error as e:
-        if conn:
-            conn.rollback()  # En caso de error, revertir la transacción
-        return {"error": str(e)}, 500  
-    finally:
-        if conn:
-            close_db_connection(conn)
-            
-def agregar_FormaPagoReserva(data):
-    conn = None
-    try:
-        conn = get_db_connection()
-        cursor = conn.cursor()
-        conn.autocommit = True  
-
-        query = "EXEC spAgregarFormaPagoReserva ?,?,?,?"
-        cursor.execute(query, data.get("ID"), data.get("UsuarioID"), data.get("FormaPagoID"), data.get("Referencia"))
+        query = "EXEC spEliminarDetallePaqueteria ?,?,?"
+        cursor.execute(query, ID, RenglonID, PersonaID)
         
 
         while cursor.description is None:
@@ -408,8 +268,8 @@ def cambiar_situacion(data):
         cursor = conn.cursor()
         conn.autocommit = True  
 
-        query = "EXEC spCambiarsituacionReserva ?,?"
-        cursor.execute(query, data.get("ID"), data.get("Situacion"))
+        query = "EXEC spCambiarSituacionPaqueteria ?,?,?"
+        cursor.execute(query, data.get("ID"), data.get("UsuarioID"), data.get("Situacion"))
         
 
         while cursor.description is None:
@@ -429,15 +289,72 @@ def cambiar_situacion(data):
         if conn:
             close_db_connection(conn)
             
-def eliminar_reserva(ID, UsuarioID):
+def afectar_paqueteria(data):
     conn = None
     try:
         conn = get_db_connection()
         cursor = conn.cursor()
         conn.autocommit = True  
 
-        query = "EXEC spEliminarReserva ?,?"
-        cursor.execute(query, ID, UsuarioID)
+        query = "EXEC spAfectarPaqueteria ?,?"
+        cursor.execute(query, data.get("ID"), data.get("UsuarioID"))
+        
+
+        while cursor.description is None:
+            cursor.nextset()
+
+        if cursor.description is None:
+            return {"error": "No data returned from the procedure."}, 500
+
+        columns = [column[0] for column in cursor.description]
+        results = [dict(zip(columns, row)) for row in cursor.fetchall()]
+        return results, 200  
+    except pyodbc.Error as e:
+        if conn:
+            conn.rollback()  # En caso de error, revertir la transacción
+        return {"error": str(e)}, 500  
+    finally:
+        if conn:
+            close_db_connection(conn)
+            
+            
+def eliminar_paqueteria(data):
+    conn = None
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        conn.autocommit = True  
+
+        query = "EXEC spEliminarPaqueteria ?,?"
+        cursor.execute(query, data.get("ID"), data.get("UsuarioID"))
+        
+
+        while cursor.description is None:
+            cursor.nextset()
+
+        if cursor.description is None:
+            return {"error": "No data returned from the procedure."}, 500
+
+        columns = [column[0] for column in cursor.description]
+        results = [dict(zip(columns, row)) for row in cursor.fetchall()]
+        return results, 200  
+    except pyodbc.Error as e:
+        if conn:
+            conn.rollback()  # En caso de error, revertir la transacción
+        return {"error": str(e)}, 500  
+    finally:
+        if conn:
+            close_db_connection(conn)
+            
+def cancelar_paqueteria(data):
+    conn = None
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        conn.autocommit = True  
+
+        query = "EXEC spCancelarPaqueteria ?,?"
+        cursor.execute(query, data.get("ID"), data.get("UsuarioID"))
         
 
         while cursor.description is None:

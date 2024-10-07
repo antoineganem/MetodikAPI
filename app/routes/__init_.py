@@ -6,17 +6,18 @@ from app.routes.Catalogos.Usuarios import usuarios_bp, usuariosResumen_bp, actUs
 from app.routes.Catalogos.Empresas import empresas_bp, empresasResumen_bp, actEmpresa_bp, verEmpresaID_bp
 from app.routes.Catalogos.Sucursales import sucursales_bp, sucursalResumen_bp, actSucursal_bp, verSucursalID_bp
 from app.routes.Catalogos.Vehiculos import vehiculos_bp, vehiculoResumen_bp, actVehiculo_bp, verVehiculoID_bp
-from app.routes.Catalogos.Perfiles import verPerfiles_bp, verPerfilID_bp, actPerfil_bp
+from app.routes.Catalogos.Perfiles import verPerfiles_bp, verPerfilID_bp, actPerfil_bp, verModulosAcceso_bp
 from app.routes.Catalogos.Almacenes import almacenes_bp, almacenResumen_bp, actAlmacen_bp, verAlmacenID_bp
 from app.routes.Catalogos.Destinos import destinos_bp, destinoResumen_bp, actDestino_bp, verDestinoID_bp
 from app.routes.Filtros.Filtros import verFiltrosCatalogos_bp, verFiltrosModulo_bp
 from app.routes.Comercial.Reservas.Reservas import verReservas_bp, nvaReserva_bp
 from app.routes.Comercial.Reservas.ReservasD import *
+from app.routes.Comercial.Paqueteria.Paqueteria import *
 from app.routes.Exploradores.RutasExplorador import verExploradorRutas_bp, verExploradorRutasID_bp
 from app.routes.Catalogos.Rutas import rutas_bp, rutasResumen_bp, actRuta_bp, verHorarios_bp, actHorarioRuta_bp, verRutasHorarios_bp, eliminarRutaHorario_bp
 from app.routes.Catalogos.Choferes import choferes_bp, choferesResumen_bp, actChoferes_bp, verChoferID_bp
 from app.routes.Catalogos.Agentes import agentes_bp, agentesResumen_bp, actAgente_bp, verAgenteID_bp
-
+from app.routes.Whatsapp.whatsapp import whatsapp_bp, get_message_data_bp
 
 def register_routes(app: Flask):
     # Login
@@ -43,6 +44,7 @@ def register_routes(app: Flask):
     app.register_blueprint(verPerfiles_bp)  
     app.register_blueprint(verPerfilID_bp)  
     app.register_blueprint(actPerfil_bp)  
+    app.register_blueprint(verModulosAcceso_bp)  
 
     ##Catalogo Empresas
 
@@ -75,6 +77,23 @@ def register_routes(app: Flask):
     app.register_blueprint(verPersonasReserva_bp)
     app.register_blueprint(agregarFormaPagoReserva_bp)    
     app.register_blueprint(cambiarSituacion_bp)  
+
+    ##Paqueteria
+    app.register_blueprint(verPaqueteria_bp)
+    app.register_blueprint(nuevaPaqueteria_bp)
+    
+    ##PaqueteriaD
+    app.register_blueprint(verPaqueteriaID_bp)
+    app.register_blueprint(verArtDispPaqueteria_bp)
+    app.register_blueprint(avanzarPaqueteria_bp)
+    app.register_blueprint(agregarPaqueteriaDetalle_bp)
+    app.register_blueprint(verPaqueteriaDetalle_bp)
+    app.register_blueprint(actPaqueteriaDetalle_bp)
+    app.register_blueprint(eliminarRenglonPaqueteria_bp)
+    app.register_blueprint(cambiarSituacionPaqueteria_bp)
+    app.register_blueprint(afectarPaqueteria_bp)
+    app.register_blueprint(eliminarPaqueteria_bp)
+    app.register_blueprint(cancelarPaqueteria_bp)
 
     # Catalogo Sucursales
 
@@ -129,3 +148,6 @@ def register_routes(app: Flask):
     app.register_blueprint(actChoferes_bp)
     app.register_blueprint(verChoferID_bp)
     
+    #Whatsapp api 
+    app.register_blueprint(whatsapp_bp)
+    app.register_blueprint(get_message_data_bp)
