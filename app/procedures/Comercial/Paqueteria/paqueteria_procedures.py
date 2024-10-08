@@ -179,7 +179,6 @@ def verPaqueteria_detalle(ID):
     try:
         conn = get_db_connection()
         cursor = conn.cursor()
-        conn.autocommit = True  
 
         query = "EXEC spVerPaqueteriaDetalle ?"
         cursor.execute(query, ID)
