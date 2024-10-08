@@ -20,6 +20,10 @@ cambiarSituacion_bp = Blueprint('cambiarSituacion', __name__)
 eliminarReserva_bp = Blueprint('eliminarReserva', __name__)
 verPdfReserva_bp = Blueprint('verPdfReserva', __name__)
 
+agregarEquipajeDetalle_bp = Blueprint('agregarEquipajeDetalle', __name__)
+verEquipajeDetalle_bp = Blueprint('verEquipajeDetalle', __name__)
+actEquipajeDetalle_bp = Blueprint('actEquipajeDetalle', __name__)
+eliminarEquipaje_bp = Blueprint('eliminarEquipaje', __name__)
 
 
 
@@ -182,4 +186,46 @@ def verPdfReserva_route():
     if data is None:
         return jsonify({"error": "Faltan datos requeridos"}), 400
     response = verPdfReserva(data)
+    return response
+
+
+@agregarEquipajeDetalle_bp.route('/Comercial/Reservas/AgregarEquipajeDetalle', methods=['POST'])
+@jwt_required()
+def agregarEquipajeDetalle_route():
+    data = request.json
+    if data is None:
+        return jsonify({"error": "Faltan datos requeridos"}), 400
+    response = agregarEquipajeDetalle(data)
+    return response
+
+@verEquipajeDetalle_bp.route('/Comercial/Reservas/verEquipajeDetalle', methods=['GET'])
+@jwt_required()
+def verEquipajeDetalle_route():
+    ID = request.args.get('ID')
+
+    if ID is None:
+        return jsonify({"error": "Faltan datos requeridos"}), 400
+    response = verEquipajeDetalle(ID)
+    return response
+
+
+@actEquipajeDetalle_bp.route('/Comercial/Reservas/actEquipajeDetalle', methods=['POST'])
+@jwt_required()
+def actEquipajeDetalle_route():
+    data = request.json
+    if data is None:
+        return jsonify({"error": "Faltan datos requeridos"}), 400
+    response = actEquipajeDetalle(data)
+    return response
+
+@eliminarEquipaje_bp.route('/Comercial/Reservas/eliminarRenglonEquipaje', methods=['DELETE'])
+@jwt_required()
+def eliminarEquipaje_route():
+    ID = request.args.get('ID')
+    RenglonID = request.args.get('RenglonID')
+    PersonaID = request.args.get('PersonaID')
+
+    if ID is None:
+        return jsonify({"error": "Faltan datos requeridos"}), 400
+    response = eliminarEquipaje(ID, RenglonID, PersonaID)
     return response

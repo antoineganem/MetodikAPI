@@ -79,6 +79,11 @@ def register_routes(app: Flask):
     app.register_blueprint(cambiarSituacion_bp)  
     app.register_blueprint(verPdfReserva_bp)  
 
+    app.register_blueprint(agregarEquipajeDetalle_bp)  
+    app.register_blueprint(verEquipajeDetalle_bp)  
+    app.register_blueprint(actEquipajeDetalle_bp)  
+    app.register_blueprint(eliminarEquipaje_bp)  
+
     ##Paqueteria
     app.register_blueprint(verPaqueteria_bp)
     app.register_blueprint(nuevaPaqueteria_bp)

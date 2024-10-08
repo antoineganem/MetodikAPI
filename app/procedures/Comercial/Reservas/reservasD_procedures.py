@@ -537,3 +537,116 @@ def ver_pdfReserva(data):
     finally:
         if conn:
             close_db_connection(conn)
+            
+            
+def agregar_equipajeDetalle(data):
+    conn = None
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        conn.autocommit = True  
+
+        query = "EXEC spAgregarEquipajeDetalle ?,?,?"
+        cursor.execute(query, data.get("ID"), data.get("UsuarioID"), data.get("Articulo"))
+        
+
+        while cursor.description is None:
+            cursor.nextset()
+
+        if cursor.description is None:
+            return {"error": "No data returned from the procedure."}, 500
+
+        columns = [column[0] for column in cursor.description]
+        results = [dict(zip(columns, row)) for row in cursor.fetchall()]
+        return results, 200  
+    except pyodbc.Error as e:
+        if conn:
+            conn.rollback()  # En caso de error, revertir la transacción
+        return {"error": str(e)}, 500  
+    finally:
+        if conn:
+            close_db_connection(conn)
+            
+def verEquipaje_detalle(ID):
+    conn = None
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+
+        query = "EXEC spVerEquipajeDetalle ?"
+        cursor.execute(query, ID)
+        
+
+        while cursor.description is None:
+            cursor.nextset()
+
+        if cursor.description is None:
+            return {"error": "No data returned from the procedure."}, 500
+
+        columns = [column[0] for column in cursor.description]
+        results = [dict(zip(columns, row)) for row in cursor.fetchall()]
+        return results, 200  
+    except pyodbc.Error as e:
+        if conn:
+            conn.rollback()  # En caso de error, revertir la transacción
+        return {"error": str(e)}, 500  
+    finally:
+        if conn:
+            close_db_connection(conn)
+
+def act_EquipajeDetalle(data):
+    conn = None
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        conn.autocommit = True  
+
+        query = "EXEC spActDetalleEquipaje ?,?,?,?,? ,?"
+        cursor.execute(query, data.get("ID"), data.get("RenglonID"), data.get("UsuarioID"), data.get("Cantidad"), data.get("Peso")
+                       , data.get("Precio"))
+        
+
+        while cursor.description is None:
+            cursor.nextset()
+
+        if cursor.description is None:
+            return {"error": "No data returned from the procedure."}, 500
+
+        columns = [column[0] for column in cursor.description]
+        results = [dict(zip(columns, row)) for row in cursor.fetchall()]
+        return results, 200  
+    except pyodbc.Error as e:
+        if conn:
+            conn.rollback()  # En caso de error, revertir la transacción
+        return {"error": str(e)}, 500  
+    finally:
+        if conn:
+            close_db_connection(conn)
+            
+def eliminar_renglonEquipaje(ID, RenglonID, PersonaID):
+    conn = None
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        conn.autocommit = True  
+
+        query = "EXEC spEliminarDetalleEquipaje ?,?,?"
+        cursor.execute(query, ID, RenglonID, PersonaID)
+        
+
+        while cursor.description is None:
+            cursor.nextset()
+
+        if cursor.description is None:
+            return {"error": "No data returned from the procedure."}, 500
+
+        columns = [column[0] for column in cursor.description]
+        results = [dict(zip(columns, row)) for row in cursor.fetchall()]
+        return results, 200  
+    except pyodbc.Error as e:
+        if conn:
+            conn.rollback()  # En caso de error, revertir la transacción
+        return {"error": str(e)}, 500  
+    finally:
+        if conn:
+            close_db_connection(conn)

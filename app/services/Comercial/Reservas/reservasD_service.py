@@ -54,3 +54,15 @@ def eliminarReserva(ID, UsuarioID):
 
 def verPdfReserva(data):
     return ver_pdfReserva(data)
+
+def agregarEquipajeDetalle(data):
+    return agregar_equipajeDetalle(data)
+
+def verEquipajeDetalle(ID):
+    return verEquipaje_detalle(ID)
+
+def actEquipajeDetalle(data):
+    return act_EquipajeDetalle(data)
+
+def eliminarEquipaje(ID, RenglonID, PersonaID):
+    return eliminar_renglonEquipaje(ID, RenglonID, PersonaID)
