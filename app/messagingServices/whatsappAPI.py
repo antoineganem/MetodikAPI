@@ -112,8 +112,9 @@ def send_message(data):
     try:
         response = requests.post(URL, headers=headers, json=message_data)
 
-        return jsonify((response.json()), response.status_code)
+        ##return jsonify((response.json()), response.status_code)
     
     except requests.exceptions.RequestException as e:
-        return jsonify({"error": str(e)}), 500
+        print()
+        ##return jsonify({"error": str(e)}), 500
     

@@ -51,3 +51,6 @@ def cambiarSituacion(data):
 
 def eliminarReserva(ID, UsuarioID):
     return eliminar_reserva(ID, UsuarioID)
+
+def verPdfReserva(data):
+    return ver_pdfReserva(data)

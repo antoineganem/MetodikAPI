@@ -18,6 +18,7 @@ verPersonasReserva_bp = Blueprint('verPersonasReserva', __name__)
 agregarFormaPagoReserva_bp = Blueprint('agregarFormaPagoReserva', __name__)
 cambiarSituacion_bp = Blueprint('cambiarSituacion', __name__)
 eliminarReserva_bp = Blueprint('eliminarReserva', __name__)
+verPdfReserva_bp = Blueprint('verPdfReserva', __name__)
 
 
 
@@ -172,4 +173,13 @@ def eliminarReserva_route():
     if ID is None:
         return jsonify({"error": "Faltan datos requeridos"}), 400
     response = eliminarReserva(ID, UsuarioID)
+    return response
+
+@verPdfReserva_bp.route('/Comercial/Reservas/verPDFReserva', methods=['POST'])
+@jwt_required()
+def verPdfReserva_route():
+    data = request.json
+    if data is None:
+        return jsonify({"error": "Faltan datos requeridos"}), 400
+    response = verPdfReserva(data)
     return response

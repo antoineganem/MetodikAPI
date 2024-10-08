@@ -2,6 +2,8 @@ import pyodbc
 from flask import jsonify
 from app.utils.db import get_db_connection, close_db_connection
 import logging
+from app.messagingServices.whatsappAPI import send_message
+import json
 
 def ver_ReservaID(ID):
     conn = None
@@ -401,15 +403,93 @@ def agregar_FormaPagoReserva(data):
         if conn:
             close_db_connection(conn)
             
+
+
 def cambiar_situacion(data):
+    conn = None
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        conn.autocommit = True
+
+        # Ejecutar el procedimiento almacenado principal
+        query = "EXEC spCambiarsituacionReserva ?,?"
+        cursor.execute(query, data.get("ID"), data.get("Situacion"))
+
+        # Procesar los resultados del primer procedimiento
+        while cursor.description is None:
+            cursor.nextset()
+
+        if cursor.description is None:
+            return {"error": "No data returned from the procedure."}, 500
+
+        # Obtener los resultados del primer procedimiento
+        columns = [column[0] for column in cursor.description]
+        results = [dict(zip(columns, row)) for row in cursor.fetchall()]
+
+        # Verificar si la situación es "Pagado"
+        if data.get("Situacion") == "Pagado":
+            try:
+                # Ejecutar el procedimiento almacenado para "Pagado"
+                query_select = "EXEC spVerBoletosPagadosReserva ?"
+                cursor.execute(query_select, data.get("ID"))
+
+                # Verificar si el SELECT devuelve resultados
+                while cursor.description is None:
+                    cursor.nextset()
+
+                if cursor.description is None:
+                    return {"error": "No data returned from spVerBoletosPagadosReserva."}, 500
+                
+                # Obtener los resultados del SELECT
+                columns_select = [column[0] for column in cursor.description]
+                select_results = [dict(zip(columns_select, row)) for row in cursor.fetchall()]
+
+                # Iterar sobre los resultados del SELECT y enviar un mensaje por cada uno
+                for result in select_results:
+                    # Crear el JSON que será enviado, no necesitas json.dumps aquí
+                    message_data = {
+                        "Telefono": result["Telefono"],
+                        "Movimiento": result["Movimiento"],
+                        "Fecha": result["Fecha"],
+                        "Pasajeros": result["Pasajeros"],
+                        "NumeroAsiento": result["NumeroAsiento"],
+                        "PrecioTotal": result["PrecioTotal"],  # Asumiendo que ahora es varchar
+                        "FechaSalida": result["FechaSalida"],
+                        "Ruta": result["Ruta"],
+                        "Nombre": result["Nombre"]
+                    }
+
+                    # Enviar el mensaje usando send_message directamente con el diccionario
+                    send_message(message_data)
+
+            except pyodbc.Error as e:
+                # Registrar el error pero no afectar el flujo de retorno
+                print(f"Error al ejecutar el procedimiento 'Pagado': {str(e)}")
+
+        # Retornar el resultado del primer procedimiento almacenado
+        return results, 200  
+
+    except pyodbc.Error as e:
+        if conn:
+            conn.rollback()  # Revertir la transacción en caso de error
+        return {"error": str(e)}, 500
+
+    finally:
+        if conn:
+            close_db_connection(conn)
+
+
+            
+def eliminar_reserva(ID, UsuarioID):
     conn = None
     try:
         conn = get_db_connection()
         cursor = conn.cursor()
         conn.autocommit = True  
 
-        query = "EXEC spCambiarsituacionReserva ?,?"
-        cursor.execute(query, data.get("ID"), data.get("Situacion"))
+        query = "EXEC spEliminarReserva ?,?"
+        cursor.execute(query, ID, UsuarioID)
         
 
         while cursor.description is None:
@@ -429,15 +509,16 @@ def cambiar_situacion(data):
         if conn:
             close_db_connection(conn)
             
-def eliminar_reserva(ID, UsuarioID):
+            
+def ver_pdfReserva(data):
     conn = None
     try:
         conn = get_db_connection()
         cursor = conn.cursor()
         conn.autocommit = True  
 
-        query = "EXEC spEliminarReserva ?,?"
-        cursor.execute(query, ID, UsuarioID)
+        query = "EXEC spPDFReserva ?"
+        cursor.execute(query, data.get("ID"))
         
 
         while cursor.description is None:
