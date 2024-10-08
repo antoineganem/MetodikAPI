@@ -126,7 +126,7 @@ def avanza_paqueteria(data):
         query = "EXEC spAvanzarPaqueteria ?,?,?,?,? ,?,?,?,?,? ,?"
         cursor.execute(query, data.get("ID"), data.get("Movimiento"), data.get("ClienteID"), data.get("TerminalOrigenID"), data.get("TerminalDestinoID")
                        , data.get("FechaEnvio"), data.get("FormaPagoID"), data.get("ReferenciaPago"), data.get("TelefonoDest"), data.get("NombreDest")
-                       , data.get("PersonaID"))
+                       , data.get("PersonaID") )
         
 
         while cursor.description is None:

@@ -41,9 +41,9 @@ def avanza_reserva(data):
         cursor = conn.cursor()
         conn.autocommit = True  
 
-        query = "EXEC spAvanzarReserva ?,?,?,?,? ,?,?,?,?"
+        query = "EXEC spAvanzarReserva ?,?,?,?,? ,?,?,?,?,?"
         cursor.execute(query, data.get("ID"), data.get("Movimiento"),  data.get("OrigenID"),  data.get("DestinoID"),  data.get("FechaSalida"),
-                        data.get("FechaRegreso"), data.get("Referencia"), data.get("Observaciones"), data.get("Ruta"))
+                        data.get("FechaRegreso"), data.get("Referencia"), data.get("Observaciones"), data.get("Ruta"), data.get("ReservaID"))
         
 
         while cursor.description is None:
