@@ -25,6 +25,7 @@ def ver_ReservaID(ID):
 
         columns = [column[0] for column in cursor.description]
         results = [dict(zip(columns, row)) for row in cursor.fetchall()]
+        session.commit()
         return results, 200  
     except pyodbc.Error as e:
         session.rollback() 

@@ -1,14 +1,13 @@
 import pyodbc
 from flask import jsonify
 from app.utils.db import get_db_connection, close_db_connection
-import logging
+from app.utils.config import get_db_session, close_db_session
 
 def ver_Indicadores(data):
-    conn = None
+    session = get_db_session()  
     try:
-        conn = get_db_connection()
-        cursor = conn.cursor()
-        conn.autocommit = True  
+        conn = session.connection().connection 
+        cursor = conn.cursor()    
 
         query = "EXEC spVerIndicadores ?,?"
         cursor.execute(query, data.get("Tipo"), data.get("EmpresaID"))
@@ -22,14 +21,13 @@ def ver_Indicadores(data):
 
         columns = [column[0] for column in cursor.description]
         results = [dict(zip(columns, row)) for row in cursor.fetchall()]
+        session.commit()
         return results, 200  
     except pyodbc.Error as e:
-        if conn:
-            conn.rollback()  # En caso de error, revertir la transacción
-        return {"error": str(e)}, 500  
+        session.rollback() 
+        return {"error": str(e)}, 500
     finally:
-        if conn:
-            close_db_connection(conn)
+        close_db_session(session)
 
 
 

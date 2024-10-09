@@ -24,6 +24,8 @@ def ver_paqueteria(data):
 
         columns = [column[0] for column in cursor.description]
         results = [dict(zip(columns, row)) for row in cursor.fetchall()]
+        session.commit()
+
         return results, 200  
     except pyodbc.Error as e:
         session.rollback() 
@@ -46,6 +48,7 @@ def nueva_paqueteria(data):
             return {"error": "No data returned from the procedure."}, 500
         columns = [column[0] for column in cursor.description]
         results = [dict(zip(columns, row)) for row in cursor.fetchall()]
+        
         return results, 200  
     except pyodbc.Error as e:
         if conn:
@@ -73,6 +76,8 @@ def ver_paqueteriaID(ID):
 
         columns = [column[0] for column in cursor.description]
         results = [dict(zip(columns, row)) for row in cursor.fetchall()]
+        session.commit()
+
         return results, 200  
     except pyodbc.Error as e:
         session.rollback() 
@@ -99,6 +104,8 @@ def ver_ArtDispPaqueteria(EmpresaID):
 
         columns = [column[0] for column in cursor.description]
         results = [dict(zip(columns, row)) for row in cursor.fetchall()]
+        session.commit()
+
         return results, 200  
     except pyodbc.Error as e:
         session.rollback() 
