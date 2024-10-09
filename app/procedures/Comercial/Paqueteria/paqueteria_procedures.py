@@ -31,30 +31,28 @@ def ver_paqueteria():
         close_db_session(session)
             
 def nueva_paqueteria(data):
-    session = get_db_session()  
+    conn = None
     try:
-        conn = session.connection().connection 
-        cursor = conn.cursor()  
+        conn = get_db_connection()
+        cursor = conn.cursor()
         conn.autocommit = True  
-
         query = "EXEC spNvaPaqueteria ?,?"
         cursor.execute(query, data.get("PersonaID"), data.get("EmpresaID"))
         
-
         while cursor.description is None:
             cursor.nextset()
-
         if cursor.description is None:
             return {"error": "No data returned from the procedure."}, 500
-
         columns = [column[0] for column in cursor.description]
         results = [dict(zip(columns, row)) for row in cursor.fetchall()]
         return results, 200  
     except pyodbc.Error as e:
-        session.rollback() 
-        return {"error": str(e)}, 500
+        if conn:
+            conn.rollback()  # En caso de error, revertir la transacción
+        return {"error": str(e)}, 500  
     finally:
-        close_db_session(session)
+        if conn:
+            close_db_connection(conn)
             
 def ver_paqueteriaID(ID):
     session = get_db_session()  

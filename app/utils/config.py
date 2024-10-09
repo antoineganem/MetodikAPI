@@ -9,11 +9,12 @@ load_dotenv()
 # Crear el motor (engine) con el pool de conexiones
 engine = create_engine(
     f"mssql+pyodbc://{os.getenv('SQL_USER')}:{os.getenv('SQL_PASSWORD')}@{os.getenv('SQL_SERVER')}/Metodik30?driver=ODBC+Driver+17+for+SQL+Server",
-    pool_size=10,  # Número de conexiones permitidas en el pool
-    max_overflow=20,  # Conexiones adicionales cuando el pool está lleno
-    pool_pre_ping=True,  # Verifica si una conexión es válida antes de usarla
-    pool_recycle=3600  # Tiempo en segundos para reciclar conexiones (una hora aquí)
+    pool_size=50,  # Aumentar el tamaño del pool si esperas más concurrencia
+    max_overflow=50,  # Permitir más conexiones adicionales
+    pool_pre_ping=True,  # Verificar si una conexión es válida antes de usarla
+    pool_recycle=1800  # Reciclar conexiones más frecuentemente
 )
+
 
 # Crear la sesión
 Session = sessionmaker(bind=engine)
