@@ -28,3 +28,6 @@ pip install flask-jwt-extended
 
 CORS
 pip install flask-cors
+
+sqlalchemy
+pip install sqlalchemy

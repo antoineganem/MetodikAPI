@@ -8,7 +8,6 @@ def verFiltros_Catalogos(data):
     try:
         conn = get_db_connection()
         cursor = conn.cursor()
-        conn.autocommit = True  
 
         query = "EXEC spVerFiltroCatalogo ?,?,?,?"
         cursor.execute(query, data.get("Tipo"), data.get("PersonaID"), data.get("Modulo"), data.get("ModuloID"))
@@ -38,7 +37,6 @@ def verFiltros_Modulo(data):
     try:
         conn = get_db_connection()
         cursor = conn.cursor()
-        conn.autocommit = True  
 
         query = "EXEC spVerFiltroModulo ?,?,?,?"
         cursor.execute(query, data.get("Tipo"), data.get("PersonaID"), data.get("Modulo"), data.get("ModuloID"))
