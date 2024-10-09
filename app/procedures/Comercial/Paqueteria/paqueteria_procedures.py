@@ -110,14 +110,12 @@ def avanza_paqueteria(data):
     try:
         conn = session.connection().connection 
         cursor = conn.cursor()  
-        conn.autocommit = True   
 
         query = "EXEC spAvanzarPaqueteria ?,?,?,?,? ,?,?,?,?,? ,?"
         cursor.execute(query, data.get("ID"), data.get("Movimiento"), data.get("ClienteID"), data.get("TerminalOrigenID"), data.get("TerminalDestinoID")
                        , data.get("FechaEnvio"), data.get("FormaPagoID"), data.get("ReferenciaPago"), data.get("TelefonoDest"), data.get("NombreDest")
                        , data.get("PersonaID") )
         
-
         while cursor.description is None:
             cursor.nextset()
 
@@ -126,6 +124,7 @@ def avanza_paqueteria(data):
 
         columns = [column[0] for column in cursor.description]
         results = [dict(zip(columns, row)) for row in cursor.fetchall()]
+        session.commit()
         return results, 200  
     except pyodbc.Error as e:
         session.rollback() 
@@ -138,7 +137,6 @@ def agregar_paqueteriaDetalle(data):
     try:
         conn = session.connection().connection 
         cursor = conn.cursor()  
-        conn.autocommit = True  
 
         query = "EXEC spAgregarPaqueteriaDetalle ?,?,?"
         cursor.execute(query, data.get("ID"), data.get("UsuarioID"), data.get("Articulo"))
@@ -152,6 +150,7 @@ def agregar_paqueteriaDetalle(data):
 
         columns = [column[0] for column in cursor.description]
         results = [dict(zip(columns, row)) for row in cursor.fetchall()]
+        session.commit()
         return results, 200  
     except pyodbc.Error as e:
         session.rollback() 
@@ -196,7 +195,6 @@ def act_paqueteriaDetalle(data):
     try:
         conn = session.connection().connection 
         cursor = conn.cursor()  
-        conn.autocommit = True  
 
         query = "EXEC spActDetallePaqueteria ?,?,?,?,? ,?"
         cursor.execute(query, data.get("ID"), data.get("RenglonID"), data.get("UsuarioID"), data.get("Cantidad"), data.get("Peso")
@@ -211,6 +209,7 @@ def act_paqueteriaDetalle(data):
 
         columns = [column[0] for column in cursor.description]
         results = [dict(zip(columns, row)) for row in cursor.fetchall()]
+        session.commit()
         return results, 200  
     except pyodbc.Error as e:
         session.rollback() 
@@ -224,7 +223,6 @@ def eliminar_renglonPaqueteria(ID, RenglonID, PersonaID):
     try:
         conn = session.connection().connection 
         cursor = conn.cursor()  
-        conn.autocommit = True    
 
         query = "EXEC spEliminarDetallePaqueteria ?,?,?"
         cursor.execute(query, ID, RenglonID, PersonaID)
@@ -238,6 +236,7 @@ def eliminar_renglonPaqueteria(ID, RenglonID, PersonaID):
 
         columns = [column[0] for column in cursor.description]
         results = [dict(zip(columns, row)) for row in cursor.fetchall()]
+        session.commit()
         return results, 200  
     except pyodbc.Error as e:
         session.rollback() 
@@ -250,7 +249,6 @@ def cambiar_situacion(data):
     try:
         conn = session.connection().connection 
         cursor = conn.cursor()  
-        conn.autocommit = True    
 
         query = "EXEC spCambiarSituacionPaqueteria ?,?,?"
         cursor.execute(query, data.get("ID"), data.get("UsuarioID"), data.get("Situacion"))
@@ -264,7 +262,9 @@ def cambiar_situacion(data):
 
         columns = [column[0] for column in cursor.description]
         results = [dict(zip(columns, row)) for row in cursor.fetchall()]
-
+        
+        session.commit()
+        
         return results, 200  
     except pyodbc.Error as e:
         session.rollback() 
@@ -291,6 +291,9 @@ def afectar_paqueteria(data):
 
         columns = [column[0] for column in cursor.description]
         results = [dict(zip(columns, row)) for row in cursor.fetchall()]
+        
+        session.commit()
+        
         return results, 200  
     except pyodbc.Error as e:
         session.rollback() 
@@ -304,7 +307,6 @@ def eliminar_paqueteria(data):
     try:
         conn = session.connection().connection 
         cursor = conn.cursor()  
-        conn.autocommit = True   
 
         query = "EXEC spEliminarPaqueteria ?,?"
         cursor.execute(query, data.get("ID"), data.get("UsuarioID"))
@@ -318,6 +320,9 @@ def eliminar_paqueteria(data):
 
         columns = [column[0] for column in cursor.description]
         results = [dict(zip(columns, row)) for row in cursor.fetchall()]
+        
+        session.commit()
+        
         return results, 200  
     except pyodbc.Error as e:
         session.rollback() 
@@ -344,6 +349,7 @@ def cancelar_paqueteria(data):
 
         columns = [column[0] for column in cursor.description]
         results = [dict(zip(columns, row)) for row in cursor.fetchall()]
+        session.commit()
         return results, 200  
     except pyodbc.Error as e:
         session.rollback() 

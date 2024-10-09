@@ -12,7 +12,6 @@ def ver_ReservaID(ID):
     try:
         conn = session.connection().connection 
         cursor = conn.cursor()  
-        conn.autocommit = True   
 
         query = "EXEC spVerReservaID ?"
         cursor.execute(query, ID)
@@ -39,7 +38,6 @@ def avanza_reserva(data):
     try:
         conn = session.connection().connection 
         cursor = conn.cursor()  
-        conn.autocommit = True    
 
         query = "EXEC spAvanzarReserva ?,?,?,?,? ,?,?,?,?,?"
         cursor.execute(query, data.get("ID"), data.get("Movimiento"),  data.get("OrigenID"),  data.get("DestinoID"),  data.get("FechaSalida"),
@@ -54,6 +52,9 @@ def avanza_reserva(data):
 
         columns = [column[0] for column in cursor.description]
         results = [dict(zip(columns, row)) for row in cursor.fetchall()]
+        
+        session.commit()
+
         return results, 200  
     except pyodbc.Error as e:
         session.rollback() 
@@ -124,7 +125,6 @@ def act_ReservaD(data):
     try:
         conn = session.connection().connection 
         cursor = conn.cursor()  
-        conn.autocommit = True   
 
         query = "EXEC spActReservaD ?,?,?,?"
         cursor.execute(query, data.get("ID"), data.get("HorarioRutaID"),  data.get("Cantidad"), data.get("TipoViaje"))
@@ -138,6 +138,9 @@ def act_ReservaD(data):
 
         columns = [column[0] for column in cursor.description]
         results = [dict(zip(columns, row)) for row in cursor.fetchall()]
+        
+        session.commit()
+
         return results, 200  
     except pyodbc.Error as e:
         session.rollback() 
@@ -176,7 +179,6 @@ def eliminar_RenglonReserva(ID, RenglonID):
     try:
         conn = session.connection().connection 
         cursor = conn.cursor()  
-        conn.autocommit = True   
 
         query = "EXEC spEliminarRenglonReservaDetalle ?,?"
         cursor.execute(query, ID, RenglonID)
@@ -190,6 +192,9 @@ def eliminar_RenglonReserva(ID, RenglonID):
 
         columns = [column[0] for column in cursor.description]
         results = [dict(zip(columns, row)) for row in cursor.fetchall()]
+        
+        session.commit()
+
         return results, 200  
     except pyodbc.Error as e:
         session.rollback() 
@@ -202,7 +207,6 @@ def afectar_reserva(data):
     try:
         conn = session.connection().connection 
         cursor = conn.cursor()  
-        conn.autocommit = True   
 
         query = "EXEC spAfectarReserva ?,?"
         cursor.execute(query, data.get("ID"), data.get("UsuarioID"))
@@ -216,6 +220,9 @@ def afectar_reserva(data):
 
         columns = [column[0] for column in cursor.description]
         results = [dict(zip(columns, row)) for row in cursor.fetchall()]
+        
+        session.commit()
+
         return results, 200  
     except pyodbc.Error as e:
         session.rollback() 
@@ -228,7 +235,6 @@ def cancelar_reserva(data):
     try:
         conn = session.connection().connection 
         cursor = conn.cursor()  
-        conn.autocommit = True   
 
         query = "EXEC spCancelarReserva ?,?"
         cursor.execute(query, data.get("ID"), data.get("UsuarioID"))
@@ -242,6 +248,9 @@ def cancelar_reserva(data):
 
         columns = [column[0] for column in cursor.description]
         results = [dict(zip(columns, row)) for row in cursor.fetchall()]
+        
+        session.commit()
+
         return results, 200  
     except pyodbc.Error as e:
         session.rollback() 
@@ -280,7 +289,6 @@ def agregar_AsientosReserva(data):
     try:
         conn = session.connection().connection 
         cursor = conn.cursor()  
-        conn.autocommit = True   
 
         query = "EXEC spAgregarAsientosReserva ?,?,?,?"
         cursor.execute(query, data.get("ID"), data.get("HorarioRutaID"), data.get("RenglonID"), data.get("Asientos"))
@@ -294,6 +302,9 @@ def agregar_AsientosReserva(data):
 
         columns = [column[0] for column in cursor.description]
         results = [dict(zip(columns, row)) for row in cursor.fetchall()]
+        
+        session.commit()
+
         return results, 200  
     except pyodbc.Error as e:
         session.rollback() 
@@ -306,7 +317,6 @@ def guardar_DatosPersonaReserva(data):
     try:
         conn = session.connection().connection 
         cursor = conn.cursor()  
-        conn.autocommit = True   
 
         query = "EXEC spGuardarDatosPersonaReserva ?,?,?,?,? ,?,?,?,?"
         cursor.execute(query, data.get("ID"), data.get("RenglonID"), data.get("HorarioRutaID"), data.get("Asiento"), data.get("Nombre"),
@@ -321,6 +331,9 @@ def guardar_DatosPersonaReserva(data):
 
         columns = [column[0] for column in cursor.description]
         results = [dict(zip(columns, row)) for row in cursor.fetchall()]
+        
+        session.commit()
+
         return results, 200  
     except pyodbc.Error as e:
         session.rollback() 
@@ -359,7 +372,6 @@ def agregar_FormaPagoReserva(data):
     try:
         conn = session.connection().connection 
         cursor = conn.cursor()  
-        conn.autocommit = True  
 
         query = "EXEC spAgregarFormaPagoReserva ?,?,?,?"
         cursor.execute(query, data.get("ID"), data.get("UsuarioID"), data.get("FormaPagoID"), data.get("Referencia"))
@@ -373,6 +385,9 @@ def agregar_FormaPagoReserva(data):
 
         columns = [column[0] for column in cursor.description]
         results = [dict(zip(columns, row)) for row in cursor.fetchall()]
+        
+        session.commit()
+
         return results, 200  
     except pyodbc.Error as e:
         session.rollback() 
@@ -387,7 +402,6 @@ def cambiar_situacion(data):
     try:
         conn = session.connection().connection 
         cursor = conn.cursor()  
-        conn.autocommit = True
 
         query = "EXEC spCambiarsituacionReserva ?,?"
         cursor.execute(query, data.get("ID"), data.get("Situacion"))
@@ -400,6 +414,7 @@ def cambiar_situacion(data):
 
         columns = [column[0] for column in cursor.description]
         results = [dict(zip(columns, row)) for row in cursor.fetchall()]
+        session.commit()
 
         if data.get("Situacion") == "Pagado":
             try:
@@ -448,7 +463,6 @@ def eliminar_reserva(ID, UsuarioID):
     try:
         conn = session.connection().connection 
         cursor = conn.cursor()  
-        conn.autocommit = True  
 
         query = "EXEC spEliminarReserva ?,?"
         cursor.execute(query, ID, UsuarioID)
@@ -462,6 +476,8 @@ def eliminar_reserva(ID, UsuarioID):
 
         columns = [column[0] for column in cursor.description]
         results = [dict(zip(columns, row)) for row in cursor.fetchall()]
+        session.commit()
+
         return results, 200  
     except pyodbc.Error as e:
         session.rollback() 
@@ -502,7 +518,6 @@ def agregar_equipajeDetalle(data):
     try:
         conn = session.connection().connection 
         cursor = conn.cursor()  
-        conn.autocommit = True 
 
         query = "EXEC spAgregarEquipajeDetalle ?,?,?"
         cursor.execute(query, data.get("ID"), data.get("UsuarioID"), data.get("Articulo"))
@@ -516,6 +531,7 @@ def agregar_equipajeDetalle(data):
 
         columns = [column[0] for column in cursor.description]
         results = [dict(zip(columns, row)) for row in cursor.fetchall()]
+        session.commit()
         return results, 200  
     except pyodbc.Error as e:
         session.rollback() 
@@ -557,7 +573,6 @@ def act_EquipajeDetalle(data):
     try:
         conn = session.connection().connection 
         cursor = conn.cursor()  
-        conn.autocommit = True   
 
         query = "EXEC spActDetalleEquipaje ?,?,?,?,? ,?"
         cursor.execute(query, data.get("ID"), data.get("RenglonID"), data.get("UsuarioID"), data.get("Cantidad"), data.get("Peso")
@@ -572,6 +587,7 @@ def act_EquipajeDetalle(data):
 
         columns = [column[0] for column in cursor.description]
         results = [dict(zip(columns, row)) for row in cursor.fetchall()]
+        session.commit()
         return results, 200  
     except pyodbc.Error as e:
         session.rollback() 
@@ -584,7 +600,6 @@ def eliminar_renglonEquipaje(ID, RenglonID, PersonaID):
     try:
         conn = session.connection().connection 
         cursor = conn.cursor()  
-        conn.autocommit = True  
 
         query = "EXEC spEliminarDetalleEquipaje ?,?,?"
         cursor.execute(query, ID, RenglonID, PersonaID)
@@ -598,6 +613,7 @@ def eliminar_renglonEquipaje(ID, RenglonID, PersonaID):
 
         columns = [column[0] for column in cursor.description]
         results = [dict(zip(columns, row)) for row in cursor.fetchall()]
+        session.commit()
         return results, 200  
     except pyodbc.Error as e:
         session.rollback() 
