@@ -23,7 +23,7 @@ def verPaqueteria_route():
     if data is None:
         return jsonify({"error": "Faltan datos requeridos"}), 400
     
-    response = verPaqueteria()
+    response = verPaqueteria(data)
     return response
 
 
