@@ -8,11 +8,11 @@ from app.utils.config import get_db_session, close_db_session
 
 
 def ver_ReservaID(ID):
-    conn = None
+    session = get_db_session()  
     try:
-        conn = get_db_connection()
-        cursor = conn.cursor()
-        conn.autocommit = True  
+        conn = session.connection().connection 
+        cursor = conn.cursor()  
+        conn.autocommit = True   
 
         query = "EXEC spVerReservaID ?"
         cursor.execute(query, ID)
@@ -28,20 +28,18 @@ def ver_ReservaID(ID):
         results = [dict(zip(columns, row)) for row in cursor.fetchall()]
         return results, 200  
     except pyodbc.Error as e:
-        if conn:
-            conn.rollback()  # En caso de error, revertir la transacción
-        return {"error": str(e)}, 500  
+        session.rollback() 
+        return {"error": str(e)}, 500
     finally:
-        if conn:
-            close_db_connection(conn)
+        close_db_session(session)
             
 
 def avanza_reserva(data):
-    conn = None
+    session = get_db_session()  
     try:
-        conn = get_db_connection()
-        cursor = conn.cursor()
-        conn.autocommit = True  
+        conn = session.connection().connection 
+        cursor = conn.cursor()  
+        conn.autocommit = True    
 
         query = "EXEC spAvanzarReserva ?,?,?,?,? ,?,?,?,?,?"
         cursor.execute(query, data.get("ID"), data.get("Movimiento"),  data.get("OrigenID"),  data.get("DestinoID"),  data.get("FechaSalida"),
@@ -58,20 +56,18 @@ def avanza_reserva(data):
         results = [dict(zip(columns, row)) for row in cursor.fetchall()]
         return results, 200  
     except pyodbc.Error as e:
-        if conn:
-            conn.rollback()  # En caso de error, revertir la transacción
-        return {"error": str(e)}, 500  
+        session.rollback() 
+        return {"error": str(e)}, 500
     finally:
-        if conn:
-            close_db_connection(conn)
+        close_db_session(session)
 
 
 def ver_ViajesDispIda(ID):
-    conn = None
+    session = get_db_session()  
     try:
-        conn = get_db_connection()
-        cursor = conn.cursor()
-        conn.autocommit = True  
+        conn = session.connection().connection 
+        cursor = conn.cursor()  
+        conn.autocommit = True   
 
         query = "EXEC spVerViajesdisponibles ?"
         cursor.execute(query, ID)
@@ -87,53 +83,48 @@ def ver_ViajesDispIda(ID):
         results = [dict(zip(columns, row)) for row in cursor.fetchall()]
         return results, 200  
     except pyodbc.Error as e:
-        if conn:
-            conn.rollback()  # En caso de error, revertir la transacción
-        return {"error": str(e)}, 500  
+        session.rollback() 
+        return {"error": str(e)}, 500
     finally:
-        if conn:
-            close_db_connection(conn)
+        close_db_session(session)
             
 
 def ver_ViajesDispVuelta(ID):
-    session = get_db_session()  # Obtener una sesión del pool de SQLAlchemy
+    session = get_db_session() 
     try:
-        conn = session.connection().connection  # Obtener la conexión cruda compatible con pyodbc
-        cursor = conn.cursor()  # Crear el cursor para ejecutar la consulta
-        conn.autocommit = True  # Habilitar autocommit si es necesario
+        conn = session.connection().connection 
+        cursor = conn.cursor()  
+        conn.autocommit = True
 
         query = "EXEC spVerViajesdisponiblesVuelta ?"
-        cursor.execute(query, ID)  # Ejecutar el procedimiento almacenado con el parámetro
+        cursor.execute(query, ID)  
 
-        # Iterar hasta obtener la descripción del cursor (si hay varios conjuntos de resultados)
         while cursor.description is None:
             cursor.nextset()
 
-        # Si no hay resultados, retornar un error
         if cursor.description is None:
             return {"error": "No data returned from the procedure."}, 500
 
-        # Obtener los nombres de las columnas y los resultados
         columns = [column[0] for column in cursor.description]
         results = [dict(zip(columns, row)) for row in cursor.fetchall()]
 
         return results, 200
 
     except pyodbc.Error as e:
-        session.rollback()  # Revertir la transacción en caso de error
+        session.rollback()  
         return {"error": str(e)}, 500
 
     finally:
-        close_db_session(session)  # Cerrar la sesión al final para devolver la conexión al pool
+        close_db_session(session)
 
             
 
 def act_ReservaD(data):
-    conn = None
+    session = get_db_session()  
     try:
-        conn = get_db_connection()
-        cursor = conn.cursor()
-        conn.autocommit = True  
+        conn = session.connection().connection 
+        cursor = conn.cursor()  
+        conn.autocommit = True   
 
         query = "EXEC spActReservaD ?,?,?,?"
         cursor.execute(query, data.get("ID"), data.get("HorarioRutaID"),  data.get("Cantidad"), data.get("TipoViaje"))
@@ -149,19 +140,17 @@ def act_ReservaD(data):
         results = [dict(zip(columns, row)) for row in cursor.fetchall()]
         return results, 200  
     except pyodbc.Error as e:
-        if conn:
-            conn.rollback()  # En caso de error, revertir la transacción
-        return {"error": str(e)}, 500  
+        session.rollback() 
+        return {"error": str(e)}, 500
     finally:
-        if conn:
-            close_db_connection(conn)
+        close_db_session(session)
             
 def ver_ReservaDetalle(ID):
-    conn = None
+    session = get_db_session()  
     try:
-        conn = get_db_connection()
-        cursor = conn.cursor()
-        conn.autocommit = True  
+        conn = session.connection().connection 
+        cursor = conn.cursor()  
+        conn.autocommit = True 
 
         query = "EXEC spVerReservaDetalle ?"
         cursor.execute(query, ID)
@@ -177,19 +166,17 @@ def ver_ReservaDetalle(ID):
         results = [dict(zip(columns, row)) for row in cursor.fetchall()]
         return results, 200  
     except pyodbc.Error as e:
-        if conn:
-            conn.rollback()  # En caso de error, revertir la transacción
-        return {"error": str(e)}, 500  
+        session.rollback() 
+        return {"error": str(e)}, 500
     finally:
-        if conn:
-            close_db_connection(conn)
+        close_db_session(session)
             
 def eliminar_RenglonReserva(ID, RenglonID):
-    conn = None
+    session = get_db_session()  
     try:
-        conn = get_db_connection()
-        cursor = conn.cursor()
-        conn.autocommit = True  
+        conn = session.connection().connection 
+        cursor = conn.cursor()  
+        conn.autocommit = True   
 
         query = "EXEC spEliminarRenglonReservaDetalle ?,?"
         cursor.execute(query, ID, RenglonID)
@@ -205,19 +192,17 @@ def eliminar_RenglonReserva(ID, RenglonID):
         results = [dict(zip(columns, row)) for row in cursor.fetchall()]
         return results, 200  
     except pyodbc.Error as e:
-        if conn:
-            conn.rollback()  # En caso de error, revertir la transacción
-        return {"error": str(e)}, 500  
+        session.rollback() 
+        return {"error": str(e)}, 500
     finally:
-        if conn:
-            close_db_connection(conn)
+        close_db_session(session)
             
 def afectar_reserva(data):
-    conn = None
+    session = get_db_session()  
     try:
-        conn = get_db_connection()
-        cursor = conn.cursor()
-        conn.autocommit = True  
+        conn = session.connection().connection 
+        cursor = conn.cursor()  
+        conn.autocommit = True   
 
         query = "EXEC spAfectarReserva ?,?"
         cursor.execute(query, data.get("ID"), data.get("UsuarioID"))
@@ -233,19 +218,17 @@ def afectar_reserva(data):
         results = [dict(zip(columns, row)) for row in cursor.fetchall()]
         return results, 200  
     except pyodbc.Error as e:
-        if conn:
-            conn.rollback()  # En caso de error, revertir la transacción
-        return {"error": str(e)}, 500  
+        session.rollback() 
+        return {"error": str(e)}, 500
     finally:
-        if conn:
-            close_db_connection(conn)
+        close_db_session(session)
             
 def cancelar_reserva(data):
-    conn = None
+    session = get_db_session()  
     try:
-        conn = get_db_connection()
-        cursor = conn.cursor()
-        conn.autocommit = True  
+        conn = session.connection().connection 
+        cursor = conn.cursor()  
+        conn.autocommit = True   
 
         query = "EXEC spCancelarReserva ?,?"
         cursor.execute(query, data.get("ID"), data.get("UsuarioID"))
@@ -261,19 +244,17 @@ def cancelar_reserva(data):
         results = [dict(zip(columns, row)) for row in cursor.fetchall()]
         return results, 200  
     except pyodbc.Error as e:
-        if conn:
-            conn.rollback()  # En caso de error, revertir la transacción
-        return {"error": str(e)}, 500  
+        session.rollback() 
+        return {"error": str(e)}, 500
     finally:
-        if conn:
-            close_db_connection(conn)
+        close_db_session(session)
             
 def ver_AsientosDispoblesRuta(data):
-    conn = None
+    session = get_db_session()  
     try:
-        conn = get_db_connection()
-        cursor = conn.cursor()
-        conn.autocommit = True  
+        conn = session.connection().connection 
+        cursor = conn.cursor()  
+        conn.autocommit = True   
 
         query = "EXEC spVerAsientosDisponiblesRuta ?,?,?"
         cursor.execute(query, data.get("ID"), data.get("HorarioRutaID"), data.get("RenglonID"))
@@ -289,19 +270,17 @@ def ver_AsientosDispoblesRuta(data):
         results = [dict(zip(columns, row)) for row in cursor.fetchall()]
         return results, 200  
     except pyodbc.Error as e:
-        if conn:
-            conn.rollback()  # En caso de error, revertir la transacción
-        return {"error": str(e)}, 500  
+        session.rollback() 
+        return {"error": str(e)}, 500
     finally:
-        if conn:
-            close_db_connection(conn)
+        close_db_session(session)
             
 def agregar_AsientosReserva(data):
-    conn = None
+    session = get_db_session()  
     try:
-        conn = get_db_connection()
-        cursor = conn.cursor()
-        conn.autocommit = True  
+        conn = session.connection().connection 
+        cursor = conn.cursor()  
+        conn.autocommit = True   
 
         query = "EXEC spAgregarAsientosReserva ?,?,?,?"
         cursor.execute(query, data.get("ID"), data.get("HorarioRutaID"), data.get("RenglonID"), data.get("Asientos"))
@@ -317,19 +296,17 @@ def agregar_AsientosReserva(data):
         results = [dict(zip(columns, row)) for row in cursor.fetchall()]
         return results, 200  
     except pyodbc.Error as e:
-        if conn:
-            conn.rollback()  # En caso de error, revertir la transacción
-        return {"error": str(e)}, 500  
+        session.rollback() 
+        return {"error": str(e)}, 500
     finally:
-        if conn:
-            close_db_connection(conn)
+        close_db_session(session)
             
 def guardar_DatosPersonaReserva(data):
-    conn = None
+    session = get_db_session()  
     try:
-        conn = get_db_connection()
-        cursor = conn.cursor()
-        conn.autocommit = True  
+        conn = session.connection().connection 
+        cursor = conn.cursor()  
+        conn.autocommit = True   
 
         query = "EXEC spGuardarDatosPersonaReserva ?,?,?,?,? ,?,?,?,?"
         cursor.execute(query, data.get("ID"), data.get("RenglonID"), data.get("HorarioRutaID"), data.get("Asiento"), data.get("Nombre"),
@@ -346,18 +323,16 @@ def guardar_DatosPersonaReserva(data):
         results = [dict(zip(columns, row)) for row in cursor.fetchall()]
         return results, 200  
     except pyodbc.Error as e:
-        if conn:
-            conn.rollback()  # En caso de error, revertir la transacción
-        return {"error": str(e)}, 500  
+        session.rollback() 
+        return {"error": str(e)}, 500
     finally:
-        if conn:
-            close_db_connection(conn)
+        close_db_session(session)
             
 def ver_PersonasReserva(ID, HorarioRutaID, RenglonID):
-    conn = None
+    session = get_db_session()  
     try:
-        conn = get_db_connection()
-        cursor = conn.cursor()
+        conn = session.connection().connection 
+        cursor = conn.cursor()  
         conn.autocommit = True  
 
         query = "EXEC spVerPersonasReserva ?,?,?"
@@ -374,18 +349,16 @@ def ver_PersonasReserva(ID, HorarioRutaID, RenglonID):
         results = [dict(zip(columns, row)) for row in cursor.fetchall()]
         return results, 200  
     except pyodbc.Error as e:
-        if conn:
-            conn.rollback()  # En caso de error, revertir la transacción
-        return {"error": str(e)}, 500  
+        session.rollback() 
+        return {"error": str(e)}, 500
     finally:
-        if conn:
-            close_db_connection(conn)
+        close_db_session(session)
             
 def agregar_FormaPagoReserva(data):
-    conn = None
+    session = get_db_session()  
     try:
-        conn = get_db_connection()
-        cursor = conn.cursor()
+        conn = session.connection().connection 
+        cursor = conn.cursor()  
         conn.autocommit = True  
 
         query = "EXEC spAgregarFormaPagoReserva ?,?,?,?"
@@ -402,96 +375,79 @@ def agregar_FormaPagoReserva(data):
         results = [dict(zip(columns, row)) for row in cursor.fetchall()]
         return results, 200  
     except pyodbc.Error as e:
-        if conn:
-            conn.rollback()  # En caso de error, revertir la transacción
-        return {"error": str(e)}, 500  
+        session.rollback() 
+        return {"error": str(e)}, 500
     finally:
-        if conn:
-            close_db_connection(conn)
+        close_db_session(session)
             
 
 
 def cambiar_situacion(data):
-    conn = None
+    session = get_db_session()  
     try:
-        conn = get_db_connection()
-        cursor = conn.cursor()
+        conn = session.connection().connection 
+        cursor = conn.cursor()  
         conn.autocommit = True
 
-        # Ejecutar el procedimiento almacenado principal
         query = "EXEC spCambiarsituacionReserva ?,?"
         cursor.execute(query, data.get("ID"), data.get("Situacion"))
 
-        # Procesar los resultados del primer procedimiento
         while cursor.description is None:
             cursor.nextset()
 
         if cursor.description is None:
             return {"error": "No data returned from the procedure."}, 500
 
-        # Obtener los resultados del primer procedimiento
         columns = [column[0] for column in cursor.description]
         results = [dict(zip(columns, row)) for row in cursor.fetchall()]
 
-        # Verificar si la situación es "Pagado"
         if data.get("Situacion") == "Pagado":
             try:
-                # Ejecutar el procedimiento almacenado para "Pagado"
                 query_select = "EXEC spVerBoletosPagadosReserva ?"
                 cursor.execute(query_select, data.get("ID"))
 
-                # Verificar si el SELECT devuelve resultados
                 while cursor.description is None:
                     cursor.nextset()
 
                 if cursor.description is None:
                     return {"error": "No data returned from spVerBoletosPagadosReserva."}, 500
                 
-                # Obtener los resultados del SELECT
                 columns_select = [column[0] for column in cursor.description]
                 select_results = [dict(zip(columns_select, row)) for row in cursor.fetchall()]
 
-                # Iterar sobre los resultados del SELECT y enviar un mensaje por cada uno
                 for result in select_results:
-                    # Crear el JSON que será enviado, no necesitas json.dumps aquí
                     message_data = {
                         "Telefono": result["Telefono"],
                         "Movimiento": result["Movimiento"],
                         "Fecha": result["Fecha"],
                         "Pasajeros": result["Pasajeros"],
                         "NumeroAsiento": result["NumeroAsiento"],
-                        "PrecioTotal": result["PrecioTotal"],  # Asumiendo que ahora es varchar
+                        "PrecioTotal": result["PrecioTotal"], 
                         "FechaSalida": result["FechaSalida"],
                         "Ruta": result["Ruta"],
                         "Nombre": result["Nombre"]
                     }
-
-                    # Enviar el mensaje usando send_message directamente con el diccionario
                     send_message(message_data)
 
             except pyodbc.Error as e:
-                # Registrar el error pero no afectar el flujo de retorno
-                print(f"Error al ejecutar el procedimiento 'Pagado': {str(e)}")
-
-        # Retornar el resultado del primer procedimiento almacenado
+                session.rollback() 
+                return {"error": str(e)}, 500
+            
         return results, 200  
 
     except pyodbc.Error as e:
-        if conn:
-            conn.rollback()  # Revertir la transacción en caso de error
+        session.rollback() 
         return {"error": str(e)}, 500
-
     finally:
-        if conn:
-            close_db_connection(conn)
+        close_db_session(session)
 
 
             
 def eliminar_reserva(ID, UsuarioID):
-    conn = None
+    session = get_db_session()  
     try:
-        conn = get_db_connection()
-        cursor = conn.cursor()
+        conn = session.connection().connection 
+        cursor = conn.cursor()  
         conn.autocommit = True  
 
         query = "EXEC spEliminarReserva ?,?"
@@ -508,20 +464,18 @@ def eliminar_reserva(ID, UsuarioID):
         results = [dict(zip(columns, row)) for row in cursor.fetchall()]
         return results, 200  
     except pyodbc.Error as e:
-        if conn:
-            conn.rollback()  # En caso de error, revertir la transacción
-        return {"error": str(e)}, 500  
+        session.rollback() 
+        return {"error": str(e)}, 500
     finally:
-        if conn:
-            close_db_connection(conn)
+        close_db_session(session)
             
             
 def ver_pdfReserva(data):
-    conn = None
+    session = get_db_session()  
     try:
-        conn = get_db_connection()
-        cursor = conn.cursor()
-        conn.autocommit = True  
+        conn = session.connection().connection 
+        cursor = conn.cursor()  
+        conn.autocommit = True 
 
         query = "EXEC spPDFReserva ?"
         cursor.execute(query, data.get("ID"))
@@ -537,20 +491,18 @@ def ver_pdfReserva(data):
         results = [dict(zip(columns, row)) for row in cursor.fetchall()]
         return results, 200  
     except pyodbc.Error as e:
-        if conn:
-            conn.rollback()  # En caso de error, revertir la transacción
-        return {"error": str(e)}, 500  
+        session.rollback() 
+        return {"error": str(e)}, 500
     finally:
-        if conn:
-            close_db_connection(conn)
+        close_db_session(session)
             
             
 def agregar_equipajeDetalle(data):
-    conn = None
+    session = get_db_session()  
     try:
-        conn = get_db_connection()
-        cursor = conn.cursor()
-        conn.autocommit = True  
+        conn = session.connection().connection 
+        cursor = conn.cursor()  
+        conn.autocommit = True 
 
         query = "EXEC spAgregarEquipajeDetalle ?,?,?"
         cursor.execute(query, data.get("ID"), data.get("UsuarioID"), data.get("Articulo"))
@@ -566,19 +518,17 @@ def agregar_equipajeDetalle(data):
         results = [dict(zip(columns, row)) for row in cursor.fetchall()]
         return results, 200  
     except pyodbc.Error as e:
-        if conn:
-            conn.rollback()  # En caso de error, revertir la transacción
-        return {"error": str(e)}, 500  
+        session.rollback() 
+        return {"error": str(e)}, 500
     finally:
-        if conn:
-            close_db_connection(conn)
+        close_db_session(session)
             
 def verEquipaje_detalle(ID):
-    conn = None
+    session = get_db_session()  
     try:
-        # Reabrir conexión antes de ejecutar el procedimiento
-        conn = get_db_connection()
-        cursor = conn.cursor()
+        conn = session.connection().connection 
+        cursor = conn.cursor()  
+        conn.autocommit = True 
 
         query = "EXEC spVerEquipajeDetalle ?"
         cursor.execute(query, ID)
@@ -596,20 +546,18 @@ def verEquipaje_detalle(ID):
 
         return results, 200
     except pyodbc.Error as e:
-        if conn:
-            conn.rollback()  # Revertir la transacción en caso de error
+        session.rollback() 
         return {"error": str(e)}, 500
     finally:
-        if conn:
-            close_db_connection(conn)  # Asegurarse de cerrar la conexión
+        close_db_session(session)
 
 
 def act_EquipajeDetalle(data):
-    conn = None
+    session = get_db_session()  
     try:
-        conn = get_db_connection()
-        cursor = conn.cursor()
-        conn.autocommit = True  
+        conn = session.connection().connection 
+        cursor = conn.cursor()  
+        conn.autocommit = True   
 
         query = "EXEC spActDetalleEquipaje ?,?,?,?,? ,?"
         cursor.execute(query, data.get("ID"), data.get("RenglonID"), data.get("UsuarioID"), data.get("Cantidad"), data.get("Peso")
@@ -626,18 +574,16 @@ def act_EquipajeDetalle(data):
         results = [dict(zip(columns, row)) for row in cursor.fetchall()]
         return results, 200  
     except pyodbc.Error as e:
-        if conn:
-            conn.rollback()  # En caso de error, revertir la transacción
-        return {"erroor": str(e)}, 500  
+        session.rollback() 
+        return {"error": str(e)}, 500
     finally:
-        if conn:
-            close_db_connection(conn)
+        close_db_session(session)
             
 def eliminar_renglonEquipaje(ID, RenglonID, PersonaID):
-    conn = None
+    session = get_db_session()  
     try:
-        conn = get_db_connection()
-        cursor = conn.cursor()
+        conn = session.connection().connection 
+        cursor = conn.cursor()  
         conn.autocommit = True  
 
         query = "EXEC spEliminarDetalleEquipaje ?,?,?"
@@ -654,9 +600,7 @@ def eliminar_renglonEquipaje(ID, RenglonID, PersonaID):
         results = [dict(zip(columns, row)) for row in cursor.fetchall()]
         return results, 200  
     except pyodbc.Error as e:
-        if conn:
-            conn.rollback()  # En caso de error, revertir la transacción
-        return {"error": str(e)}, 500  
+        session.rollback() 
+        return {"error": str(e)}, 500
     finally:
-        if conn:
-            close_db_connection(conn)
+        close_db_session(session)

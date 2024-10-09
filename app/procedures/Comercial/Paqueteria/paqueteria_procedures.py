@@ -2,15 +2,14 @@ import pyodbc
 from flask import jsonify
 from app.utils.db import get_db_connection, close_db_connection
 from app.utils.config import get_db_session, close_db_session
-import logging
 
 
 def ver_paqueteria():
-    conn = None
+    session = get_db_session()  
     try:
-        conn = get_db_connection()
-        cursor = conn.cursor()
-        conn.autocommit = True  
+        conn = session.connection().connection 
+        cursor = conn.cursor()  
+        conn.autocommit = True    
 
         query = "EXEC spVerPaqueteria"
         cursor.execute(query)
@@ -26,18 +25,16 @@ def ver_paqueteria():
         results = [dict(zip(columns, row)) for row in cursor.fetchall()]
         return results, 200  
     except pyodbc.Error as e:
-        if conn:
-            conn.rollback()  # En caso de error, revertir la transacción
-        return {"error": str(e)}, 500  
+        session.rollback() 
+        return {"error": str(e)}, 500
     finally:
-        if conn:
-            close_db_connection(conn)
+        close_db_session(session)
             
 def nueva_paqueteria(data):
-    conn = None
+    session = get_db_session()  
     try:
-        conn = get_db_connection()
-        cursor = conn.cursor()
+        conn = session.connection().connection 
+        cursor = conn.cursor()  
         conn.autocommit = True  
 
         query = "EXEC spNvaPaqueteria ?,?"
@@ -54,24 +51,21 @@ def nueva_paqueteria(data):
         results = [dict(zip(columns, row)) for row in cursor.fetchall()]
         return results, 200  
     except pyodbc.Error as e:
-        if conn:
-            conn.rollback()  # En caso de error, revertir la transacción
-        return {"error": str(e)}, 500  
+        session.rollback() 
+        return {"error": str(e)}, 500
     finally:
-        if conn:
-            close_db_connection(conn)
+        close_db_session(session)
             
 def ver_paqueteriaID(ID):
-    conn = None
+    session = get_db_session()  
     try:
-        conn = get_db_connection()
-        cursor = conn.cursor()
+        conn = session.connection().connection 
+        cursor = conn.cursor()  
         conn.autocommit = True  
 
         query = "EXEC spVerPaqueteriaID ?"
         cursor.execute(query, ID)
         
-
         while cursor.description is None:
             cursor.nextset()
 
@@ -82,19 +76,17 @@ def ver_paqueteriaID(ID):
         results = [dict(zip(columns, row)) for row in cursor.fetchall()]
         return results, 200  
     except pyodbc.Error as e:
-        if conn:
-            conn.rollback()  # En caso de error, revertir la transacción
-        return {"error": str(e)}, 500  
+        session.rollback() 
+        return {"error": str(e)}, 500
     finally:
-        if conn:
-            close_db_connection(conn)
+        close_db_session(session)
             
 def ver_ArtDispPaqueteria(EmpresaID):
-    conn = None
+    session = get_db_session()  
     try:
-        conn = get_db_connection()
-        cursor = conn.cursor()
-        conn.autocommit = True  
+        conn = session.connection().connection 
+        cursor = conn.cursor()  
+        conn.autocommit = True   
 
         query = "EXEC spVerArticulosPaqueteria ?"
         cursor.execute(query, EmpresaID)
@@ -110,19 +102,17 @@ def ver_ArtDispPaqueteria(EmpresaID):
         results = [dict(zip(columns, row)) for row in cursor.fetchall()]
         return results, 200  
     except pyodbc.Error as e:
-        if conn:
-            conn.rollback()  # En caso de error, revertir la transacción
-        return {"error": str(e)}, 500  
+        session.rollback() 
+        return {"error": str(e)}, 500
     finally:
-        if conn:
-            close_db_connection(conn)
+        close_db_session(session)
             
 def avanza_paqueteria(data):
-    conn = None
+    session = get_db_session()  
     try:
-        conn = get_db_connection()
-        cursor = conn.cursor()
-        conn.autocommit = True  
+        conn = session.connection().connection 
+        cursor = conn.cursor()  
+        conn.autocommit = True   
 
         query = "EXEC spAvanzarPaqueteria ?,?,?,?,? ,?,?,?,?,? ,?"
         cursor.execute(query, data.get("ID"), data.get("Movimiento"), data.get("ClienteID"), data.get("TerminalOrigenID"), data.get("TerminalDestinoID")
@@ -140,18 +130,16 @@ def avanza_paqueteria(data):
         results = [dict(zip(columns, row)) for row in cursor.fetchall()]
         return results, 200  
     except pyodbc.Error as e:
-        if conn:
-            conn.rollback()  # En caso de error, revertir la transacción
-        return {"error": str(e)}, 500  
+        session.rollback() 
+        return {"error": str(e)}, 500
     finally:
-        if conn:
-            close_db_connection(conn)
+        close_db_session(session)
             
 def agregar_paqueteriaDetalle(data):
-    conn = None
+    session = get_db_session()  
     try:
-        conn = get_db_connection()
-        cursor = conn.cursor()
+        conn = session.connection().connection 
+        cursor = conn.cursor()  
         conn.autocommit = True  
 
         query = "EXEC spAgregarPaqueteriaDetalle ?,?,?"
@@ -168,12 +156,10 @@ def agregar_paqueteriaDetalle(data):
         results = [dict(zip(columns, row)) for row in cursor.fetchall()]
         return results, 200  
     except pyodbc.Error as e:
-        if conn:
-            conn.rollback()  # En caso de error, revertir la transacción
-        return {"error": str(e)}, 500  
+        session.rollback() 
+        return {"error": str(e)}, 500
     finally:
-        if conn:
-            close_db_connection(conn)
+        close_db_session(session)
             
 def verPaqueteria_detalle(ID):
     session = get_db_session()  # Obtener una sesión del pool de SQLAlchemy
@@ -208,10 +194,10 @@ def verPaqueteria_detalle(ID):
             
             
 def act_paqueteriaDetalle(data):
-    conn = None
+    session = get_db_session()  
     try:
-        conn = get_db_connection()
-        cursor = conn.cursor()
+        conn = session.connection().connection 
+        cursor = conn.cursor()  
         conn.autocommit = True  
 
         query = "EXEC spActDetallePaqueteria ?,?,?,?,? ,?"
@@ -229,20 +215,18 @@ def act_paqueteriaDetalle(data):
         results = [dict(zip(columns, row)) for row in cursor.fetchall()]
         return results, 200  
     except pyodbc.Error as e:
-        if conn:
-            conn.rollback()  # En caso de error, revertir la transacción
-        return {"error": str(e)}, 500  
+        session.rollback() 
+        return {"error": str(e)}, 500
     finally:
-        if conn:
-            close_db_connection(conn)
+        close_db_session(session)
             
             
 def eliminar_renglonPaqueteria(ID, RenglonID, PersonaID):
-    conn = None
+    session = get_db_session()  
     try:
-        conn = get_db_connection()
-        cursor = conn.cursor()
-        conn.autocommit = True  
+        conn = session.connection().connection 
+        cursor = conn.cursor()  
+        conn.autocommit = True    
 
         query = "EXEC spEliminarDetallePaqueteria ?,?,?"
         cursor.execute(query, ID, RenglonID, PersonaID)
@@ -258,20 +242,17 @@ def eliminar_renglonPaqueteria(ID, RenglonID, PersonaID):
         results = [dict(zip(columns, row)) for row in cursor.fetchall()]
         return results, 200  
     except pyodbc.Error as e:
-        if conn:
-            conn.rollback()  # En caso de error, revertir la transacción
-        return {"error": str(e)}, 500  
+        session.rollback() 
+        return {"error": str(e)}, 500
     finally:
-        if conn:
-            close_db_connection(conn)
+        close_db_session(session)
             
 def cambiar_situacion(data):
-    conn = None
+    session = get_db_session()  
     try:
-        
-        conn = get_db_connection()
-        cursor = conn.cursor()
-        conn.autocommit = True  
+        conn = session.connection().connection 
+        cursor = conn.cursor()  
+        conn.autocommit = True    
 
         query = "EXEC spCambiarSituacionPaqueteria ?,?,?"
         cursor.execute(query, data.get("ID"), data.get("UsuarioID"), data.get("Situacion"))
@@ -288,18 +269,16 @@ def cambiar_situacion(data):
 
         return results, 200  
     except pyodbc.Error as e:
-        if conn:
-            conn.rollback()  # En caso de error, revertir la transacción
-        return {"error": str(e)}, 500  
+        session.rollback() 
+        return {"error": str(e)}, 500
     finally:
-        if conn:
-            close_db_connection(conn)
+        close_db_session(session)
             
 def afectar_paqueteria(data):
-    conn = None
+    session = get_db_session()  
     try:
-        conn = get_db_connection()
-        cursor = conn.cursor()
+        conn = session.connection().connection 
+        cursor = conn.cursor()  
         conn.autocommit = True  
 
         query = "EXEC spAfectarPaqueteria ?,?"
@@ -316,20 +295,18 @@ def afectar_paqueteria(data):
         results = [dict(zip(columns, row)) for row in cursor.fetchall()]
         return results, 200  
     except pyodbc.Error as e:
-        if conn:
-            conn.rollback()  # En caso de error, revertir la transacción
-        return {"error": str(e)}, 500  
+        session.rollback() 
+        return {"error": str(e)}, 500
     finally:
-        if conn:
-            close_db_connection(conn)
+        close_db_session(session)
             
             
 def eliminar_paqueteria(data):
-    conn = None
+    session = get_db_session()  
     try:
-        conn = get_db_connection()
-        cursor = conn.cursor()
-        conn.autocommit = True  
+        conn = session.connection().connection 
+        cursor = conn.cursor()  
+        conn.autocommit = True   
 
         query = "EXEC spEliminarPaqueteria ?,?"
         cursor.execute(query, data.get("ID"), data.get("UsuarioID"))
@@ -345,18 +322,16 @@ def eliminar_paqueteria(data):
         results = [dict(zip(columns, row)) for row in cursor.fetchall()]
         return results, 200  
     except pyodbc.Error as e:
-        if conn:
-            conn.rollback()  # En caso de error, revertir la transacción
-        return {"error": str(e)}, 500  
+        session.rollback() 
+        return {"error": str(e)}, 500
     finally:
-        if conn:
-            close_db_connection(conn)
+        close_db_session(session)
             
 def cancelar_paqueteria(data):
-    conn = None
+    session = get_db_session()  
     try:
-        conn = get_db_connection()
-        cursor = conn.cursor()
+        conn = session.connection().connection 
+        cursor = conn.cursor()  
         conn.autocommit = True  
 
         query = "EXEC spCancelarPaqueteria ?,?"
@@ -373,9 +348,7 @@ def cancelar_paqueteria(data):
         results = [dict(zip(columns, row)) for row in cursor.fetchall()]
         return results, 200  
     except pyodbc.Error as e:
-        if conn:
-            conn.rollback()  # En caso de error, revertir la transacción
-        return {"error": str(e)}, 500  
+        session.rollback() 
+        return {"error": str(e)}, 500
     finally:
-        if conn:
-            close_db_connection(conn)
+        close_db_session(session)

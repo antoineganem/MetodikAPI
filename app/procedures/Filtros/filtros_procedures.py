@@ -1,13 +1,15 @@
 import pyodbc
 from flask import jsonify
 from app.utils.db import get_db_connection, close_db_connection
-import logging
+from app.utils.config import get_db_session, close_db_session
+
 
 def verFiltros_Catalogos(data):
-    conn = None
+    session = get_db_session()  
     try:
-        conn = get_db_connection()
-        cursor = conn.cursor()
+        conn = session.connection().connection 
+        cursor = conn.cursor()  
+        conn.autocommit = True  
 
         query = "EXEC spVerFiltroCatalogo ?,?,?,?"
         cursor.execute(query, data.get("Tipo"), data.get("PersonaID"), data.get("Modulo"), data.get("ModuloID"))
@@ -25,19 +27,18 @@ def verFiltros_Catalogos(data):
 
         return results, 200  
     except pyodbc.Error as e:
-        if conn:
-            conn.rollback()  # En caso de error, revertir la transacción
-        return {"error": str(e)}, 500  
+        session.rollback() 
+        return {"error": str(e)}, 500
     finally:
-        if conn:
-            close_db_connection(conn)
+        close_db_session(session)
             
 
 def verFiltros_Modulo(data):
-    conn = None
+    session = get_db_session()  
     try:
-        conn = get_db_connection()
-        cursor = conn.cursor()
+        conn = session.connection().connection 
+        cursor = conn.cursor()  
+        conn.autocommit = True  
 
         query = "EXEC spVerFiltroModulo ?,?,?,?"
         cursor.execute(query, data.get("Tipo"), data.get("PersonaID"), data.get("Modulo"), data.get("ModuloID"))
@@ -53,14 +54,13 @@ def verFiltros_Modulo(data):
         results = [dict(zip(columns, row)) for row in cursor.fetchall()]
         close_db_connection(conn)
 
-        return results, 200  
+        return results, 200
+      
     except pyodbc.Error as e:
-        if conn:
-            conn.rollback()  # En caso de error, revertir la transacción
-        return {"error": str(e)}, 500  
+        session.rollback() 
+        return {"error": str(e)}, 500
     finally:
-        if conn:
-            close_db_connection(conn)
+        close_db_session(session)
 
 
 
