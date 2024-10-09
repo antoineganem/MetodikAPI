@@ -1,6 +1,7 @@
 import pyodbc
 from flask import jsonify
 from app.utils.db import get_db_connection, close_db_connection
+from app.utils.config import get_db_session, close_db_session
 import logging
 
 
@@ -175,31 +176,35 @@ def agregar_paqueteriaDetalle(data):
             close_db_connection(conn)
             
 def verPaqueteria_detalle(ID):
-    conn = None
+    session = get_db_session()  # Obtener una sesión del pool de SQLAlchemy
     try:
-        conn = get_db_connection()
-        cursor = conn.cursor()
+        conn = session.connection().connection  # Obtener la conexión cruda compatible con pyodbc
+        cursor = conn.cursor()  # Crear el cursor para ejecutar la consulta
 
         query = "EXEC spVerPaqueteriaDetalle ?"
-        cursor.execute(query, ID)
-        
+        cursor.execute(query, ID)  # Ejecutar el procedimiento almacenado con el parámetro
 
+        # Iterar hasta obtener la descripción del cursor (si hay varios conjuntos de resultados)
         while cursor.description is None:
             cursor.nextset()
 
+        # Si no hay resultados, retornar un error
         if cursor.description is None:
             return {"error": "No data returned from the procedure."}, 500
 
+        # Obtener los nombres de las columnas y los resultados
         columns = [column[0] for column in cursor.description]
         results = [dict(zip(columns, row)) for row in cursor.fetchall()]
-        return results, 200  
+
+        return results, 200
+
     except pyodbc.Error as e:
-        if conn:
-            conn.rollback()  # En caso de error, revertir la transacción
-        return {"error": str(e)}, 500  
+        session.rollback()  # Revertir la transacción en caso de error
+        return {"error": str(e)}, 500
+
     finally:
-        if conn:
-            close_db_connection(conn)
+        close_db_session(session)  # Cerrar la sesión al final para devolver la conexión al pool
+
             
             
 def act_paqueteriaDetalle(data):
@@ -263,6 +268,7 @@ def eliminar_renglonPaqueteria(ID, RenglonID, PersonaID):
 def cambiar_situacion(data):
     conn = None
     try:
+        
         conn = get_db_connection()
         cursor = conn.cursor()
         conn.autocommit = True  
@@ -279,6 +285,7 @@ def cambiar_situacion(data):
 
         columns = [column[0] for column in cursor.description]
         results = [dict(zip(columns, row)) for row in cursor.fetchall()]
+
         return results, 200  
     except pyodbc.Error as e:
         if conn:

@@ -4,6 +4,8 @@ from app.utils.db import get_db_connection, close_db_connection
 import logging
 from app.messagingServices.whatsappAPI import send_message
 import json
+from app.utils.config import get_db_session, close_db_session
+
 
 def ver_ReservaID(ID):
     conn = None
@@ -94,32 +96,36 @@ def ver_ViajesDispIda(ID):
             
 
 def ver_ViajesDispVuelta(ID):
-    conn = None
+    session = get_db_session()  # Obtener una sesión del pool de SQLAlchemy
     try:
-        conn = get_db_connection()
-        cursor = conn.cursor()
-        conn.autocommit = True  
+        conn = session.connection().connection  # Obtener la conexión cruda compatible con pyodbc
+        cursor = conn.cursor()  # Crear el cursor para ejecutar la consulta
+        conn.autocommit = True  # Habilitar autocommit si es necesario
 
         query = "EXEC spVerViajesdisponiblesVuelta ?"
-        cursor.execute(query, ID)
-        
+        cursor.execute(query, ID)  # Ejecutar el procedimiento almacenado con el parámetro
 
+        # Iterar hasta obtener la descripción del cursor (si hay varios conjuntos de resultados)
         while cursor.description is None:
             cursor.nextset()
 
+        # Si no hay resultados, retornar un error
         if cursor.description is None:
             return {"error": "No data returned from the procedure."}, 500
 
+        # Obtener los nombres de las columnas y los resultados
         columns = [column[0] for column in cursor.description]
         results = [dict(zip(columns, row)) for row in cursor.fetchall()]
-        return results, 200  
+
+        return results, 200
+
     except pyodbc.Error as e:
-        if conn:
-            conn.rollback()  # En caso de error, revertir la transacción
-        return {"error": str(e)}, 500  
+        session.rollback()  # Revertir la transacción en caso de error
+        return {"error": str(e)}, 500
+
     finally:
-        if conn:
-            close_db_connection(conn)
+        close_db_session(session)  # Cerrar la sesión al final para devolver la conexión al pool
+
             
 
 def act_ReservaD(data):
@@ -570,29 +576,33 @@ def agregar_equipajeDetalle(data):
 def verEquipaje_detalle(ID):
     conn = None
     try:
+        # Reabrir conexión antes de ejecutar el procedimiento
         conn = get_db_connection()
         cursor = conn.cursor()
 
         query = "EXEC spVerEquipajeDetalle ?"
         cursor.execute(query, ID)
-        
 
+        # Asegurar que se obtengan los resultados correctos
         while cursor.description is None:
             cursor.nextset()
 
         if cursor.description is None:
             return {"error": "No data returned from the procedure."}, 500
 
+        # Obtener las columnas y los resultados
         columns = [column[0] for column in cursor.description]
         results = [dict(zip(columns, row)) for row in cursor.fetchall()]
-        return results, 200  
+
+        return results, 200
     except pyodbc.Error as e:
         if conn:
-            conn.rollback()  # En caso de error, revertir la transacción
-        return {"error": str(e)}, 500  
+            conn.rollback()  # Revertir la transacción en caso de error
+        return {"error": str(e)}, 500
     finally:
         if conn:
-            close_db_connection(conn)
+            close_db_connection(conn)  # Asegurarse de cerrar la conexión
+
 
 def act_EquipajeDetalle(data):
     conn = None
@@ -618,7 +628,7 @@ def act_EquipajeDetalle(data):
     except pyodbc.Error as e:
         if conn:
             conn.rollback()  # En caso de error, revertir la transacción
-        return {"error": str(e)}, 500  
+        return {"erroor": str(e)}, 500  
     finally:
         if conn:
             close_db_connection(conn)

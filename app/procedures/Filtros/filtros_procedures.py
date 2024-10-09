@@ -21,6 +21,7 @@ def verFiltros_Catalogos(data):
         columns = [column[0] for column in cursor.description]
 
         results = [dict(zip(columns, row)) for row in cursor.fetchall()]
+        close_db_connection(conn)
 
         return results, 200  
     except pyodbc.Error as e:
@@ -50,6 +51,8 @@ def verFiltros_Modulo(data):
 
         columns = [column[0] for column in cursor.description]
         results = [dict(zip(columns, row)) for row in cursor.fetchall()]
+        close_db_connection(conn)
+
         return results, 200  
     except pyodbc.Error as e:
         if conn:
