@@ -4,15 +4,16 @@ from app.utils.db import get_db_connection, close_db_connection
 from app.utils.config import get_db_session, close_db_session
 
 
-def ver_paqueteria():
+def ver_paqueteria(data):
     session = get_db_session()  
     try:
         conn = session.connection().connection 
         cursor = conn.cursor()  
         conn.autocommit = True    
 
-        query = "EXEC spVerPaqueteria"
-        cursor.execute(query)
+        query = "EXEC spVerPaqueteria ?,?,?,?,?, ?,?"
+        cursor.execute(query, data.get("EmpresaID"), data.get("EstatusID"), data.get("Movimiento"), data.get("FechaD"), data.get("FechaH"), 
+                       data.get("Situacion"), data.get("Usuario"))
         
 
         while cursor.description is None:

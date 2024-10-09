@@ -16,9 +16,13 @@ afectarPaqueteria_bp = Blueprint('afectarPaqueteria', __name__)
 eliminarPaqueteria_bp = Blueprint('eliminarPaqueteria', __name__)
 cancelarPaqueteria_bp = Blueprint('cancelarPaqueteria', __name__)
 
-@verPaqueteria_bp.route('/Comercial/Paqueteria/verPaqueterias', methods=['GET'])
+@verPaqueteria_bp.route('/Comercial/Paqueteria/verPaqueterias', methods=['POST'])
 @jwt_required()
 def verPaqueteria_route():
+    data = request.json
+    if data is None:
+        return jsonify({"error": "Faltan datos requeridos"}), 400
+    
     response = verPaqueteria()
     return response
 

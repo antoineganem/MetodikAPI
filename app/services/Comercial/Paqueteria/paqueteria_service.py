@@ -1,7 +1,7 @@
 from app.procedures.Comercial.Paqueteria.paqueteria_procedures import *
 
-def verPaqueteria():
-    return ver_paqueteria()
+def verPaqueteria(data):
+    return ver_paqueteria(data)
 
 def nuevaPaqueteria(data):
     return nueva_paqueteria(data)
