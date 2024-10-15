@@ -18,6 +18,7 @@ from app.routes.Catalogos.Rutas import rutas_bp, rutasResumen_bp, actRuta_bp, ve
 from app.routes.Catalogos.Choferes import choferes_bp, choferesResumen_bp, actChoferes_bp, verChoferID_bp
 from app.routes.Catalogos.Agentes import agentes_bp, agentesResumen_bp, actAgente_bp, verAgenteID_bp
 from app.routes.Whatsapp.whatsapp import whatsapp_bp, get_message_data_bp
+from app.routes.Logistica.Rutas.Rutas import *
 
 def register_routes(app: Flask):
     # Login
@@ -157,3 +158,12 @@ def register_routes(app: Flask):
     #Whatsapp api 
     app.register_blueprint(whatsapp_bp)
     app.register_blueprint(get_message_data_bp)
+    
+    ##Configurador de rutas
+    app.register_blueprint(verRutasModulo_bp)
+    app.register_blueprint(nuevaRuta_bp)
+    app.register_blueprint(verRutaID_bp)
+    app.register_blueprint(avanzarRuta_bp)
+    app.register_blueprint(verRutaDetalle_bp)
+    app.register_blueprint(agregarParadaRuta_bp)
+    app.register_blueprint(ActParadaRuta_bp)
