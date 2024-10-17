@@ -167,3 +167,8 @@ def register_routes(app: Flask):
     app.register_blueprint(verRutaDetalle_bp)
     app.register_blueprint(agregarParadaRuta_bp)
     app.register_blueprint(ActParadaRuta_bp)
+    app.register_blueprint(eliminarParadaRuta_bp)
+    app.register_blueprint(verParadaRutasDisponible_bp)
+    app.register_blueprint(copiarRuta_bp)
+    app.register_blueprint(eliminarRuta_bp)
+    app.register_blueprint(cancelarRuta_bp)

@@ -1,366 +1,115 @@
-import pyodbc
-from flask import jsonify
-from app.utils.db import get_db_connection, close_db_connection
-from app.utils.config import get_db_session, close_db_session
+from app.utils.db_helpers import execute_stored_procedure
+
 
 
 def ver_paqueteria(data):
-    session = get_db_session()  
-    try:
-        conn = session.connection().connection 
-        cursor = conn.cursor()  
-        conn.autocommit = True    
+    sp_name = "spVerPaqueteria"
+    params = [
+        data.get("EmpresaID"), 
+        data.get("EstatusID"),
+        data.get("Movimiento"),
+        data.get("FechaD"),
+        data.get("FechaH"),
+        data.get("Situacion"),
+        data.get("Usuario"),
+    ]
+    return execute_stored_procedure(sp_name, params)
 
-        query = "EXEC spVerPaqueteria ?,?,?,?,?, ?,?"
-        cursor.execute(query, data.get("EmpresaID"), data.get("EstatusID"), data.get("Movimiento"), data.get("FechaD"), data.get("FechaH"), 
-                       data.get("Situacion"), data.get("Usuario"))
-        
-
-        while cursor.description is None:
-            cursor.nextset()
-
-        if cursor.description is None:
-            return {"error": "No data returned from the procedure."}, 500
-
-        columns = [column[0] for column in cursor.description]
-        results = [dict(zip(columns, row)) for row in cursor.fetchall()]
-        session.commit()
-
-        return results, 200  
-    except pyodbc.Error as e:
-        session.rollback() 
-        return {"error": str(e)}, 500
-    finally:
-        close_db_session(session)
-            
 def nueva_paqueteria(data):
-    conn = None
-    try:
-        conn = get_db_connection()
-        cursor = conn.cursor()
-        conn.autocommit = True  
-        query = "EXEC spNvaPaqueteria ?,?"
-        cursor.execute(query, data.get("PersonaID"), data.get("EmpresaID"))
-        
-        while cursor.description is None:
-            cursor.nextset()
-        if cursor.description is None:
-            return {"error": "No data returned from the procedure."}, 500
-        columns = [column[0] for column in cursor.description]
-        results = [dict(zip(columns, row)) for row in cursor.fetchall()]
-        
-        return results, 200  
-    except pyodbc.Error as e:
-        if conn:
-            conn.rollback()  # En caso de error, revertir la transacción
-        return {"error": str(e)}, 500  
-    finally:
-        if conn:
-            close_db_connection(conn)
-            
+    sp_name = "spNvaPaqueteria"
+    params = [
+        data.get("PersonaID"), 
+        data.get("EmpresaID"),
+    ]
+    return execute_stored_procedure(sp_name, params)
+
 def ver_paqueteriaID(ID):
-    session = get_db_session()  
-    try:
-        conn = session.connection().connection 
-        cursor = conn.cursor()  
-        conn.autocommit = True  
-
-        query = "EXEC spVerPaqueteriaID ?"
-        cursor.execute(query, ID)
-        
-        while cursor.description is None:
-            cursor.nextset()
-
-        if cursor.description is None:
-            return {"error": "No data returned from the procedure."}, 500
-
-        columns = [column[0] for column in cursor.description]
-        results = [dict(zip(columns, row)) for row in cursor.fetchall()]
-        session.commit()
-
-        return results, 200  
-    except pyodbc.Error as e:
-        session.rollback() 
-        return {"error": str(e)}, 500
-    finally:
-        close_db_session(session)
+    sp_name = "spVerPaqueteriaID"
+    params = [ ID ]
+    return execute_stored_procedure(sp_name, params)
             
 def ver_ArtDispPaqueteria(EmpresaID):
-    session = get_db_session()  
-    try:
-        conn = session.connection().connection 
-        cursor = conn.cursor()  
-        conn.autocommit = True   
-
-        query = "EXEC spVerArticulosPaqueteria ?"
-        cursor.execute(query, EmpresaID)
-        
-
-        while cursor.description is None:
-            cursor.nextset()
-
-        if cursor.description is None:
-            return {"error": "No data returned from the procedure."}, 500
-
-        columns = [column[0] for column in cursor.description]
-        results = [dict(zip(columns, row)) for row in cursor.fetchall()]
-        session.commit()
-
-        return results, 200  
-    except pyodbc.Error as e:
-        session.rollback() 
-        return {"error": str(e)}, 500
-    finally:
-        close_db_session(session)
+    sp_name = "spVerArticulosPaqueteria"
+    params = [ EmpresaID ]
+    return execute_stored_procedure(sp_name, params)
             
 def avanza_paqueteria(data):
-    session = get_db_session()  
-    try:
-        conn = session.connection().connection 
-        cursor = conn.cursor()  
-
-        query = "EXEC spAvanzarPaqueteria ?,?,?,?,? ,?,?,?,?,? ,?"
-        cursor.execute(query, data.get("ID"), data.get("Movimiento"), data.get("ClienteID"), data.get("TerminalOrigenID"), data.get("TerminalDestinoID")
-                       , data.get("FechaEnvio"), data.get("FormaPagoID"), data.get("ReferenciaPago"), data.get("TelefonoDest"), data.get("NombreDest")
-                       , data.get("PersonaID") )
-        
-        while cursor.description is None:
-            cursor.nextset()
-
-        if cursor.description is None:
-            return {"error": "No data returned from the procedure."}, 500
-
-        columns = [column[0] for column in cursor.description]
-        results = [dict(zip(columns, row)) for row in cursor.fetchall()]
-        session.commit()
-        return results, 200  
-    except pyodbc.Error as e:
-        session.rollback() 
-        return {"error": str(e)}, 500
-    finally:
-        close_db_session(session)
+    sp_name = "spAvanzarPaqueteria"
+    params = [
+        data.get("ID"), 
+        data.get("Movimiento"),
+        data.get("ClienteID"),
+        data.get("TerminalOrigenID"),
+        data.get("TerminalDestinoID"),
+        data.get("FechaEnvio"),
+        data.get("FormaPagoID"),
+        data.get("ReferenciaPago"),
+        data.get("TelefonoDest"),
+        data.get("NombreDest"),
+        data.get("PersonaID"),
+    ]
+    return execute_stored_procedure(sp_name, params)
             
 def agregar_paqueteriaDetalle(data):
-    session = get_db_session()  
-    try:
-        conn = session.connection().connection 
-        cursor = conn.cursor()  
-
-        query = "EXEC spAgregarPaqueteriaDetalle ?,?,?"
-        cursor.execute(query, data.get("ID"), data.get("UsuarioID"), data.get("Articulo"))
-        
-
-        while cursor.description is None:
-            cursor.nextset()
-
-        if cursor.description is None:
-            return {"error": "No data returned from the procedure."}, 500
-
-        columns = [column[0] for column in cursor.description]
-        results = [dict(zip(columns, row)) for row in cursor.fetchall()]
-        session.commit()
-        return results, 200  
-    except pyodbc.Error as e:
-        session.rollback() 
-        return {"error": str(e)}, 500
-    finally:
-        close_db_session(session)
+    sp_name = "spAgregarPaqueteriaDetalle"
+    params = [
+        data.get("ID"), 
+        data.get("UsuarioID"),
+        data.get("Articulo"),
+    ]
+    return execute_stored_procedure(sp_name, params)
             
 def verPaqueteria_detalle(ID):
-    session = get_db_session()  # Obtener una sesión del pool de SQLAlchemy
-    try:
-        conn = session.connection().connection  # Obtener la conexión cruda compatible con pyodbc
-        cursor = conn.cursor()  # Crear el cursor para ejecutar la consulta
+    sp_name = "spVerPaqueteriaDetalle"
+    params = [ ID ]
+    return execute_stored_procedure(sp_name, params)
 
-        query = "EXEC spVerPaqueteriaDetalle ?"
-        cursor.execute(query, ID)  # Ejecutar el procedimiento almacenado con el parámetro
-
-        # Iterar hasta obtener la descripción del cursor (si hay varios conjuntos de resultados)
-        while cursor.description is None:
-            cursor.nextset()
-
-        # Si no hay resultados, retornar un error
-        if cursor.description is None:
-            return {"error": "No data returned from the procedure."}, 500
-
-        # Obtener los nombres de las columnas y los resultados
-        columns = [column[0] for column in cursor.description]
-        results = [dict(zip(columns, row)) for row in cursor.fetchall()]
-
-        return results, 200
-
-    except pyodbc.Error as e:
-        session.rollback()  # Revertir la transacción en caso de error
-        return {"error": str(e)}, 500
-
-    finally:
-        close_db_session(session)  # Cerrar la sesión al final para devolver la conexión al pool
-
-            
-            
 def act_paqueteriaDetalle(data):
-    session = get_db_session()  
-    try:
-        conn = session.connection().connection 
-        cursor = conn.cursor()  
-
-        query = "EXEC spActDetallePaqueteria ?,?,?,?,? ,?"
-        cursor.execute(query, data.get("ID"), data.get("RenglonID"), data.get("UsuarioID"), data.get("Cantidad"), data.get("Peso")
-                       , data.get("Precio"))
-        
-
-        while cursor.description is None:
-            cursor.nextset()
-
-        if cursor.description is None:
-            return {"error": "No data returned from the procedure."}, 500
-
-        columns = [column[0] for column in cursor.description]
-        results = [dict(zip(columns, row)) for row in cursor.fetchall()]
-        session.commit()
-        return results, 200  
-    except pyodbc.Error as e:
-        session.rollback() 
-        return {"error": str(e)}, 500
-    finally:
-        close_db_session(session)
-            
+    sp_name = "spActDetallePaqueteria"
+    params = [
+        data.get("ID"), 
+        data.get("RenglonID"),
+        data.get("UsuarioID"),
+        data.get("Cantidad"),
+        data.get("Peso"),
+        data.get("Precio"),
+    ]
+    return execute_stored_procedure(sp_name, params)
             
 def eliminar_renglonPaqueteria(ID, RenglonID, PersonaID):
-    session = get_db_session()  
-    try:
-        conn = session.connection().connection 
-        cursor = conn.cursor()  
-
-        query = "EXEC spEliminarDetallePaqueteria ?,?,?"
-        cursor.execute(query, ID, RenglonID, PersonaID)
-        
-
-        while cursor.description is None:
-            cursor.nextset()
-
-        if cursor.description is None:
-            return {"error": "No data returned from the procedure."}, 500
-
-        columns = [column[0] for column in cursor.description]
-        results = [dict(zip(columns, row)) for row in cursor.fetchall()]
-        session.commit()
-        return results, 200  
-    except pyodbc.Error as e:
-        session.rollback() 
-        return {"error": str(e)}, 500
-    finally:
-        close_db_session(session)
+    sp_name = "spEliminarDetallePaqueteria"
+    params = [ID, RenglonID, PersonaID]
+    return execute_stored_procedure(sp_name, params)
             
 def cambiar_situacion(data):
-    session = get_db_session()  
-    try:
-        conn = session.connection().connection 
-        cursor = conn.cursor()  
-
-        query = "EXEC spCambiarSituacionPaqueteria ?,?,?"
-        cursor.execute(query, data.get("ID"), data.get("UsuarioID"), data.get("Situacion"))
-        
-
-        while cursor.description is None:
-            cursor.nextset()
-
-        if cursor.description is None:
-            return {"error": "No data returned from the procedure."}, 500
-
-        columns = [column[0] for column in cursor.description]
-        results = [dict(zip(columns, row)) for row in cursor.fetchall()]
-        
-        session.commit()
-        
-        return results, 200  
-    except pyodbc.Error as e:
-        session.rollback() 
-        return {"error": str(e)}, 500
-    finally:
-        close_db_session(session)
+    sp_name = "spCambiarSituacionPaqueteria"
+    params = [
+        data.get("ID"), 
+        data.get("UsuarioID"),
+        data.get("Situacion"),
+    ]
+    return execute_stored_procedure(sp_name, params)
             
 def afectar_paqueteria(data):
-    session = get_db_session()  
-    try:
-        conn = session.connection().connection 
-        cursor = conn.cursor()  
-        conn.autocommit = True  
-
-        query = "EXEC spAfectarPaqueteria ?,?"
-        cursor.execute(query, data.get("ID"), data.get("UsuarioID"))
-        
-
-        while cursor.description is None:
-            cursor.nextset()
-
-        if cursor.description is None:
-            return {"error": "No data returned from the procedure."}, 500
-
-        columns = [column[0] for column in cursor.description]
-        results = [dict(zip(columns, row)) for row in cursor.fetchall()]
-        
-        session.commit()
-        
-        return results, 200  
-    except pyodbc.Error as e:
-        session.rollback() 
-        return {"error": str(e)}, 500
-    finally:
-        close_db_session(session)
-            
+    sp_name = "spAfectarPaqueteria"
+    params = [
+        data.get("ID"), 
+        data.get("UsuarioID"),
+    ]
+    return execute_stored_procedure(sp_name, params)
             
 def eliminar_paqueteria(data):
-    session = get_db_session()  
-    try:
-        conn = session.connection().connection 
-        cursor = conn.cursor()  
-
-        query = "EXEC spEliminarPaqueteria ?,?"
-        cursor.execute(query, data.get("ID"), data.get("UsuarioID"))
-        
-
-        while cursor.description is None:
-            cursor.nextset()
-
-        if cursor.description is None:
-            return {"error": "No data returned from the procedure."}, 500
-
-        columns = [column[0] for column in cursor.description]
-        results = [dict(zip(columns, row)) for row in cursor.fetchall()]
-        
-        session.commit()
-        
-        return results, 200  
-    except pyodbc.Error as e:
-        session.rollback() 
-        return {"error": str(e)}, 500
-    finally:
-        close_db_session(session)
+    sp_name = "spEliminarPaqueteria"
+    params = [
+        data.get("ID"), 
+        data.get("UsuarioID"),
+    ]
+    return execute_stored_procedure(sp_name, params)
             
 def cancelar_paqueteria(data):
-    session = get_db_session()  
-    try:
-        conn = session.connection().connection 
-        cursor = conn.cursor()  
-        conn.autocommit = True  
-
-        query = "EXEC spCancelarPaqueteria ?,?"
-        cursor.execute(query, data.get("ID"), data.get("UsuarioID"))
-        
-
-        while cursor.description is None:
-            cursor.nextset()
-
-        if cursor.description is None:
-            return {"error": "No data returned from the procedure."}, 500
-
-        columns = [column[0] for column in cursor.description]
-        results = [dict(zip(columns, row)) for row in cursor.fetchall()]
-        session.commit()
-        return results, 200  
-    except pyodbc.Error as e:
-        session.rollback() 
-        return {"error": str(e)}, 500
-    finally:
-        close_db_session(session)
+    sp_name = "spCancelarPaqueteria"
+    params = [
+        data.get("ID"), 
+        data.get("UsuarioID"),
+    ]
+    return execute_stored_procedure(sp_name, params)

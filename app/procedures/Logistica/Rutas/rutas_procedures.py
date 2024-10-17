@@ -38,11 +38,17 @@ def ver_RutaDetalle(ID):
     params = [ ID ]
     return execute_stored_procedure(sp_name, params)
 
+def ver_ParadaRutasDisponible(ID):
+    sp_name = "spVerParadasRuta"
+    params = [ ID ]
+    return execute_stored_procedure(sp_name, params)
+
 def agregar_paradaRuta(data):
     sp_name = "spAgregarParadaRuta"
     params = [
         data.get("ID"), 
-        data.get("UsuarioID")
+        data.get("UsuarioID"),
+        data.get("DestinoID"),
     ]
     return execute_stored_procedure(sp_name, params)
 
@@ -53,8 +59,32 @@ def act_ParadaRuta(data):
         data.get("RenglonID"), 
         data.get("UsuarioID"), 
         data.get("HoraAbordaje"), 
-        data.get("DestinoID"), 
         data.get("Descripcion"), 
-        data.get("HoraDescenso")
+    ]
+    return execute_stored_procedure(sp_name, params)
+
+def eliminar_paradaRuta(ID, RenglonID, UsuarioID):
+    sp_name = "spEliminarParadaRuta"
+    params = [ID, RenglonID, UsuarioID]
+    return execute_stored_procedure(sp_name, params)
+
+def copiar_Ruta(data):
+    sp_name = "spCopiarRuta"
+    params = [
+        data.get("ID"), 
+        data.get("UsuarioID"),
+    ]
+    return execute_stored_procedure(sp_name, params)
+
+def eliminar_ruta(ID, UsuarioID):
+    sp_name = "spEliminarRuta"
+    params = [ID, UsuarioID]
+    return execute_stored_procedure(sp_name, params)
+
+def cancelar_Ruta(data):
+    sp_name = "spCancelarRuta"
+    params = [
+        data.get("ID"), 
+        data.get("UsuarioID"),
     ]
     return execute_stored_procedure(sp_name, params)
