@@ -14,6 +14,8 @@ verParadaRutasDisponible_bp = Blueprint('verParadaRutasDisponible', __name__)
 copiarRuta_bp = Blueprint('copiarRuta', __name__)
 eliminarRuta_bp = Blueprint('eliminarRuta', __name__)
 cancelarRuta_bp = Blueprint('cancelarRuta', __name__)
+afectarRuta_bp = Blueprint('afectarRuta', __name__)
+cambiarsituacionRuta_bp = Blueprint('cambiarsituacionRuta', __name__)
 
 @verRutasModulo_bp.route('/Logistica/Rutas/verRutas', methods=['GET'])
 @jwt_required()
@@ -125,4 +127,22 @@ def cancelarRuta_route():
     if data is None:
         return jsonify({"error": "Faltan datos requeridos"}), 400
     response = cancelarRuta(data)
+    return response
+
+@afectarRuta_bp.route('/Logistica/Rutas/afectarRuta', methods=['POST'])
+@jwt_required()
+def afectarRuta_route():
+    data = request.json
+    if data is None:
+        return jsonify({"error": "Faltan datos requeridos"}), 400
+    response = afectarRuta(data)
+    return response
+
+@cambiarsituacionRuta_bp.route('/Logistica/Rutas/cambiarsituacionRuta', methods=['POST'])
+@jwt_required()
+def afectarRuta_route():
+    data = request.json
+    if data is None:
+        return jsonify({"error": "Faltan datos requeridos"}), 400
+    response = afectarRuta(data)
     return response

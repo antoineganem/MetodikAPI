@@ -88,3 +88,20 @@ def cancelar_Ruta(data):
         data.get("UsuarioID"),
     ]
     return execute_stored_procedure(sp_name, params)
+
+def afectar_Ruta(data):
+    sp_name = "spAfectarRuta"
+    params = [
+        data.get("ID"), 
+        data.get("UsuarioID"),
+    ]
+    return execute_stored_procedure(sp_name, params)
+
+def cambiar_situacionRuta(data):
+    sp_name = "spCambiarSituacionRuta"
+    params = [
+        data.get("ID"), 
+        data.get("UsuarioID"),
+        data.get("Situacion"),
+    ]
+    return execute_stored_procedure(sp_name, params)

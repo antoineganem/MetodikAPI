@@ -35,3 +35,9 @@ def eliminarRuta(ID, UsuarioID):
 
 def cancelarRuta(data):
     return cancelar_Ruta(data)
+
+def afectarRuta(data):
+    return afectar_Ruta(data)
+
+def cambiarsituacionRuta(data):
+    return cambiar_situacionRuta(data)
