@@ -112,7 +112,6 @@ def copiarRuta_route():
 @jwt_required()
 def eliminarRuta_route():
     ID = request.args.get('ID')
-    RenglonID = request.args.get('RenglonID')
     UsuarioID = request.args.get('UsuarioID')
     if ID is None:
         return jsonify({"error": "Faltan datos requeridos"}), 400
@@ -140,9 +139,9 @@ def afectarRuta_route():
 
 @cambiarsituacionRuta_bp.route('/Logistica/Rutas/cambiarsituacionRuta', methods=['POST'])
 @jwt_required()
-def afectarRuta_route():
+def cambiarsituacionRuta_route():
     data = request.json
     if data is None:
         return jsonify({"error": "Faltan datos requeridos"}), 400
-    response = afectarRuta(data)
+    response = cambiarsituacionRuta(data)
     return response

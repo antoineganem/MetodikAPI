@@ -30,6 +30,8 @@ def avanzar_ruta(data):
         data.get("VehiculoID"), 
         data.get("EquipoID"), 
         data.get("Observaciones"),
+        data.get("GenerarAutomatico"),
+
     ]
     return execute_stored_procedure(sp_name, params)
 
@@ -60,6 +62,7 @@ def act_ParadaRuta(data):
         data.get("UsuarioID"), 
         data.get("HoraAbordaje"), 
         data.get("Descripcion"), 
+        data.get("HoraDescenso"), 
     ]
     return execute_stored_procedure(sp_name, params)
 
