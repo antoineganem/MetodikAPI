@@ -17,7 +17,7 @@ from app.routes.Exploradores.RutasExplorador import verExploradorRutas_bp, verEx
 from app.routes.Catalogos.Rutas import rutas_bp, rutasResumen_bp, actRuta_bp, verHorarios_bp, actHorarioRuta_bp, verRutasHorarios_bp, eliminarRutaHorario_bp
 from app.routes.Catalogos.Choferes import choferes_bp, choferesResumen_bp, actChoferes_bp, verChoferID_bp
 from app.routes.Catalogos.Agentes import agentes_bp, agentesResumen_bp, actAgente_bp, verAgenteID_bp
-from app.routes.Whatsapp.whatsapp import whatsapp_bp, get_message_data_bp
+from app.routes.Whatsapp.whatsapp import whatsapp_bp, get_message_data_bp, send_message_bp, webhook_verify_bp, webhook_bp
 from app.routes.Logistica.Rutas.Rutas import *
 
 def register_routes(app: Flask):
@@ -158,6 +158,10 @@ def register_routes(app: Flask):
     #Whatsapp api 
     app.register_blueprint(whatsapp_bp)
     app.register_blueprint(get_message_data_bp)
+    app.register_blueprint(send_message_bp)
+    app.register_blueprint(webhook_verify_bp)
+    app.register_blueprint(webhook_bp)
+
     
     ##Configurador de rutas
     app.register_blueprint(verRutasModulo_bp)
