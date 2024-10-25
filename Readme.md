@@ -31,3 +31,6 @@ pip install flask-cors
 
 sqlalchemy
 pip install sqlalchemy
+
+requests
+pip install requests
