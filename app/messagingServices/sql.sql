@@ -12,6 +12,7 @@ CREATE TABLE Conversaciones (
     Mensaje NVARCHAR(MAX),                      -- NVARCHAR(MAX) para texto largo
     FechaEnvio DATETIME DEFAULT GETDATE(),      -- Fecha de envío con valor por defecto
     TipoMensaje VARCHAR(10) CHECK (TipoMensaje IN ('texto', 'imagen', 'archivo')),  -- Validación de tipos de mensaje
+    Leido Bit DEFAULT 0
 );
 
 
@@ -103,3 +104,32 @@ BEGIN
         RAISERROR(@ErrorMessage, @ErrorSeverity, @ErrorState);
     END CATCH;
 END;
+
+CREATE PROCEDURE spVerUsuariosWAPP
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    SELECT 
+        u.UsuarioID,
+        u.wa_id,
+        u.Nombre,
+        MAX(c.FechaEnvio) AS UltimoMensajeFecha,
+        c.Mensaje AS UltimoMensaje,
+        c.Leido AS UltimoMensajeLeido
+    FROM 
+        UsuariosWhatsapp u
+    LEFT JOIN 
+        Conversaciones c ON u.UsuarioID = c.UsuarioID
+    WHERE
+        c.FechaEnvio = (
+            SELECT MAX(FechaEnvio) 
+            FROM Conversaciones 
+            WHERE UsuarioID = u.UsuarioID
+        )
+    GROUP BY 
+        u.UsuarioID, u.wa_id, u.Nombre, c.Mensaje, c.Leido
+    ORDER BY 
+        UltimoMensajeFecha DESC;
+END;
+

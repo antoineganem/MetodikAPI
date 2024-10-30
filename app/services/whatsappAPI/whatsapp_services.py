@@ -1,5 +1,5 @@
-from app.messagingServices.whatsappAPI import send_message_template, send_message,handle_message, verify
-from app.messagingServices.whatsappSP import message_data
+from app.messagingServices.whatsappAPI import send_message_template, send_message,handle_message, verify, upload_media, start_conversation
+from app.messagingServices.whatsappSP import message_data, leerMensajesPorWAID, verUsuariosWAPP
 
 def send_template_service(data):
     return send_message_template(data)
@@ -15,3 +15,15 @@ def handle_message_service():
 
 def verify_service():
     return verify()
+
+def upload_media_service(data):
+    return upload_media(data)
+
+def start_conversation(data):
+    return start_conversation(data)
+
+def leerMensajesPorWAID_service(data):
+    return leerMensajesPorWAID(data)
+
+def verUsuariosWAPP_service():
+    return verUsuariosWAPP()

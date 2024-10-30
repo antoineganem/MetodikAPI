@@ -4,7 +4,6 @@ from app.messagingServices.whatsappSP import leerMensajesPorWAID, actMensajeWAPP
 from flask import jsonify,request,current_app
 import os 
 from dotenv import load_dotenv
-from app.utils.db import get_db_connection, close_db_connection
 import logging
 #Load environment variables
 load_dotenv()
@@ -13,7 +12,7 @@ TOKEN = os.getenv('TOKEN') # Access token for the Facebook Graph API
 PHONE_NUMBER_ID = os.getenv('PHONE_NUMBER_ID')  # Your WhatsApp phone number ID
 
 
-def process_whatsapp_message(body):
+def process_whatsapp_message(body,remitente):
 
     wa_id = body["entry"][0]["changes"][0]["value"]["contacts"][0]["wa_id"]
     nombre = body["entry"][0]["changes"][0]["value"]["contacts"][0]["profile"]["name"]
@@ -23,7 +22,6 @@ def process_whatsapp_message(body):
 
     tipoMensaje = message["type"]
 
-    remitente = 'cliente' 
     #save this into the database 
 
     data = {
@@ -80,7 +78,7 @@ def send_message_template(data):
                         {
                             "type": "image",
                             "image":{
-                                "id": "1471435016875389"
+                                "id": "1095232572226685"
                             }
                         }
                     ]
@@ -158,6 +156,15 @@ def send_message(receipient_WAID, text):
     response = requests.post(url, json=data, headers=headers)
 
     if response.status_code == 200:
+        db_data = {
+            "wa_id": receipient_WAID,
+            "nombre": "Agente",
+            "mensaje": text,
+            "type": "text",
+            "remitente": "agente",
+        }
+        status = actMensajeWAPP(db_data)
+        print("Status db", status)
         print("Status:", response.status_code)
         print("Content-type:", response.headers["content-type"])
         print("Body:", response.text)
@@ -199,7 +206,7 @@ def handle_message():
     try:
         if is_valid_whatsapp_message(body):
             print("body", body)
-            status = process_whatsapp_message(body)
+            status = process_whatsapp_message(body,'cliente')
             print("status", status) 
             return jsonify({"status": "ok"}), 200
         else:
@@ -235,35 +242,83 @@ def verify():
         logging.info("MISSING_PARAMETER")
         return jsonify({"status": "error", "message": "Missing parameters"}), 400
 
-def upload_media(): 
+def upload_media(data): 
 
     try:    
 
         # Get the route of the media file 
-        media = request.body["media"]
+        media = data.get("media")
 
-        url = f"https://graph.facebook.com/v21.0/{PHONE_NUMBER_ID}/media"
+
+        url = f"https://graph.facebook.com/v21.0/452579597933631/media"
 
         headers = {
-            'Authorization': f'Bearer{TOKEN}'
+            'Authorization': f'Bearer {TOKEN}'
+        }
+
+        form_data = {
+            'messaging_product': 'whatsapp',
+            'type': 'image/png',
         }
 
         files = {
-            'file': f"@{media}",
-            'type': 'image/jpeg',
-            'messanging_product': 'whatsapp'
+            'file': ('default.png', open(media,'rb'), 'image/png',  {'Expires': '0'}),  # Open the file in binary mode
+            'type': 'image/png'  # Ensure the type is correct for the file you're sending
         }
 
-        response = requests.post(url, headers= headers, files=files)
+
+        response = requests.post(url, headers= headers, files=files, data=form_data)
+
 
         if response.status_code == 200:
-            return jsonify(response.json()), 200
+            return jsonify(response.json())
         
         else: 
-            return jsonify({"error": response.json()}), response.status_code
-
+            return response.json()
+      
+    except FileNotFoundError:
+        return jsonify({"error": "File not found"}) # Specific error for file not found
+    
+    except requests.exceptions.RequestException as e:
+        return jsonify({"error": f"Request failed: {str(e)}"})  # Catch any request-related errors
+    
     except Exception as e:
+        return jsonify({"error": str(e)})
+    
+def start_conversation(data):
+    """
+    Start a conversation with a user on WhatsApp using the Facebook Graph API.
+    """
+    try: 
+
+        URL = f"https://graph.facebook.com/v20.0/452579597933631/messages"
+            
+        headers = {
+            "Content-type": "application/json",
+            "Authorization": f"Bearer {TOKEN}",
+        }
+
+        data = {
+            "messaging_product": "whatsapp",
+            "to": f"{data.get('Telefono')}",
+            "type": "template",
+            "template": {
+                "name": "hello_world", # plantilla temporal
+                "language": {
+                    "code": "en_US"
+                },
+            }
+        }
         
-        return jsonify({"error": str(e)}), 500
-    
-    
+        response = requests.post(URL, headers=headers, json=data)
+
+        if response.status_code == 200:
+            return jsonify(response.json())
+        
+        else: 
+            return response.json()
+        
+    except requests.exceptions.RequestException as e:
+            
+        return jsonify({"error": f"Request failed: {str(e)}"})
+        
