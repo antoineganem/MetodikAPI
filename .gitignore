@@ -2,4 +2,4 @@ __pycache__/
 *.pyc
 venv/
 /.env
-/utils/db.py
+/utils/db.py__pycache__/
