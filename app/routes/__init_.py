@@ -13,7 +13,7 @@ from app.routes.Filtros.Filtros import verFiltrosCatalogos_bp, verFiltrosModulo_
 from app.routes.Comercial.Reservas.Reservas import verReservas_bp, nvaReserva_bp
 from app.routes.Comercial.Reservas.ReservasD import *
 from app.routes.Comercial.Paqueteria.Paqueteria import *
-from app.routes.Exploradores.RutasExplorador import verExploradorRutas_bp, verExploradorRutasID_bp
+from app.routes.Exploradores.RutasExplorador import verExploradorRutas_bp, verExploradorRutasID_bp, VerParadasRutasExp_bp, verPasajerosRuta_bp
 from app.routes.Catalogos.Rutas import rutas_bp, rutasResumen_bp, actRuta_bp, verHorarios_bp, actHorarioRuta_bp, verRutasHorarios_bp, eliminarRutaHorario_bp
 from app.routes.Catalogos.Choferes import choferes_bp, choferesResumen_bp, actChoferes_bp, verChoferID_bp
 from app.routes.Catalogos.Agentes import agentes_bp, agentesResumen_bp, actAgente_bp, verAgenteID_bp
@@ -139,7 +139,9 @@ def register_routes(app: Flask):
     # Explorador rutas
     app.register_blueprint(verExploradorRutas_bp)
     app.register_blueprint(verExploradorRutasID_bp)
-    
+    app.register_blueprint(VerParadasRutasExp_bp)
+    app.register_blueprint(verPasajerosRuta_bp)
+
     #Catalogo de Rutas 
     app.register_blueprint(rutas_bp)
     app.register_blueprint(rutasResumen_bp)
