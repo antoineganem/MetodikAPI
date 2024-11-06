@@ -1,55 +1,49 @@
 from flask import request, Blueprint, jsonify, Response
 from flask_jwt_extended import jwt_required
-from app.services.Catalogos.Choferes.choferes_services import VerChoferes_SR, VerChoferesResumen_SR, ActChoferes_SR, VerChoferID_SR
-
-choferes_bp = Blueprint('VerChoferes_SR', __name__)
-choferesResumen_bp = Blueprint('VerChoferesResumen_SR', __name__)
-actChoferes_bp = Blueprint('ActChoferes_SR', __name__)
-verChoferID_bp = Blueprint('VerChoferID_SR', __name__)
+from app.services.Catalogos.Choferes.choferes_service import verChoferes, verChoferID, actChoferD, eliminarChofer
 
 
-@choferes_bp.route('/Catalogos/Choferes/choferes', methods=['GET'])
+verChoferes_bp = Blueprint('verChoferes', __name__)
+verChoferID_bp = Blueprint('verChoferID', __name__)
+actChoferD_bp = Blueprint('actChoferD', __name__)
+eliminarChofer_bp = Blueprint('eliminarChofer', __name__)
+
+
+@verChoferes_bp.route('/Catalogos/Choferes', methods=['POST'])
 @jwt_required()
-def choferes_route():
-    response = VerChoferes_SR()
-    return response
-
-
-
-@choferesResumen_bp.route('/Catalogos/Choferes/verChoferesResumen', methods=['GET'])
-@jwt_required()
-def choferesResumen_route():
-    ID = request.args.get('ID')
-    if ID is None:
-        return jsonify({"error": "Faltan datos requeridos"}), 400
-
-    response = VerChoferesResumen_SR(ID)
-    return response
-
-
-
-@actChoferes_bp.route('/Catalogos/Choferes/actChoferes', methods=['POST'])
-@jwt_required()
-def actChoferes_route():
+def verChoferes_route():
     data = request.json
-    
-    if data is None or data == {}:
+    if data is None:
         return jsonify({"error": "Faltan datos requeridos"}), 400
-    
-    response, status_code = ActChoferes_SR(data)
-  
-    return jsonify(response), status_code
+    response = verChoferes(data)
+    return response
+
 
 @verChoferID_bp.route('/Catalogos/Choferes/verChoferID', methods=['GET'])
 @jwt_required()
-def choferes_route():
+def verChoferID_route():
     ID = request.args.get('ID')
-
-    print("Datos recibidos:", ID)  
-
-    if ID is None: 
+    if ID is None:
         return jsonify({"error": "Faltan datos requeridos"}), 400
+    response = verChoferID(ID)
+    return response
 
-    response = VerChoferID_SR(ID)
-    
+
+@actChoferD_bp.route('/Catalogos/Choferes/actChoferD', methods=['POST'])
+@jwt_required()
+def actChoferD_route():
+    data = request.json
+    if data is None:
+        return jsonify({"error": "Faltan datos requeridos"}), 400
+    response = actChoferD(data)
+    return response
+
+
+@eliminarChofer_bp.route('/Catalogos/Choferes/eliminarChofer', methods=['DELETE'])
+# @jwt_required()
+def eliminarChofer_route():
+    ID = request.args.get('ID')
+    if ID is None:
+        return jsonify({"error": "Faltan datos requeridos"}), 400
+    response = eliminarChofer(ID)
     return response
