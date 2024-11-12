@@ -1,5 +1,5 @@
 from flask import Blueprint, request
-from app.services.whatsappAPI.whatsapp_services import send_template_service, get_message_data, send_message_service, verify_service, handle_message_service, upload_media_service, start_conversation, leerMensajesPorWAID_service, verUsuariosWAPP_service
+from app.services.whatsappAPI.whatsapp_services import send_template_service, get_message_data, send_message_service, verify_service, handle_message_service, upload_media_service, start_conversation, leerMensajesPorWAID_service, verUsuariosWAPP_service, send_templates_service
 from app.services.whatsappAPI.whatsapp_services import leerMensajesPorWAID_service, verUsuariosWAPP_service
 from flask_jwt_extended import  jwt_required
 
@@ -12,6 +12,7 @@ upload_media_bp = Blueprint('uploadMedia', __name__)
 start_conversation_bp = Blueprint('startConversation', __name__)
 leerMensajesPorWAID_bp = Blueprint('leerMensajesPorWAID', __name__)
 verUsuariosWAPP_bp = Blueprint('verUsuariosWAPP', __name__)
+send_templates_bp = Blueprint('sendTemplates',__name__)
 
 @whatsapp_bp.route('/send_message', methods=['POST'])
 def send_message_route():
@@ -72,3 +73,15 @@ def leerMensajesPorWAID_route():
 def verUsuariosWAPP_route():
     verUsuariosWAPP_response = verUsuariosWAPP_service()
     return verUsuariosWAPP_response
+
+@send_templates_bp.route('/sendTemplates',methods=['POST'])
+def sendTemplates_route():
+    data = request.json
+    to_number = data.get('Telefono'),
+    template_name = data.get('Plantilla'),
+    parameters = data.get('Parametros',[])
+
+    send_template_response = send_templates_service(to_number,template_name, *parameters)
+
+    return send_template_response
+    
