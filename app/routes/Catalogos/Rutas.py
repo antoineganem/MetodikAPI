@@ -1,77 +1,59 @@
 from flask import request, Blueprint, jsonify, Response
 from flask_jwt_extended import jwt_required
-from app.services.Catalogos.Rutas.rutas_service import VerRutas, VerRutasResumen, ActRuta, VerHorarios, ActHorarioRuta, VerRutasHorarios, EliminarRutaHorario
+from app.services.Catalogos.Rutas.rutas_service import verRutas, verCatRutaID, actCatRuta, actDescensoRuta, delDescensoRuta
 
-rutas_bp = Blueprint('verRutas', __name__)
-rutasResumen_bp = Blueprint('verRutasResumen', __name__)
-actRuta_bp = Blueprint('actRuta', __name__)
-verHorarios_bp = Blueprint('verHorarios', __name__)
-actHorarioRuta_bp = Blueprint('actHorarioRuta', __name__)
-verRutasHorarios_bp = Blueprint('verRutasHorarios', __name__)
-eliminarRutaHorario_bp = Blueprint('eliminarRutaHorario', __name__)
+verRutas_bp = Blueprint('verRutas', __name__)
+verCatRutaID_bp = Blueprint('verCatRutaID', __name__)
+actCatRuta_bp = Blueprint('actCatRuta', __name__)
+actDescensoRuta_bp = Blueprint('actDescensoRuta', __name__)
+delDescensoRuta_bp = Blueprint('delDescensoRuta', __name__)
 
-@rutas_bp.route('/Catalogos/Rutas/rutas', methods=['GET'])
+
+@verRutas_bp.route('/Catalogos/Rutas', methods=['POST'])
 @jwt_required()
-def rutas_route():
-    response = VerRutas()
+def verRutas_route():
+    data = request.json
+    if data is None:
+        return jsonify({"error": "Faltan datos requeridos"}), 400
+    response = verRutas(data)
     return response
 
-@rutasResumen_bp.route('/Catalogos/Rutas/verRutasResumen', methods=['GET'])
+
+@verCatRutaID_bp.route('/Catalogos/Rutas/verCatRutaID', methods=['GET'])
 @jwt_required()
-def rutasResumen_route():
+def verCatRutaID_route():
     ID = request.args.get('ID')
     if ID is None:
         return jsonify({"error": "Faltan datos requeridos"}), 400
-
-    response = VerRutasResumen(ID)
+    response = verCatRutaID(ID)
     return response
 
-@actRuta_bp.route('/Catalogos/Rutas/actRuta', methods=['POST'])
-@jwt_required()
-def actRuta_route():
-    data = request.json
 
+@actCatRuta_bp.route('/Catalogos/Rutas/actCatRuta', methods=['POST'])
+@jwt_required()
+def actCatRuta_route():
+    data = request.json
     if data is None:
         return jsonify({"error": "Faltan datos requeridos"}), 400
-    
-    response, status_code = ActRuta(data)
-
-    return jsonify(response), status_code
+    response = actCatRuta(data)
+    return response
 
 
-@verHorarios_bp.route('/Catalogos/Rutas/verHorarios', methods=['GET'])
+@actDescensoRuta_bp.route('/Catalogos/Rutas/actDescensoRuta', methods=['POST'])
 @jwt_required()
-def verHorarios_route():
-    response = VerHorarios()
-    return jsonify(response)
-
-@actHorarioRuta_bp.route('/Catalogos/Rutas/actHorarioRuta', methods=['POST'])
-@jwt_required()
-def actHorarioRuta_route():
+def actDescensoRuta_route():
     data = request.json
-
     if data is None:
         return jsonify({"error": "Faltan datos requeridos"}), 400
-    
-    response, status_code = ActHorarioRuta(data)
+    response = actDescensoRuta(data)
+    return response
 
-    return jsonify(response), status_code
 
-@verRutasHorarios_bp.route('/Catalogos/Rutas/verRutasHorarios', methods=['GET'])
+@delDescensoRuta_bp.route('/Catalogos/Rutas/delDescensoRuta', methods=['DELETE'])
 @jwt_required()
-def verRutasHorarios_route():
-    ID = request.args.get('ID')
-    print (ID)
-    response = VerRutasHorarios(ID)
-
-    return (response)
-
-@eliminarRutaHorario_bp.route('/Catalogos/Rutas/eliminarRutaHorario', methods=['DELETE'])
-@jwt_required()
-def eliminarRutaHorario_route():
-    ID = request.args.get('ID')
-    if ID is None:
+def delDescensoRuta_route():
+    data = request.json
+    if data is None:
         return jsonify({"error": "Faltan datos requeridos"}), 400
-
-    response = EliminarRutaHorario(ID)
+    response = delDescensoRuta(data)
     return response

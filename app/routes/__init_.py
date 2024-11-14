@@ -15,7 +15,7 @@ from app.routes.Comercial.Reservas.Reservas import verReservas_bp, nvaReserva_bp
 from app.routes.Comercial.Reservas.ReservasD import *
 from app.routes.Comercial.Paqueteria.Paqueteria import *
 from app.routes.Exploradores.RutasExplorador import verExploradorRutas_bp, verExploradorRutasID_bp
-from app.routes.Catalogos.Rutas import rutas_bp, rutasResumen_bp, actRuta_bp, verHorarios_bp, actHorarioRuta_bp, verRutasHorarios_bp, eliminarRutaHorario_bp
+from app.routes.Catalogos.Rutas import verRutas_bp, verCatRutaID_bp, actCatRuta_bp, actDescensoRuta_bp, delDescensoRuta_bp
 from app.routes.Catalogos.Choferes import verChoferes_bp, verChoferID_bp, actChoferD_bp, eliminarChofer_bp
 from app.routes.Catalogos.Agentes import agentes_bp, agentesResumen_bp, actAgente_bp, verAgenteID_bp
 from app.routes.Whatsapp.whatsapp import whatsapp_bp, get_message_data_bp
@@ -148,13 +148,11 @@ def register_routes(app: Flask):
     app.register_blueprint(verExploradorRutasID_bp)
     
     #Catalogo de Rutas 
-    app.register_blueprint(rutas_bp)
-    app.register_blueprint(rutasResumen_bp)
-    app.register_blueprint(actRuta_bp)
-    app.register_blueprint(verHorarios_bp)
-    app.register_blueprint(actHorarioRuta_bp)
-    app.register_blueprint(verRutasHorarios_bp)
-    app.register_blueprint(eliminarRutaHorario_bp)
+    app.register_blueprint(verRutas_bp)
+    app.register_blueprint(verCatRutaID_bp)
+    app.register_blueprint(actCatRuta_bp)
+    app.register_blueprint(actDescensoRuta_bp)
+    app.register_blueprint(delDescensoRuta_bp)
 
     #Catalogo de Choferes
     app.register_blueprint(verChoferes_bp)
