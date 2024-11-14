@@ -6,7 +6,7 @@ from app.routes.Catalogos.Usuarios import usuarios_bp, usuariosResumen_bp, actUs
 from app.routes.Catalogos.Empresas import empresas_bp, empresasResumen_bp, actEmpresa_bp, verEmpresaID_bp
 from app.routes.Catalogos.Sucursales import sucursales_bp, sucursalResumen_bp, actSucursal_bp, verSucursalID_bp
 from app.routes.Catalogos.Vehiculos import vehiculos_bp, vehiculoResumen_bp, actVehiculo_bp, verVehiculoID_bp
-from app.routes.Catalogos.Perfiles import verPerfiles_bp, verPerfilID_bp, actPerfil_bp, verModulosAcceso_bp
+from app.routes.Catalogos.Perfiles import *
 from app.routes.Catalogos.Almacenes import almacenes_bp, almacenResumen_bp, actAlmacen_bp, verAlmacenID_bp
 from app.routes.Catalogos.Destinos import destinos_bp, destinoResumen_bp, actDestino_bp, verDestinoID_bp
 from app.routes.Filtros.Filtros import verFiltrosCatalogos_bp, verFiltrosModulo_bp
@@ -20,6 +20,7 @@ from app.routes.Catalogos.Choferes import verChoferes_bp, verChoferID_bp, actCho
 from app.routes.Catalogos.Agentes import agentes_bp, agentesResumen_bp, actAgente_bp, verAgenteID_bp
 from app.routes.Whatsapp.whatsapp import whatsapp_bp, get_message_data_bp, send_message_bp, webhook_verify_bp, webhook_bp, upload_media_bp, start_conversation_bp, leerMensajesPorWAID_bp, verUsuariosWAPP_bp
 from app.routes.Logistica.Rutas.Rutas import *
+from app.routes.Logistica.PreciosRuta.PreciosRuta import *
 
 def register_routes(app: Flask):
     # Login
@@ -47,6 +48,8 @@ def register_routes(app: Flask):
     app.register_blueprint(verPerfilID_bp)  
     app.register_blueprint(actPerfil_bp)  
     app.register_blueprint(verModulosAcceso_bp)  
+    app.register_blueprint(actAccesosPerfil_bp)  
+    app.register_blueprint(crearMenus_bp)  
 
     ##Catalogo Empresas
 
@@ -190,3 +193,8 @@ def register_routes(app: Flask):
     app.register_blueprint(cancelarRuta_bp)
     app.register_blueprint(afectarRuta_bp)
     app.register_blueprint(cambiarsituacionRuta_bp)
+    
+    #Precios Rutas
+    app.register_blueprint(verPreciosRutas_bp)
+    app.register_blueprint(actPreciosRuta_bp)
+    app.register_blueprint(afectarCambioPreciosRuta_bp)

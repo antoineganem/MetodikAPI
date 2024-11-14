@@ -1,4 +1,4 @@
-from app.procedures.Catalogos.Perfiles.perfiles_procedures import ver_Perfiles, ver_PerfilID, act_Perfil, ver_ModulosAcceso
+from app.procedures.Catalogos.Perfiles.perfiles_procedures import *
 
 def verPerfiles(EstatusID, EmpresaID, Buscar):
     return ver_Perfiles(EstatusID, EmpresaID, Buscar)
@@ -11,3 +11,9 @@ def actPerfil(data):
 
 def verModulosAcceso(PerfilID, PersonaID):
     return ver_ModulosAcceso(PerfilID, PersonaID)
+
+def actAccesosPerfil(data):
+    return act_accesosPerfil(data)
+
+def crearMenus(PersonaID):
+    return crear_menus(PersonaID)
