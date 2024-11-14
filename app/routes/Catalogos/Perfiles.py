@@ -1,11 +1,13 @@
 from flask import request, Blueprint, jsonify, Response
 from flask_jwt_extended import jwt_required
-from app.services.Catalogos.Perfiles.perfiles_service import verPerfiles, verPerfilID, actPerfil, verModulosAcceso
+from app.services.Catalogos.Perfiles.perfiles_service import *
 
 verPerfiles_bp = Blueprint('verPerfiles', __name__)
 verPerfilID_bp = Blueprint('verPerfilID', __name__)
 actPerfil_bp = Blueprint('actPerfil', __name__)
 verModulosAcceso_bp = Blueprint('verModulosAcceso', __name__)
+actAccesosPerfil_bp = Blueprint('actAccesosPerfil', __name__)
+crearMenus_bp = Blueprint('crearMenus', __name__)
 
 
 @verPerfiles_bp.route('/Catalogos/Perfiles/verPerfiles', methods=['GET'])
@@ -50,3 +52,21 @@ def verModulosAcceso_route():
     response = verModulosAcceso(PerfilID, PersonaID)
     return response
 
+@actAccesosPerfil_bp.route('/Catalogos/Perfiles/actAccesosPerfil', methods=['POST'])
+@jwt_required()
+def actAccesosPerfil_route():
+    data = request.json
+    if data is None:
+        return jsonify({"error": "Faltan datos requeridos"}), 400
+    response = actAccesosPerfil(data)
+    return response
+
+@crearMenus_bp.route('/Catalogos/Perfiles/crearMenus', methods=['GET'])
+@jwt_required()
+def verModulosAcceso_route():
+    PersonaID = request.args.get('PersonaID')
+
+    if PersonaID is None:
+        return jsonify({"error": "Faltan datos requeridos"}), 400
+    response = crearMenus(PersonaID)
+    return response

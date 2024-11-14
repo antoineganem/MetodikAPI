@@ -6,7 +6,7 @@ from app.routes.Catalogos.Usuarios import usuarios_bp, usuariosResumen_bp, actUs
 from app.routes.Catalogos.Empresas import empresas_bp, empresasResumen_bp, actEmpresa_bp, verEmpresaID_bp
 from app.routes.Catalogos.Sucursales import sucursales_bp, sucursalResumen_bp, actSucursal_bp, verSucursalID_bp
 from app.routes.Catalogos.Vehiculos import vehiculos_bp, vehiculoResumen_bp, actVehiculo_bp, verVehiculoID_bp
-from app.routes.Catalogos.Perfiles import verPerfiles_bp, verPerfilID_bp, actPerfil_bp, verModulosAcceso_bp
+from app.routes.Catalogos.Perfiles import *
 from app.routes.Catalogos.Almacenes import almacenes_bp, almacenResumen_bp, actAlmacen_bp, verAlmacenID_bp
 from app.routes.Catalogos.Destinos import destinos_bp, destinoResumen_bp, actDestino_bp, verDestinoID_bp
 from app.routes.Filtros.Filtros import verFiltrosCatalogos_bp, verFiltrosModulo_bp
@@ -14,12 +14,13 @@ from app.routes.Catalogos.Equipos import verEquipoID_bp, verEquipos_bp, actEquip
 from app.routes.Comercial.Reservas.Reservas import verReservas_bp, nvaReserva_bp
 from app.routes.Comercial.Reservas.ReservasD import *
 from app.routes.Comercial.Paqueteria.Paqueteria import *
-from app.routes.Exploradores.RutasExplorador import verExploradorRutas_bp, verExploradorRutasID_bp
 from app.routes.Catalogos.Rutas import verRutas_bp, verCatRutaID_bp, actCatRuta_bp, actDescensoRuta_bp, delDescensoRuta_bp
+from app.routes.Exploradores.RutasExplorador import verExploradorRutas_bp, verExploradorRutasID_bp, VerParadasRutasExp_bp, verPasajerosRuta_bp
 from app.routes.Catalogos.Choferes import verChoferes_bp, verChoferID_bp, actChoferD_bp, eliminarChofer_bp
 from app.routes.Catalogos.Agentes import agentes_bp, agentesResumen_bp, actAgente_bp, verAgenteID_bp
-from app.routes.Whatsapp.whatsapp import whatsapp_bp, get_message_data_bp
+from app.routes.Whatsapp.whatsapp import whatsapp_bp, get_message_data_bp, send_message_bp, webhook_verify_bp, webhook_bp, upload_media_bp, start_conversation_bp, leerMensajesPorWAID_bp, verUsuariosWAPP_bp, send_templates_bp
 from app.routes.Logistica.Rutas.Rutas import *
+from app.routes.Logistica.PreciosRuta.PreciosRuta import *
 
 def register_routes(app: Flask):
     # Login
@@ -47,6 +48,8 @@ def register_routes(app: Flask):
     app.register_blueprint(verPerfilID_bp)  
     app.register_blueprint(actPerfil_bp)  
     app.register_blueprint(verModulosAcceso_bp)  
+    app.register_blueprint(actAccesosPerfil_bp)  
+    app.register_blueprint(crearMenus_bp)  
 
     ##Catalogo Empresas
 
@@ -146,7 +149,9 @@ def register_routes(app: Flask):
     # Explorador rutas
     app.register_blueprint(verExploradorRutas_bp)
     app.register_blueprint(verExploradorRutasID_bp)
-    
+    app.register_blueprint(VerParadasRutasExp_bp)
+    app.register_blueprint(verPasajerosRuta_bp)
+
     #Catalogo de Rutas 
     app.register_blueprint(verRutas_bp)
     app.register_blueprint(verCatRutaID_bp)
@@ -163,6 +168,14 @@ def register_routes(app: Flask):
     #Whatsapp api 
     app.register_blueprint(whatsapp_bp)
     app.register_blueprint(get_message_data_bp)
+    app.register_blueprint(send_message_bp)
+    app.register_blueprint(webhook_verify_bp)
+    app.register_blueprint(webhook_bp)
+    app.register_blueprint(upload_media_bp)
+    app.register_blueprint(start_conversation_bp)
+    app.register_blueprint(leerMensajesPorWAID_bp)
+    app.register_blueprint(verUsuariosWAPP_bp)
+    app.register_blueprint(send_templates_bp)
     
     ##Configurador de rutas
     app.register_blueprint(verRutasModulo_bp)
@@ -179,3 +192,8 @@ def register_routes(app: Flask):
     app.register_blueprint(cancelarRuta_bp)
     app.register_blueprint(afectarRuta_bp)
     app.register_blueprint(cambiarsituacionRuta_bp)
+    
+    #Precios Rutas
+    app.register_blueprint(verPreciosRutas_bp)
+    app.register_blueprint(actPreciosRuta_bp)
+    app.register_blueprint(afectarCambioPreciosRuta_bp)
