@@ -1,6 +1,6 @@
 import requests 
 import json
-from app.messagingServices.whatsappSP import leerMensajesPorWAID, actMensajeWAPP # store procedures 
+from app.messagingServices.whatsappSP import leerMensajesPorWAID, actMensajeWAPP,enviarEstadoCuenta1SP, enviarEstadoCuenta2SP, enviarEstadoCuenta3SP # store procedures 
 from flask import jsonify,request,current_app
 import os 
 from dotenv import load_dotenv
@@ -358,7 +358,6 @@ def send_templates(to_number, template_name, *parameters):
         }
     }
 
-    print(payload)
     # Define headers and send request
     headers = {
         "Content-Type": "application/json",
@@ -371,10 +370,96 @@ def send_templates(to_number, template_name, *parameters):
 
         response = requests.post(URL, json=payload, headers=headers)
         print(response.json())
-        return jsonify(response.json()), response.status_code
+        return response.json()
     
     except requests.exceptions.RequestException as e:
         print(e)
         return ({"error": str(e),"status": 500}) 
 
 
+def enviarEstadosCuenta1():
+
+    client_data, status_code =  enviarEstadoCuenta1SP()
+ 
+    acc = []
+
+    if isinstance(client_data, list):
+        for client in client_data: 
+
+            cliente_name = client['Cliente']
+            factura = client['Factura']
+            importe = str(client['Importe'])
+            telefono = f"+52{client['Telefono']}"
+
+            template_name = 'contacto_1'
+                
+            # Send the message to each client
+            response = send_templates(
+                telefono,
+                template_name,
+                cliente_name,
+                factura,
+                importe
+            )
+            
+            acc.append(response)
+
+        return jsonify(acc),200
+
+def enviarEstadoCuenta2():
+
+    client_data, status_code = enviarEstadoCuenta2SP()
+
+    acc = []
+
+    if isinstance(client_data, list):
+        for client in client_data: 
+
+            cliente_name = client['Cliente']
+        
+            telefono = f"+52{client['Telefono']}"
+
+            template_name = 'contacto_2'
+                
+            # Send the message to each client
+            response = send_templates(
+                telefono,
+                template_name,
+                cliente_name
+            )
+            
+            acc.append(response)
+
+        return jsonify(acc),200
+
+def enviarEstadoCuenta3():
+
+    client_data, status_code = enviarEstadoCuenta3SP()
+
+    acc = []
+
+    if isinstance(client_data, list):
+        for client in client_data: 
+        
+            telefono = f"52{client['Telefono']}"
+
+            diasVencido = client['Diasvencido']
+
+            factura = client['Factura']
+
+            importe = str(client['Importe'])
+
+            template_name = 'contacto_3'
+                
+            # Send the message to each client
+            response = send_templates(
+                telefono,
+                template_name,
+                diasVencido, 
+                importe, 
+                factura
+            )
+            
+            acc.append(response)
+
+        return jsonify(acc),200
