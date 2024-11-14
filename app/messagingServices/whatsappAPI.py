@@ -137,6 +137,8 @@ def send_message_template(data):
 
 #Function to respond to user onces the user has sent a message
 def send_message(receipient_WAID, text):
+    print(text)
+    print(receipient_WAID)
     headers = {
         "Content-type": "application/json",
         "Authorization": f"Bearer {TOKEN}",
@@ -320,3 +322,57 @@ def start_conversation(data):
             
         return jsonify({"error": f"Request failed: {str(e)}"})
         
+
+def send_templates(to_number, template_name, *parameters):
+    # Construct the parameters for the template message
+    if isinstance(to_number, tuple):
+        to_number = to_number[0]
+
+    if isinstance(template_name, tuple):
+        template_name = template_name[0]
+
+    message_parameters = [
+        {"type": "text", "text": param} for param in parameters
+    ]
+    
+    # Create the payload with dynamic parameters
+    payload = {
+        "messaging_product": "whatsapp",
+        "to": to_number,
+        "type": "template",
+        "template": {
+            "name": template_name,
+            "language": {
+                "code": "es_MX"
+            },
+            "components": [
+                {
+                    "type": "body",
+                    "parameters": 
+                    message_parameters
+                    
+                }
+            ]
+        }
+    }
+
+    print(payload)
+    # Define headers and send request
+    headers = {
+        "Content-Type": "application/json",
+        "Authorization": f"Bearer {TOKEN}"  # Replace with your token
+    }
+    
+    URL = f"https://graph.facebook.com/v20.0/452579597933631/messages"
+    
+    try: 
+
+        response = requests.post(URL, json=payload, headers=headers)
+        print(response.json())
+        return jsonify(response.json()), response.status_code
+    
+    except requests.exceptions.RequestException as e:
+        print(e)
+        return ({"error": str(e),"status": 500}) 
+
+

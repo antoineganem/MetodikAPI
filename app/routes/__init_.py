@@ -18,7 +18,7 @@ from app.routes.Exploradores.RutasExplorador import verExploradorRutas_bp, verEx
 from app.routes.Catalogos.Rutas import rutas_bp, rutasResumen_bp, actRuta_bp, verHorarios_bp, actHorarioRuta_bp, verRutasHorarios_bp, eliminarRutaHorario_bp
 from app.routes.Catalogos.Choferes import verChoferes_bp, verChoferID_bp, actChoferD_bp, eliminarChofer_bp
 from app.routes.Catalogos.Agentes import agentes_bp, agentesResumen_bp, actAgente_bp, verAgenteID_bp
-from app.routes.Whatsapp.whatsapp import whatsapp_bp, get_message_data_bp, send_message_bp, webhook_verify_bp, webhook_bp, upload_media_bp, start_conversation_bp, leerMensajesPorWAID_bp, verUsuariosWAPP_bp
+from app.routes.Whatsapp.whatsapp import whatsapp_bp, get_message_data_bp, send_message_bp, webhook_verify_bp, webhook_bp, upload_media_bp, start_conversation_bp, leerMensajesPorWAID_bp, verUsuariosWAPP_bp, send_templates_bp
 from app.routes.Logistica.Rutas.Rutas import *
 from app.routes.Logistica.PreciosRuta.PreciosRuta import *
 
@@ -177,6 +177,7 @@ def register_routes(app: Flask):
     app.register_blueprint(start_conversation_bp)
     app.register_blueprint(leerMensajesPorWAID_bp)
     app.register_blueprint(verUsuariosWAPP_bp)
+    app.register_blueprint(send_templates_bp)
     
     ##Configurador de rutas
     app.register_blueprint(verRutasModulo_bp)
