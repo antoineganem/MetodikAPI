@@ -1,7 +1,8 @@
 import requests 
 import json
+from app.socketio_config import socketio  
 from app.messagingServices.whatsappSP import leerMensajesPorWAID, actMensajeWAPP,enviarEstadoCuenta1SP, enviarEstadoCuenta2SP, enviarEstadoCuenta3SP # store procedures 
-from flask import jsonify,request,current_app
+from flask import jsonify,request
 import os 
 from dotenv import load_dotenv
 import logging
@@ -30,10 +31,14 @@ def process_whatsapp_message(body,remitente):
         'mensaje': mensaje,
         'remitente': remitente,
         'tipoMensaje': tipoMensaje,
-
     }
-    
-    return actMensajeWAPP(data)
+
+    status = actMensajeWAPP(data)
+
+    print(status)
+    socketio.emit('new_message', status)
+
+    return status
 
 def is_valid_whatsapp_message(body):
     """
