@@ -1,6 +1,6 @@
 import pyodbc
 from flask import jsonify
-from app.messagingServices.whatsappAPI import send_message
+from app.messagingServices.whatsappAPI import send_message_template, upload_media
 from app.utils.config import get_db_session, close_db_session
 from app.utils.db_helpers import execute_stored_procedure
 
@@ -41,7 +41,9 @@ def act_ReservaD(data):
     sp_name = "spActReservaD"
     params = [
         data.get("ID"), 
-        data.get("HorarioRutaID"),
+        data.get("RutaID"),
+        data.get("ParadaID"),
+        data.get("DestinoID"),
         data.get("Cantidad"),
         data.get("TipoViaje"),
     ]
@@ -77,7 +79,6 @@ def ver_AsientosDispoblesRuta(data):
     sp_name = "spVerAsientosDisponiblesRuta"
     params = [
         data.get("ID"), 
-        data.get("HorarioRutaID"),
         data.get("RenglonID"),
 
     ]
@@ -87,7 +88,6 @@ def agregar_AsientosReserva(data):
     sp_name = "spAgregarAsientosReserva"
     params = [
         data.get("ID"), 
-        data.get("HorarioRutaID"),
         data.get("RenglonID"),
         data.get("Asientos"),
     ]
@@ -98,7 +98,6 @@ def guardar_DatosPersonaReserva(data):
     params = [
         data.get("ID"), 
         data.get("RenglonID"),
-        data.get("HorarioRutaID"),
         data.get("Asiento"),
         data.get("Nombre"),
         data.get("Email"),
@@ -108,9 +107,9 @@ def guardar_DatosPersonaReserva(data):
     ]
     return execute_stored_procedure(sp_name, params)
             
-def ver_PersonasReserva(ID, HorarioRutaID, RenglonID):
+def ver_PersonasReserva(ID, RenglonID):
     sp_name = "spVerPersonasReserva"
-    params = [ ID, HorarioRutaID, RenglonID]
+    params = [ ID, RenglonID]
     return execute_stored_procedure(sp_name, params)
 
             
@@ -141,10 +140,14 @@ def cambiar_situacion(data):
 
         columns = [column[0] for column in cursor.description]
         results = [dict(zip(columns, row)) for row in cursor.fetchall()]
+        
         session.commit()
 
         if data.get("Situacion") == "Pagado":
             try:
+                
+                subirQRreserva(data.get("ID"))
+                
                 query_select = "EXEC spVerBoletosPagadosReserva ?"
                 cursor.execute(query_select, data.get("ID"))
 
@@ -156,7 +159,7 @@ def cambiar_situacion(data):
                 
                 columns_select = [column[0] for column in cursor.description]
                 select_results = [dict(zip(columns_select, row)) for row in cursor.fetchall()]
-
+                
                 for result in select_results:
                     message_data = {
                         "Telefono": result["Telefono"],
@@ -167,9 +170,11 @@ def cambiar_situacion(data):
                         "PrecioTotal": result["PrecioTotal"], 
                         "FechaSalida": result["FechaSalida"],
                         "Ruta": result["Ruta"],
-                        "Nombre": result["Nombre"]
+                        "Nombre": result["Nombre"],
+                        "IDCodigoQR": result["IDCodigoQR"]
+
                     }
-                    send_message(message_data)
+                send_message_template(message_data)
 
             except pyodbc.Error as e:
                 session.rollback() 
@@ -227,3 +232,27 @@ def eliminar_renglonEquipaje(ID, RenglonID, PersonaID):
     sp_name = "spEliminarDetalleEquipaje"
     params = [ ID, RenglonID, PersonaID ]
     return execute_stored_procedure(sp_name, params)
+
+def subirQRreserva(ID):
+    sp_name = "spGenerarQRReserva"
+    params = [ID]
+    Resp, status_code = execute_stored_procedure(sp_name, params)
+    
+    if status_code == 200:
+        ruta_archivos = []
+        for item in Resp:
+            ruta_archivo = {"media": item.get("RutaArchivo")}
+            ruta_archivos.append(ruta_archivo)
+        for ruta in ruta_archivos:
+            response = upload_media(ruta)
+            try:
+                subirQRReserva(ID, item.get("RenglonID"), item.get("NoAsiento"), response)
+            except ValueError:
+                print(f"Error al obtener JSON de la respuesta: {response.text}")
+    else:
+        print(f"Error al ejecutar el procedimiento: {Resp}")
+
+def subirQRReserva(ID, RenglonID, NoAsiento, response):
+    sp_name = "spActIDQrReserva"
+    params = [ ID, RenglonID, NoAsiento, response.get("id")]
+    execute_stored_procedure(sp_name, params)

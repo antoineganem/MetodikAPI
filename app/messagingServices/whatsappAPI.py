@@ -83,7 +83,7 @@ def send_message_template(data):
                         {
                             "type": "image",
                             "image":{
-                                "id": "1095232572226685"
+                                "id": f"{data.get('IDCodigoQR')}"
                             }
                         }
                     ]
@@ -276,21 +276,19 @@ def upload_media(data):
 
         response = requests.post(url, headers= headers, files=files, data=form_data)
 
-
         if response.status_code == 200:
-            return jsonify(response.json())
-        
-        else: 
-            return response.json()
-      
+            return response.json() 
+        else:
+            return {"error": response.json()} 
+
     except FileNotFoundError:
-        return jsonify({"error": "File not found"}) # Specific error for file not found
+        return {"error": "File not found"}  
     
     except requests.exceptions.RequestException as e:
-        return jsonify({"error": f"Request failed: {str(e)}"})  # Catch any request-related errors
+        return {"error": f"Request failed: {str(e)}"} 
     
     except Exception as e:
-        return jsonify({"error": str(e)})
+        return {"error": str(e)} 
     
 def start_conversation(data):
     """
