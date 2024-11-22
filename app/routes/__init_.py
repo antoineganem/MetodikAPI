@@ -14,6 +14,7 @@ from app.routes.Catalogos.Equipos import verEquipoID_bp, verEquipos_bp, actEquip
 from app.routes.Comercial.Reservas.Reservas import verReservas_bp, nvaReserva_bp
 from app.routes.Comercial.Reservas.ReservasD import *
 from app.routes.Comercial.Paqueteria.Paqueteria import *
+from app.routes.Catalogos.Clientes import verClienteID_bp, verClientes_bp, actCliente_bp
 from app.routes.Catalogos.Rutas import verRutas_bp, verCatRutaID_bp, actCatRuta_bp, actDescensoRuta_bp, delDescensoRuta_bp
 from app.routes.Exploradores.RutasExplorador import verExploradorRutas_bp, verExploradorRutasID_bp, VerParadasRutasExp_bp, verPasajerosRuta_bp
 from app.routes.Catalogos.Choferes import verChoferes_bp, verChoferID_bp, actChoferD_bp, eliminarChofer_bp
@@ -158,6 +159,11 @@ def register_routes(app: Flask):
     app.register_blueprint(actCatRuta_bp)
     app.register_blueprint(actDescensoRuta_bp)
     app.register_blueprint(delDescensoRuta_bp)
+
+    #Catalogo Clientes
+    app.register_blueprint(verClientes_bp)
+    app.register_blueprint(verClienteID_bp)
+    app.register_blueprint(actCliente_bp)
 
     #Catalogo de Choferes
     app.register_blueprint(verChoferes_bp)
