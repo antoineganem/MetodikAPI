@@ -63,7 +63,7 @@ def crear_menus(PersonaID):
                 "name": item["Nombre"],
                 "labelDisable": False,
                 "active": True,
-                "children": [] if item["Nombre"] != "Inicio" else None,
+                "children": None if item["Nombre"] in ["Inicio", "Soporte"] else [],
                 "to": item["NombreArchivo"] if item["NombreArchivo"] else f"/{item['Menu'].lower()}/{item['Nombre'].lower().replace(' ', '_')}",
                 "icon": item["Icono"] 
             }

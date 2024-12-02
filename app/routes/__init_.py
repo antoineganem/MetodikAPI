@@ -23,6 +23,7 @@ from app.routes.Catalogos.Agentes import *
 from app.routes.Whatsapp.whatsapp import *
 from app.routes.Logistica.Rutas.Rutas import *
 from app.routes.Logistica.PreciosRuta.PreciosRuta import *
+from app.routes.Catalogos.Pasajeros import *
 
 def register_routes(app: Flask):
     # Login
