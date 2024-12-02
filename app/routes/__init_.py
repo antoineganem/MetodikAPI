@@ -19,6 +19,7 @@ from app.routes.Catalogos.Rutas import *
 from app.routes.Catalogos.Choferes import *
 from app.routes.Catalogos.Agentes import *
 from app.routes.Whatsapp.whatsapp import *
+
 from app.routes.Logistica.Rutas.Rutas import *
 from app.routes.Logistica.PreciosRuta.PreciosRuta import *
 
@@ -175,7 +176,10 @@ def register_routes(app: Flask):
     app.register_blueprint(start_conversation_bp)
     app.register_blueprint(leerMensajesPorWAID_bp)
     app.register_blueprint(verUsuariosWAPP_bp)
-    app.register_blueprint(send_templates_bp)
+    app.register_blueprint(marcarComoLeido_bp)
+    app.register_blueprint(enviarEstadoCuenta1_bp)
+    app.register_blueprint(enviarEstadoCuenta2_bp)
+    app.register_blueprint(enviarEstadoCuenta3_bp)
     
     ##Configurador de rutas
     app.register_blueprint(verRutasModulo_bp)

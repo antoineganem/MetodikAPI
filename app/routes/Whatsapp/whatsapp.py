@@ -1,6 +1,6 @@
 from flask import Blueprint, request
-from app.services.whatsappAPI.whatsapp_services import send_template_service, get_message_data, send_message_service, verify_service, handle_message_service, upload_media_service, start_conversation, leerMensajesPorWAID_service, verUsuariosWAPP_service, send_templates_service
-from app.services.whatsappAPI.whatsapp_services import leerMensajesPorWAID_service, verUsuariosWAPP_service
+from app.services.whatsappAPI.whatsapp_services import send_template_service, get_message_data, send_message_service, verify_service, handle_message_service, upload_media_service, start_conversation, leerMensajesPorWAID_service, verUsuariosWAPP_service
+from app.services.whatsappAPI.whatsapp_services import leerMensajesPorWAID_service, verUsuariosWAPP_service, enviarEstadoCuenta1_service, enviarEstadoCuenta2_service, enviarEstadoCuenta3_service, marcarComoLeido_service
 from flask_jwt_extended import  jwt_required
 
 whatsapp_bp = Blueprint('whatsapp', __name__)
@@ -12,7 +12,10 @@ upload_media_bp = Blueprint('uploadMedia', __name__)
 start_conversation_bp = Blueprint('startConversation', __name__)
 leerMensajesPorWAID_bp = Blueprint('leerMensajesPorWAID', __name__)
 verUsuariosWAPP_bp = Blueprint('verUsuariosWAPP', __name__)
-send_templates_bp = Blueprint('sendTemplates',__name__)
+enviarEstadoCuenta1_bp = Blueprint('enviarEstadoCuenta1',__name__)
+enviarEstadoCuenta2_bp = Blueprint('enviarEstadoCuenta2',__name__)
+enviarEstadoCuenta3_bp = Blueprint('enviarEstadoCuenta3',__name__)
+marcarComoLeido_bp = Blueprint('marcarComoLeido',__name__)
 
 @whatsapp_bp.route('/send_message', methods=['POST'])
 def send_message_route():
@@ -53,6 +56,7 @@ def upload_media_route():
     upload_media_response = upload_media_service(data)
     return upload_media_response 
 
+
 @start_conversation_bp.route('/start_conversation', methods=['POST'])
 @jwt_required()
 def start_conversation_route():
@@ -64,9 +68,15 @@ def start_conversation_route():
 @jwt_required()
 def leerMensajesPorWAID_route():
     data = request.json
-    print(data)
     leerMensajesPorWAID_response = leerMensajesPorWAID_service(data)
     return leerMensajesPorWAID_response
+
+@marcarComoLeido_bp.route('/marcarComoLeido', methods=['POST'])
+@jwt_required()
+def marcarComoLeido_route():
+    data = request.json
+    marcarComoLeido_response = marcarComoLeido_service(data)
+    return marcarComoLeido_response
 
 @verUsuariosWAPP_bp.route('/verUsuarios', methods=['GET'])
 @jwt_required()
@@ -74,14 +84,33 @@ def verUsuariosWAPP_route():
     verUsuariosWAPP_response = verUsuariosWAPP_service()
     return verUsuariosWAPP_response
 
-@send_templates_bp.route('/sendTemplates',methods=['POST'])
-def sendTemplates_route():
-    data = request.json
-    to_number = data.get('Telefono'),
-    template_name = data.get('Plantilla'),
-    parameters = data.get('Parametros',[])
 
-    send_template_response = send_templates_service(to_number,template_name, *parameters)
+@enviarEstadoCuenta1_bp.route('/enviarEstadoCuenta1',methods=['GET'])
+def enviarEstadoCuenta1():
+    #data = request.json
 
-    return send_template_response
+    #to_number = data.get('Telefono'),
+    #template_name = data.get('Plantilla'),
+    #parameters = data.get('Parametros',[])
+
+    #send_template_response = send_templates_service(to_number,template_name, *parameters)
+
+    #return send_template_response
     
+    data =  enviarEstadoCuenta1_service()
+    
+    return data
+
+@enviarEstadoCuenta2_bp.route('/enviarEstadoCuenta2', methods=['GET'])
+def enviarEstadoCuenta2():
+
+    data = enviarEstadoCuenta2_service()
+
+    return data
+
+@enviarEstadoCuenta3_bp.route('/enviarEstadoCuenta3',methods=['GET'])
+def enviarEstadosCuenta3():
+
+    data = enviarEstadoCuenta3_service()
+
+    return data

@@ -1,5 +1,5 @@
-from app.messagingServices.whatsappAPI import send_message_template, send_message,handle_message, verify, upload_media, start_conversation, send_templates
-from app.messagingServices.whatsappSP import message_data, leerMensajesPorWAID, verUsuariosWAPP
+from app.messagingServices.whatsappAPI import send_message_template, send_message,handle_message, verify, upload_media, start_conversation, enviarEstadosCuenta1, enviarEstadoCuenta2, enviarEstadoCuenta3
+from app.messagingServices.whatsappSP import message_data, leerMensajesPorWAID, verUsuariosWAPP, marcarComoLeido
 
 def send_template_service(data):
     return send_message_template(data)
@@ -28,5 +28,14 @@ def leerMensajesPorWAID_service(data):
 def verUsuariosWAPP_service():
     return verUsuariosWAPP()
 
-def send_templates_service(to_number, template_name, *parameters):
-    return send_templates(to_number, template_name, *parameters)
+def marcarComoLeido_service(data):
+    return marcarComoLeido(data)
+
+def enviarEstadoCuenta1_service():
+    return enviarEstadosCuenta1()
+
+def enviarEstadoCuenta2_service():
+    return enviarEstadoCuenta2()
+
+def enviarEstadoCuenta3_service():
+    return enviarEstadoCuenta3()

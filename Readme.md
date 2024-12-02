@@ -34,3 +34,6 @@ pip install sqlalchemy
 
 requests
 pip install requests
+
+Flask-SocketIO   
+pip install flask-socketio

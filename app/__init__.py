@@ -4,6 +4,7 @@ from app.routes.__init_ import register_routes
 from flask_swagger_ui import get_swaggerui_blueprint
 from flask_jwt_extended import JWTManager
 from flask_cors import CORS  # Importa CORS
+from app.socketio_config import socketio  # Importamos `socketio` desde el archivo de configuración
 
 def create_app():
     app = Flask(__name__)
@@ -14,6 +15,7 @@ def create_app():
 
     # Inicializar JWTManager
     jwt = JWTManager(app)
+
 
     register_routes(app)
 
@@ -44,4 +46,6 @@ def create_app():
         "security": [{"BearerAuth": []}],
     }
 
+    socketio.init_app(app)
+    
     return app
