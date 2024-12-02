@@ -1,4 +1,33 @@
-Librerias a instalar
+# Librerias a instalar
+
+## venv
+
+1. Start venv:
+```bash
+    python3 -m venv venv/
+```
+
+2. Initialize:
+```bash
+    source venv/bin/activate
+```
+
+---
+
+### Massive Install:
+
+- Python dependencies:
+```bash
+    pip install flask pyodbc python-dotenv flask-swagger-ui flask-jwt-extended flask-cors sqlalchemy requests flask-socketio
+```
+
+- Others:
+```bash
+    # servicio sqlserver en mac
+    brew install msodbcsql17 mssql-tools
+```
+
+---
 
 1. Flask
 Flask es el framework web que usaremos el funcionamiento de la API.
