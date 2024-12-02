@@ -1,7 +1,7 @@
 from app.procedures.Logistica.PreciosRuta.preciosruta_procedure import *
 
-def verPreciosRutas():
-    return ver_preciosRutas()
+def verPreciosRutas(EmpresaID, OrigenID, DestinoID):
+    return ver_preciosRutas(EmpresaID, OrigenID, DestinoID)
 
 def actPreciosRuta( data ):
     return act_preciosRuta( data )
