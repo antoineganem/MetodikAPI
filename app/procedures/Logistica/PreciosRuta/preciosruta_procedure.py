@@ -1,8 +1,8 @@
 from app.utils.db_helpers import execute_stored_procedure
 
-def ver_preciosRutas():
+def ver_preciosRutas(EmpresaID, OrigenID, DestinoID):
     sp_name = "spVerPreciosRutas"
-    params = []
+    params = [ EmpresaID, OrigenID, DestinoID ]
     return execute_stored_procedure(sp_name, params)
 
 def act_preciosRuta(data):
