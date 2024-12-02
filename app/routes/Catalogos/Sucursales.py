@@ -1,33 +1,26 @@
 from flask import request, Blueprint, jsonify
 from flask_jwt_extended import jwt_required
 from app.services.Catalogos.Sucursales.sucursales_service import (
-        VerSucursales, VerSucursalResumen, ActSucursal, VerSucursalID)
+        verSucursales,actSucursal,verSucursalID)
 
-sucursales_bp = Blueprint('VerSucursales', __name__)
-sucursalResumen_bp = Blueprint('VerSucursalResumen', __name__)
-actSucursal_bp = Blueprint('ActSucursal', __name__)
-verSucursalID_bp = Blueprint('VerSucursalID', __name__)
+verSucursales_bp = Blueprint('verSucursales', __name__)
+actSucursal_bp = Blueprint('actSucursal', __name__)
+verSucursalID_bp = Blueprint('verSucursalID', __name__)
 
 
-@sucursales_bp.route('/Catalogos/Sucursales/sucursales', methods=['GET'])
+@verSucursales_bp.route('/Catalogos/verSucursales', methods=['POST'])
 @jwt_required()
 def sucursales_route():
-    response = VerSucursales()
-    return response
+    data= request.json
 
-
-@sucursalResumen_bp.route('/Catalogos/Sucursales/verSucursalResumen', methods=['GET'])
-@jwt_required()
-def sucursalResumen_route():
-    ID = request.args.get('ID')
-    if ID is None:
+    if data is None:
         return jsonify({"error": "Faltan datos requeridos"}), 400
 
-    response = VerSucursalResumen(ID)
-    return response
+    user_response = verSucursales(data)
 
+    return user_response
 
-@actSucursal_bp.route('/Catalogos/Sucursales/actSucursal', methods=['POST'])
+@actSucursal_bp.route('/Catalogos/actSucursal', methods=['POST'])
 @jwt_required()
 def actUSucursal_route():
     data = request.json
@@ -35,21 +28,17 @@ def actUSucursal_route():
     if data is None:
         return jsonify({"error": "Faltan datos requeridos"}), 400
 
-    response, status_code = ActSucursal(data)
+    user_response = actSucursal(data)
 
-    return jsonify(response), status_code
+    return user_response
 
 
-@verSucursalID_bp.route('/Catalogos/Usuarios/verSucursalID', methods=['GET'])
+@verSucursalID_bp.route('/Catalogos/verSucursalID', methods=['GET'])
 @jwt_required()
 def verSucursalID_route():
     ID = request.args.get('ID')
 
-    print("Datos recibidos:", ID)
-
     if ID is None:
         return jsonify({"error": "Faltan datos requeridos"}), 400
-
-    response = VerSucursalID(ID)
-
+    response = verSucursalID(ID)
     return response

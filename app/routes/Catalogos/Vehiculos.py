@@ -1,55 +1,43 @@
-from flask import request, Blueprint, jsonify
+from flask import request, Blueprint, jsonify, Response
 from flask_jwt_extended import jwt_required
-from app.services.Catalogos.Vehiculos.vehiculos_service import (
-        VerVehiculos, VerVehiculoResumen, ActVehiculo, VerVehiculoID)
+from app.services.Catalogos.Vehiculos.vehiculos_service import verVehiculos, actVehiculo, verVehiculoID
 
-vehiculos_bp = Blueprint('VerVehiuclos', __name__)
-vehiculoResumen_bp = Blueprint('VerVehiculoResumen', __name__)
-actVehiculo_bp = Blueprint('ActVehiculo', __name__)
-verVehiculoID_bp = Blueprint('VerVehiculoID', __name__)
+verVehiculos_bp = Blueprint('verVehiculos',__name__)
+actVehiculo_bp = Blueprint('actVehiculo',__name__)
+verVehiculoID_bp = Blueprint('verVehiculoID',__name__)
 
 
-@vehiculos_bp.route('/Catalogos/Vehiculos/vehiculos', methods=['GET'])
+@verVehiculos_bp.route('/Catalogos/verVehiculos', methods=['POST'])
 @jwt_required()
-def vehiculos_route():
-    response = VerVehiculos()
-    return response
-
-
-@vehiculoResumen_bp.route('/Catalogos/Vehiculos/verVehiculoResumen', methods=['GET'])
-@jwt_required()
-def vehiculoResumen_route():
-    ID = request.args.get('ID')
-    if ID is None:
-        return jsonify({"error": "Faltan datos requeridos"}), 400
-
-    response = VerVehiculoResumen(ID)
-    return response
-
-
-@actVehiculo_bp.route('/Catalogos/Vehiculos/actVehiculo', methods=['POST'])
-@jwt_required()
-def actUVehiculo_route():
+def verVehiculos_route():
     data = request.json
 
     if data is None:
         return jsonify({"error": "Faltan datos requeridos"}), 400
+    
+    user_response = verVehiculos(data)
 
-    response, status_code = ActVehiculo(data)
+    return user_response
 
-    return jsonify(response), status_code
+@actVehiculo_bp.route('/Catalogos/actVehiculo', methods=['POST'])
+@jwt_required()
+def actVehiculo_route():
+    data = request.json
 
+    if data is None:
+        return jsonify({"error": "Faltan datos requeridos"}), 400
+    
+    user_response = actVehiculo(data)
 
-@verVehiculoID_bp.route('/Catalogos/Usuarios/verVehiculoID', methods=['GET'])
+    return user_response
+
+@verVehiculoID_bp.route('/Catalogos/verVehiculoID', methods=['GET'])
 @jwt_required()
 def verVehiculoID_route():
     ID = request.args.get('ID')
-
-    print("Datos recibidos:", ID)
-
+    
     if ID is None:
         return jsonify({"error": "Faltan datos requeridos"}), 400
-
-    response = VerVehiculoID(ID)
-
+    response = verVehiculoID(ID)
     return response
+

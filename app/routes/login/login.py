@@ -19,7 +19,7 @@ def login_route():
         return jsonify({"error": "Faltan datos requeridos"}), 400
 
     user_response = login(Correo, Contrasena, Empresa)
-    
+    print(user_response)
     
     if not user_response:
         return jsonify({"error": "Credenciales inválidas"}), 401

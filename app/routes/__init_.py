@@ -4,16 +4,19 @@ from app.routes.Indicadores.indicadores import verIndicadores_bp
 from app.routes.Configuracion.Modulos import verModulos_bp, verModuloID_bp, actModulo_bp, eliminarModulo_bp
 from app.routes.Catalogos.Usuarios import usuarios_bp, usuariosResumen_bp, actUsuario_bp, verUsuarioID_bp
 from app.routes.Catalogos.Empresas import empresas_bp, empresasResumen_bp, actEmpresa_bp, verEmpresaID_bp
-from app.routes.Catalogos.Sucursales import sucursales_bp, sucursalResumen_bp, actSucursal_bp, verSucursalID_bp
-from app.routes.Catalogos.Vehiculos import vehiculos_bp, vehiculoResumen_bp, actVehiculo_bp, verVehiculoID_bp
+from app.routes.Catalogos.Sucursales import verSucursales_bp, actSucursal_bp, verSucursalID_bp
+from app.routes.Catalogos.Vehiculos import verVehiculos_bp,actVehiculo_bp, verVehiculoID_bp
 from app.routes.Catalogos.Perfiles import verPerfiles_bp, verPerfilID_bp, actPerfil_bp, verModulosAcceso_bp
 from app.routes.Catalogos.Almacenes import almacenes_bp, almacenResumen_bp, actAlmacen_bp, verAlmacenID_bp
-from app.routes.Catalogos.Destinos import destinos_bp, destinoResumen_bp, actDestino_bp, verDestinoID_bp
+from app.routes.Catalogos.Destinos import verDestinos_bp, actDestino_bp, verDestinoID_bp
+from app.routes.Catalogos.Pasajeros import verPasajeros_bp, actPasajeros_bp, verPasajerosID_bp
 from app.routes.Filtros.Filtros import verFiltrosCatalogos_bp, verFiltrosModulo_bp
 from app.routes.Comercial.Reservas.Reservas import verReservas_bp, nvaReserva_bp
 from app.routes.Comercial.Reservas.ReservasD import *
 from app.routes.Comercial.Paqueteria.Paqueteria import *
 from app.routes.Exploradores.RutasExplorador import verExploradorRutas_bp, verExploradorRutasID_bp
+from app.routes.Exploradores.PaqueteriaRExplorador import verPaqueteriaR_bp
+from app.routes.Exploradores.PaqueteriaEntrega import verPaqueteriaEntrega_bp
 from app.routes.Catalogos.Rutas import rutas_bp, rutasResumen_bp, actRuta_bp, verHorarios_bp, actHorarioRuta_bp, verRutasHorarios_bp, eliminarRutaHorario_bp
 from app.routes.Catalogos.Choferes import choferes_bp, choferesResumen_bp, actChoferes_bp, verChoferID_bp
 from app.routes.Catalogos.Agentes import agentes_bp, agentesResumen_bp, actAgente_bp, verAgenteID_bp
@@ -104,14 +107,12 @@ def register_routes(app: Flask):
 
     # Catalogo Sucursales
 
-    app.register_blueprint(sucursales_bp)
-    app.register_blueprint(sucursalResumen_bp)
+    app.register_blueprint(verSucursales_bp)
     app.register_blueprint(actSucursal_bp)
     app.register_blueprint(verSucursalID_bp)
 
     # Catalogo Vehiculos
-    app.register_blueprint(vehiculos_bp)
-    app.register_blueprint(vehiculoResumen_bp)
+    app.register_blueprint(verVehiculos_bp)
     app.register_blueprint(actVehiculo_bp)
     app.register_blueprint(verVehiculoID_bp)
 
@@ -124,10 +125,15 @@ def register_routes(app: Flask):
 
     # Catalogo Destinos
 
-    app.register_blueprint(destinos_bp)
-    app.register_blueprint(destinoResumen_bp)
+    app.register_blueprint(verDestinos_bp)
     app.register_blueprint(actDestino_bp)
     app.register_blueprint(verDestinoID_bp)
+
+    # Catalogo Pasajeros
+
+    app.register_blueprint(verPasajeros_bp)
+    app.register_blueprint(actPasajeros_bp)
+    app.register_blueprint(verPasajerosID_bp)
 
     # Catalogo Agentes
 
@@ -139,6 +145,12 @@ def register_routes(app: Flask):
     # Explorador rutas
     app.register_blueprint(verExploradorRutas_bp)
     app.register_blueprint(verExploradorRutasID_bp)
+
+    #Explorador Paqueteria Recepcion
+    app.register_blueprint(verPaqueteriaR_bp)
+
+    #Explorador Paqueteria Entrega
+    app.register_blueprint(verPaqueteriaEntrega_bp)
     
     #Catalogo de Rutas 
     app.register_blueprint(rutas_bp)

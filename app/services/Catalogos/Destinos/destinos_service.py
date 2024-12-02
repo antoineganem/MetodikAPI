@@ -1,18 +1,14 @@
 from app.procedures.Catalogos.Destinos.destinos_procedures import (
-    verDestinos, verDestinoResumen, actDestino, verDestinoID)
+    ver_Destinos,act_Destinos,ver_DestinoID)
+
+def verDestinos(data):
+    return ver_Destinos(data)
+
+def actDestinos(data):
+    return act_Destinos(data)
+
+def verDestinoID(ID):
+    return ver_DestinoID(ID)
 
 
-def VerDestinos():
-    return verDestinos()
 
-
-def VerDestinoResumen(ID):
-    return verDestinoResumen(ID)
-
-
-def ActDestino(data):
-    return actDestino(data)
-
-
-def VerDestinoID(ID):
-    return verDestinoID(ID)
