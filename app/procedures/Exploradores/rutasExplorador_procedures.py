@@ -1,60 +1,30 @@
-import pyodbc
-from flask import jsonify
-from app.utils.db import get_db_connection, close_db_connection
-import logging
+from app.utils.db_helpers import execute_stored_procedure
 
-def ver_ExploradorRutas():
-    conn = None
-    try:
-        conn = get_db_connection()
-        cursor = conn.cursor()
-        conn.autocommit = True  
-
-        query = "EXEC spVerExploradorRutas"
-        cursor.execute(query)
-        
-
-        while cursor.description is None:
-            cursor.nextset()
-
-        if cursor.description is None:
-            return {"error": "No data returned from the procedure."}, 500
-
-        columns = [column[0] for column in cursor.description]
-        results = [dict(zip(columns, row)) for row in cursor.fetchall()]
-        return results, 200  
-    except pyodbc.Error as e:
-        if conn:
-            conn.rollback()  # En caso de error, revertir la transacción
-        return {"error": str(e)}, 500  
-    finally:
-        if conn:
-            close_db_connection(conn)
+def ver_ExploradorRutas(data):
+    sp_name = "spVerExploradorRutas"
+    params = [
+        data.get("EmpresaID"), 
+        data.get("PersonaID"),
+        data.get("RutaID"),
+        data.get("OrigenID"),
+        data.get("DestinoID"),
+        data.get("HoraSalida"),
+        data.get("FechaDesde"),
+        data.get("FechaHasta"),
+    ]
+    return execute_stored_procedure(sp_name, params)
             
 def ver_ExploradorRutasID(ID):
-    conn = None
-    try:
-        conn = get_db_connection()
-        cursor = conn.cursor()
-        conn.autocommit = True  
+    sp_name = "spVerExploradorRutasID"
+    params = [ ID ]
+    return execute_stored_procedure(sp_name, params)
 
-        query = "EXEC spVerExploradorRutasID ?"
-        cursor.execute(query, ID)
-        
+def ver_ParadasRutasExp(ID):
+    sp_name = "spVerParadasRutasExp"
+    params = [ ID ]
+    return execute_stored_procedure(sp_name, params)
 
-        while cursor.description is None:
-            cursor.nextset()
-
-        if cursor.description is None:
-            return {"error": "No data returned from the procedure."}, 500
-
-        columns = [column[0] for column in cursor.description]
-        results = [dict(zip(columns, row)) for row in cursor.fetchall()]
-        return results, 200  
-    except pyodbc.Error as e:
-        if conn:
-            conn.rollback()  # En caso de error, revertir la transacción
-        return {"error": str(e)}, 500  
-    finally:
-        if conn:
-            close_db_connection(conn)
+def ver_pasajerosRuta(RutaID, ParadaID):
+    sp_name = "spVerPasajerosRutaExp"
+    params = [ RutaID, ParadaID ]
+    return execute_stored_procedure(sp_name, params)

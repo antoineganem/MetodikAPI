@@ -143,12 +143,11 @@ def guardarDatosPersonasReserva_route():
 @jwt_required()
 def verPersonasReserva_route():
     ID = request.args.get('ID')
-    HorarioRutaID = request.args.get('HorarioRutaID')
     RenglonID = request.args.get('RenglonID')
 
     if ID is None:
         return jsonify({"error": "Faltan datos requeridos"}), 400
-    response = verPersonasReserva(ID, HorarioRutaID, RenglonID)
+    response = verPersonasReserva(ID, RenglonID)
     return response
 
 @agregarFormaPagoReserva_bp.route('/Comercial/Reservas/agregarPagoReserva', methods=['POST'])

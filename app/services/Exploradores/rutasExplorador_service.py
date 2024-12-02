@@ -1,7 +1,13 @@
-from app.procedures.Exploradores.rutasExplorador_procedures import ver_ExploradorRutas, ver_ExploradorRutasID
+from app.procedures.Exploradores.rutasExplorador_procedures import *
 
-def verExploradorRutas():
-    return ver_ExploradorRutas()
+def verExploradorRutas(data):
+    return ver_ExploradorRutas(data)
 
 def verExploradorRutasID(ID):
     return ver_ExploradorRutasID(ID)
+
+def VerParadasRutasExp(ID):
+    return ver_ParadasRutasExp(ID)
+
+def verPasajerosRuta(RutaID, ParadaID):
+    return ver_pasajerosRuta(RutaID, ParadaID)

@@ -1,116 +1,94 @@
-import pyodbc
-from flask import jsonify
-from app.utils.db import get_db_connection, close_db_connection
-import logging
+from app.utils.db_helpers import execute_stored_procedure
 
 def ver_Perfiles(EstatusID, EmpresaID, Buscar):
-    conn = None
-    try:
-        conn = get_db_connection()
-        cursor = conn.cursor()
-        conn.autocommit = True  
-
-        query = "EXEC spVerPerfiles ?,?,?"
-        cursor.execute(query, EstatusID, EmpresaID, Buscar)
-        
-
-        while cursor.description is None:
-            cursor.nextset()
-
-        if cursor.description is None:
-            return {"error": "No data returned from the procedure."}, 500
-
-        columns = [column[0] for column in cursor.description]
-        results = [dict(zip(columns, row)) for row in cursor.fetchall()]
-        return results, 200  
-    except pyodbc.Error as e:
-        if conn:
-            conn.rollback()  # En caso de error, revertir la transacción
-        return {"error": str(e)}, 500  
-    finally:
-        if conn:
-            close_db_connection(conn)
+    sp_name = "spVerPerfiles"
+    params = [ EstatusID, EmpresaID, Buscar ]
+    return execute_stored_procedure(sp_name, params)
             
 def ver_PerfilID(ID):
-    conn = None
-    try:
-        conn = get_db_connection()
-        cursor = conn.cursor()
-        conn.autocommit = True  
-
-        query = "EXEC spVerPerfilID ?"
-        cursor.execute(query, ID)
-        
-
-        while cursor.description is None:
-            cursor.nextset()
-
-        if cursor.description is None:
-            return {"error": "No data returned from the procedure."}, 500
-
-        columns = [column[0] for column in cursor.description]
-        results = [dict(zip(columns, row)) for row in cursor.fetchall()]
-        return results, 200  
-    except pyodbc.Error as e:
-        if conn:
-            conn.rollback()  # En caso de error, revertir la transacción
-        return {"error": str(e)}, 500  
-    finally:
-        if conn:
-            close_db_connection(conn)
-            
+    sp_name = "spVerPerfilID"
+    params = [ ID ]
+    return execute_stored_procedure(sp_name, params)
 
 def act_Perfil(data):
-    conn = None
-    try:
-        conn = get_db_connection()
-        cursor = conn.cursor()
-        conn.autocommit = True  # Asegúrate de que las transacciones se confirmen automáticamente
-
-
-        query = "EXEC spActPerfiles ?,?,?,?,?"
-        cursor.execute(query, data.get("ID"), data.get("Nombre"), data.get("Notas"), data.get("EstatusID"), data.get("EmpresaID"))
-
-        
-        while cursor.description is None:
-            cursor.nextset()
-
-        if cursor.description is None:
-            return {"error": "No data returned from the procedure."}, 500
-
-        columns = [column[0] for column in cursor.description]
-        results = [dict(zip(columns, row)) for row in cursor.fetchall()]
-        return results, 200  
-    except pyodbc.Error as e:
-        return {"error": str(e)}, 500  
-    finally:
-        if conn:
-            close_db_connection(conn)
+    sp_name = "spActPerfiles"
+    params = [
+        data.get("ID"), 
+        data.get("nombre"), 
+        data.get("notas"), 
+        data.get("estatus"), 
+        data.get("EmpresaID"),
+    ]
+    return execute_stored_procedure(sp_name, params)
 
 def ver_ModulosAcceso(PerfilID, PersonaID):
-    conn = None
-    try:
-        conn = get_db_connection()
-        cursor = conn.cursor()
-        conn.autocommit = True  
+    sp_name = "spVerModulosAcceso"
+    params = [ PerfilID, PersonaID ]
+    return execute_stored_procedure(sp_name, params)
 
-        query = "EXEC spVerModulosAcceso ?,?"
-        cursor.execute(query, PerfilID, PersonaID)
-        
+def act_accesosPerfil(data):
+    sp_name = "spActAccesosPerfil"
+    params = [
+        data.get("ChecksCatalogos"), 
+        data.get("ChecksConfiguracion"), 
+        data.get("CheckMenu"), 
+        data.get("CheckSubModulo"), 
+        data.get("PerfilID"),
+    ]
+    return execute_stored_procedure(sp_name, params)
 
-        while cursor.description is None:
-            cursor.nextset()
+def crear_menus(PersonaID):
+    # Llamada al procedimiento almacenado
+    sp_name = "spCrearMenus"
+    params = [PersonaID]
+    menu_data, status_code = execute_stored_procedure(sp_name, params)
 
-        if cursor.description is None:
-            return {"error": "No data returned from the procedure."}, 500
+    # Verificación de que menu_data es una lista y contiene elementos válidos
+    if not isinstance(menu_data, list):
+        return [{"label": "Dashboard", "labelDisable": False, "children": []},
+                {"label": "Modulos", "children": []}]
 
-        columns = [column[0] for column in cursor.description]
-        results = [dict(zip(columns, row)) for row in cursor.fetchall()]
-        return results, 200  
-    except pyodbc.Error as e:
-        if conn:
-            conn.rollback()  # En caso de error, revertir la transacción
-        return {"error": str(e)}, 500  
-    finally:
-        if conn:
-            close_db_connection(conn)
+    # Estructura de salida
+    dashboard_menu = {"label": "Dashboard", "labelDisable": True, "children": []}
+    modulos_menu = {"label": "Modulos", "children": []}
+
+    # Mapa de menús principales para agregar submenús
+    menu_map = {}
+
+    # Paso 1: Crear todos los menús principales y clasificarlos en Dashboard y Modulos
+    for item in menu_data:
+        if item["Tipo"] == "Menu":
+            # Verificación para no agregar children a "Inicio"
+            menu_entry = {
+                "name": item["Nombre"],
+                "labelDisable": False,
+                "active": True,
+                "children": [] if item["Nombre"] != "Inicio" else None,
+                "to": item["NombreArchivo"] if item["NombreArchivo"] else f"/{item['Menu'].lower()}/{item['Nombre'].lower().replace(' ', '_')}",
+                "icon": item["Icono"] 
+            }
+            menu_map[item["Nombre"]] = menu_entry
+            # Clasificación en Dashboard o Modulos según el TipoMenu
+            if item["TipoMenu"] == "Dashboard":
+                dashboard_menu["children"].append(menu_entry)
+            elif item["TipoMenu"] == "Modulo":
+                modulos_menu["children"].append(menu_entry)
+
+    # Paso 2: Agregar submenús y módulos a los menús principales en cada sección
+    for item in menu_data:
+        if item["Tipo"] in ["Modulo", "Catalogo"]:
+            parent_menu = menu_map.get(item["Menu"])
+            if parent_menu and parent_menu["children"] is not None:
+                submenu_entry = {
+                    "name": item["Nombre"],
+                    "to": item["NombreArchivo"] if item["NombreArchivo"] else f"/{item['Menu'].lower()}/{item['Nombre'].lower().replace(' ', '_')}",
+                    "active": True,
+                    "icon": item["Icono"] 
+                }
+                # Agrega el submenú al menú principal correspondiente
+                parent_menu["children"].append(submenu_entry)
+
+    # Resultado final con "Dashboard" y "Modulos" como objetos principales
+    final_menu = [dashboard_menu, modulos_menu]
+
+    return final_menu
