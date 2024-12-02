@@ -10,7 +10,13 @@ afectarCambioPreciosRuta_bp = Blueprint('afectarCambioPreciosRuta', __name__)
 @verPreciosRutas_bp.route('/Logistica/PreciosRutas/verPreciosRutas', methods=['GET'])
 @jwt_required()
 def verPreciosRutas_route():
-    response = verPreciosRutas()
+    EmpresaID = request.args.get('EmpresaID')
+    OrigenID = request.args.get('OrigenID')
+    DestinoID = request.args.get('DestinoID')
+
+    if EmpresaID is None or OrigenID is None or DestinoID is None:
+        return jsonify({"error": "Faltan datos requeridos"}), 400
+    response = verPreciosRutas(EmpresaID, OrigenID, DestinoID)
     return response
 
 @actPreciosRuta_bp.route('/Logistica/PreciosRutas/actPreciosRuta', methods=['POST'])

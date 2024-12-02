@@ -1,24 +1,24 @@
 from flask import Flask
-from app.routes.login.login import login_bp 
-from app.routes.Indicadores.indicadores import verIndicadores_bp 
-from app.routes.Configuracion.Modulos import verModulos_bp, verModuloID_bp, actModulo_bp, eliminarModulo_bp
-from app.routes.Catalogos.Usuarios import usuarios_bp, usuariosResumen_bp, actUsuario_bp, verUsuarioID_bp
-from app.routes.Catalogos.Empresas import empresas_bp, empresasResumen_bp, actEmpresa_bp, verEmpresaID_bp
-from app.routes.Catalogos.Sucursales import sucursales_bp, sucursalResumen_bp, actSucursal_bp, verSucursalID_bp
-from app.routes.Catalogos.Vehiculos import vehiculos_bp, vehiculoResumen_bp, actVehiculo_bp, verVehiculoID_bp
+from app.routes.login.login import * 
+from app.routes.Indicadores.indicadores import *
+from app.routes.Configuracion.Modulos import *
+from app.routes.Catalogos.Usuarios import *
+from app.routes.Catalogos.Empresas import *
+from app.routes.Catalogos.Sucursales import *
+from app.routes.Catalogos.Vehiculos import *
 from app.routes.Catalogos.Perfiles import *
-from app.routes.Catalogos.Almacenes import almacenes_bp, almacenResumen_bp, actAlmacen_bp, verAlmacenID_bp
-from app.routes.Catalogos.Destinos import destinos_bp, destinoResumen_bp, actDestino_bp, verDestinoID_bp
-from app.routes.Filtros.Filtros import verFiltrosCatalogos_bp, verFiltrosModulo_bp
-from app.routes.Catalogos.Equipos import verEquipoID_bp, verEquipos_bp, actEquipoD_bp, eliminarEquipo_bp
-from app.routes.Comercial.Reservas.Reservas import verReservas_bp, nvaReserva_bp
+from app.routes.Catalogos.Almacenes import *
+from app.routes.Catalogos.Destinos import *
+from app.routes.Filtros.Filtros import *
+from app.routes.Catalogos.Equipos import *
+from app.routes.Comercial.Reservas.Reservas import *
 from app.routes.Comercial.Reservas.ReservasD import *
 from app.routes.Comercial.Paqueteria.Paqueteria import *
-from app.routes.Catalogos.Rutas import verRutas_bp, verCatRutaID_bp, actCatRuta_bp, actDescensoRuta_bp, delDescensoRuta_bp
-from app.routes.Exploradores.RutasExplorador import verExploradorRutas_bp, verExploradorRutasID_bp, VerParadasRutasExp_bp, verPasajerosRuta_bp
-from app.routes.Catalogos.Choferes import verChoferes_bp, verChoferID_bp, actChoferD_bp, eliminarChofer_bp
-from app.routes.Catalogos.Agentes import agentes_bp, agentesResumen_bp, actAgente_bp, verAgenteID_bp
-from app.routes.Whatsapp.whatsapp import whatsapp_bp, get_message_data_bp, send_message_bp, webhook_verify_bp, webhook_bp, upload_media_bp, start_conversation_bp, leerMensajesPorWAID_bp, verUsuariosWAPP_bp, send_templates_bp
+from app.routes.Exploradores.RutasExplorador import *
+from app.routes.Catalogos.Rutas import *
+from app.routes.Catalogos.Choferes import *
+from app.routes.Catalogos.Agentes import *
+from app.routes.Whatsapp.whatsapp import *
 from app.routes.Logistica.Rutas.Rutas import *
 from app.routes.Logistica.PreciosRuta.PreciosRuta import *
 
