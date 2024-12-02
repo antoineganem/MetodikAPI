@@ -4,6 +4,7 @@ from app.utils.db import get_db_connection, close_db_connection
 
 def login(Correo, Contrasena, Empresa):
     conn = None
+    print("entro store")
     try:
         conn = get_db_connection()
         cursor = conn.cursor()

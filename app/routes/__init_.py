@@ -15,11 +15,12 @@ from app.routes.Comercial.Reservas.Reservas import *
 from app.routes.Comercial.Reservas.ReservasD import *
 from app.routes.Comercial.Paqueteria.Paqueteria import *
 from app.routes.Exploradores.RutasExplorador import *
+from app.routes.Exploradores.PaqueteriaRExplorador import *
+from app.routes.Exploradores.PaqueteriaEntrega import *
 from app.routes.Catalogos.Rutas import *
 from app.routes.Catalogos.Choferes import *
 from app.routes.Catalogos.Agentes import *
 from app.routes.Whatsapp.whatsapp import *
-
 from app.routes.Logistica.Rutas.Rutas import *
 from app.routes.Logistica.PreciosRuta.PreciosRuta import *
 
@@ -109,14 +110,12 @@ def register_routes(app: Flask):
 
     # Catalogo Sucursales
 
-    app.register_blueprint(sucursales_bp)
-    app.register_blueprint(sucursalResumen_bp)
+    app.register_blueprint(verSucursales_bp)
     app.register_blueprint(actSucursal_bp)
     app.register_blueprint(verSucursalID_bp)
 
     # Catalogo Vehiculos
-    app.register_blueprint(vehiculos_bp)
-    app.register_blueprint(vehiculoResumen_bp)
+    app.register_blueprint(verVehiculos_bp)
     app.register_blueprint(actVehiculo_bp)
     app.register_blueprint(verVehiculoID_bp)
 
@@ -129,10 +128,15 @@ def register_routes(app: Flask):
 
     # Catalogo Destinos
 
-    app.register_blueprint(destinos_bp)
-    app.register_blueprint(destinoResumen_bp)
+    app.register_blueprint(verDestinos_bp)
     app.register_blueprint(actDestino_bp)
     app.register_blueprint(verDestinoID_bp)
+
+    # Catalogo Pasajeros
+
+    app.register_blueprint(verPasajeros_bp)
+    app.register_blueprint(actPasajeros_bp)
+    app.register_blueprint(verPasajerosID_bp)
 
     # Catalogo Agentes
 
@@ -152,7 +156,13 @@ def register_routes(app: Flask):
     app.register_blueprint(verExploradorRutasID_bp)
     app.register_blueprint(VerParadasRutasExp_bp)
     app.register_blueprint(verPasajerosRuta_bp)
+    
+    #Explorador Paqueteria Recepcion
+    app.register_blueprint(verPaqueteriaR_bp)
 
+    #Explorador Paqueteria Entrega
+    app.register_blueprint(verPaqueteriaEntrega_bp)
+    
     #Catalogo de Rutas 
     app.register_blueprint(verRutas_bp)
     app.register_blueprint(verCatRutaID_bp)

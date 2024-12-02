@@ -1,18 +1,13 @@
 from app.procedures.Catalogos.Sucursales.sucursales_procedures import (
-    verSucursales, verSucursalResumen, actSucursal, verSucursalID)
+    ver_Sucursales,act_Sucursales,ver_SucursalID)
 
 
-def VerSucursales():
-    return verSucursales()
+def verSucursales(data):
+    return ver_Sucursales(data)
+
+def actSucursal(data):
+    return act_Sucursales(data)
 
 
-def VerSucursalResumen(ID):
-    return verSucursalResumen(ID)
-
-
-def ActSucursal(data):
-    return actSucursal(data)
-
-
-def VerSucursalID(ID):
-    return verSucursalID(ID)
+def verSucursalID(ID):
+    return ver_SucursalID(ID)

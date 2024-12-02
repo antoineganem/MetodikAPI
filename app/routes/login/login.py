@@ -17,7 +17,7 @@ def login_route():
 
     if Correo is None or Contrasena is None or Empresa is None:
         return jsonify({"error": "Faltan datos requeridos"}), 400
-
+      
     user_response = login(Correo, Contrasena, Empresa)   
     
      
