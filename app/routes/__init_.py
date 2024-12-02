@@ -153,13 +153,11 @@ def register_routes(app: Flask):
     app.register_blueprint(verPasajerosRuta_bp)
 
     #Catalogo de Rutas 
-    app.register_blueprint(rutas_bp)
-    app.register_blueprint(rutasResumen_bp)
-    app.register_blueprint(actRuta_bp)
-    app.register_blueprint(verHorarios_bp)
-    app.register_blueprint(actHorarioRuta_bp)
-    app.register_blueprint(verRutasHorarios_bp)
-    app.register_blueprint(eliminarRutaHorario_bp)
+    app.register_blueprint(verRutas_bp)
+    app.register_blueprint(verCatRutaID_bp)
+    app.register_blueprint(actCatRuta_bp)
+    app.register_blueprint(actDescensoRuta_bp)
+    app.register_blueprint(delDescensoRuta_bp)
 
     #Catalogo de Choferes
     app.register_blueprint(verChoferes_bp)

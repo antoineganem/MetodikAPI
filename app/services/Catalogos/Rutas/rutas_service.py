@@ -1,23 +1,19 @@
-from app.procedures.Catalogos.Rutas.rutas_procedures import verRutas, verRutasResumen, actRutas, verHorarios, actHorarioRuta, verRutasHorarios, eliminarRutaHorario
+from app.procedures.Catalogos.Rutas.rutas_procedures import ver_Rutas, ver_CatRutaID, act_CatRuta, act_DescensoRuta, del_DescensoRuta
+def verRutas(data):
+    return ver_Rutas(data)
 
-def VerRutas():
-    return verRutas()
 
-def VerRutasResumen(ID):
-    return verRutasResumen(ID)
+def verCatRutaID(ID):
+    return ver_CatRutaID(ID)
 
-def ActRuta(data):
-    return actRutas(data)
 
-def VerHorarios():
-    return verHorarios()
+def actCatRuta(data):
+    return act_CatRuta(data)
 
-def ActHorarioRuta(data):
-    return actHorarioRuta(data)
 
-def VerRutasHorarios(ID):
-    return verRutasHorarios(ID)
+def actDescensoRuta(data):
+    return act_DescensoRuta(data)
 
-def EliminarRutaHorario(ID):
-    return eliminarRutaHorario(ID)
 
+def delDescensoRuta(data):
+    return del_DescensoRuta(data)
