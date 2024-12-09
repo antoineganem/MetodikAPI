@@ -36,7 +36,6 @@ def register_routes(app: Flask):
     app.register_blueprint(verModulos_bp)
     app.register_blueprint(verModuloID_bp)
     app.register_blueprint(actModulo_bp)
-    app.register_blueprint(eliminarModulo_bp)
 
     # Catalogo Usuarios
 
