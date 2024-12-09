@@ -7,10 +7,6 @@ verFiltrosCatalogos_bp = Blueprint('verFiltrosCatalogos', __name__)
 verFiltrosModulo_bp = Blueprint('verFiltrosModulo', __name__)
 
 
-
-
-
-
 @verFiltrosCatalogos_bp.route('/Filtros/Catalogos', methods=['POST'])
 @jwt_required()
 def filtrosCatalogos_route():
@@ -34,3 +30,4 @@ def filtrosModulos_route():
     user_response = verFiltrosModulo(data)
     
     return user_response
+
