@@ -5,3 +5,4 @@ def verFiltrosCatalogos(data):
 
 def verFiltrosModulo(data):
     return verFiltros_Modulo(data)
+
