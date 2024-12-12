@@ -1,6 +1,3 @@
-import pyodbc
-from flask import jsonify
-from app.utils.db import get_db_connection, close_db_connection
 from app.utils.db_helpers import execute_stored_procedure
 
 

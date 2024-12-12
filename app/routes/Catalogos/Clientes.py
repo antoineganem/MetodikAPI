@@ -27,7 +27,7 @@ def verClienteID_route():
 
 
 @actCliente_bp.route('/Catalogos/Clientes/actCliente', methods=['POST'])
-# @jwt_required()
+@jwt_required()
 def actCliente_route():
     data = request.json
     if data is None:

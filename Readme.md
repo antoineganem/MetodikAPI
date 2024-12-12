@@ -1,30 +1,41 @@
 # Librerias a instalar
 
-## venv
+## Requerimientos
 
-1. Start venv:
+1. Install poetry:
 ```bash
-    python3 -m venv venv/
+curl -sSL https://install.python-poetry.org | python3 -
 ```
 
-2. Initialize:
+2. Añade poetry al PATH:
 ```bash
-    source venv/bin/activate
+export PATH="$HOME/.local/bin:$PATH"
+```
+
+3. Asegurate que funcione:
+```bash
+poetry --version
 ```
 
 ---
 
-### Massive Install:
+## Entorno de desarrollo
 
-- Python dependencies:
+1. Clona el repositorio y entra a la raiz del proyecto.
+
+2. En la raiz del proyecto ejecuta:
 ```bash
-    pip install flask pyodbc python-dotenv flask-swagger-ui flask-jwt-extended flask-cors sqlalchemy requests flask-socketio
+poetry install
 ```
 
-- Others:
+3. Activa el entorno virtual:
 ```bash
-    # servicio sqlserver en mac
-    brew install msodbcsql17 mssql-tools
+source .venv/bin/activate
+```
+
+4. Run:
+```bash
+python3 run.py
 ```
 
 ---
