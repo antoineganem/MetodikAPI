@@ -32,7 +32,7 @@ def avanzar_ruta(data):
         data.get("Observaciones"),
         data.get("GenerarAutomatico"),
 
-    ]
+    ] 
     return execute_stored_procedure(sp_name, params)
 
 def ver_RutaDetalle(ID):

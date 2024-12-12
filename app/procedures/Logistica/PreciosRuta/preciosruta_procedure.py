@@ -13,6 +13,8 @@ def act_preciosRuta(data):
         data.get("PrecioInfantil"),
         data.get("PrecioInapam"),
         data.get("PrecioRedondo"),
+        data.get("PrecioRedondoInfantil"),
+        data.get("PrecioRedondoInapam"),
     ]
     return execute_stored_procedure(sp_name, params)
 
