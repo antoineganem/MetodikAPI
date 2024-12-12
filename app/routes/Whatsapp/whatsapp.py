@@ -20,6 +20,7 @@ marcarComoLeido_bp = Blueprint('marcarComoLeido',__name__)
 @whatsapp_bp.route('/send_message', methods=['POST'])
 def send_message_route():
     data = request.json
+    print(data)
     send_message_response = send_template_service(data)
     return send_message_response, 200
 
@@ -27,6 +28,7 @@ def send_message_route():
 @jwt_required()
 def get_message_data_route():
     data = request.json
+    print(data)
     get_message_data_response = get_message_data(data)
     return get_message_data_response 
 

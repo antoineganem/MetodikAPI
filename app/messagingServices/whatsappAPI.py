@@ -33,6 +33,7 @@ def process_whatsapp_message(body,remitente):
         'tipoMensaje': tipoMensaje,
     }
 
+
     status = actMensajeWAPP(data)
 
     print(status)
@@ -71,8 +72,8 @@ def send_message_template(data):
         "messaging_product": "whatsapp",
         "to": f'{data.get("Telefono")}',
         "type": "template",
-        "template": {
-            "name": "rtn_boletos",
+            "template": {
+            "name": "rtn_boletos_2",
             "language": {
                 "code": "es_MX" 
             },
@@ -181,7 +182,7 @@ def send_message(receipient_WAID, text):
         print(response.text)
         return response, 500
 
-#Function to handle incoming messages from the WhatsApp API
+#Function to handle incoming messages from the WhatsApp API webhook
 def handle_message():
     """
     Handle incoming webhook events from the WhatsApp API.
@@ -197,7 +198,7 @@ def handle_message():
         response: A tuple containing a JSON response and an HTTP status code.
     """
     body = request.get_json()
-
+    print(body)
     # logging.info(f"request body: {body}")
 
     # Check if it's a WhatsApp status update
@@ -265,7 +266,7 @@ def upload_media(data):
 
         form_data = {
             'messaging_product': 'whatsapp',
-            'type': 'image/png',
+            'type': 'image/jgp',
         }
 
         files = {

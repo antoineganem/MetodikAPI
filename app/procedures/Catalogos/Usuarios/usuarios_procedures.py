@@ -2,114 +2,74 @@ import pyodbc
 from flask import jsonify
 from app.utils.db import get_db_connection, close_db_connection
 import logging
+from app.utils.db_helpers import execute_stored_procedure
 
+#get all personas from the database
+def verPersonas(data):
 
-def VerUsuarios(EmpresaID, EstatusID):
-    conn = None
-    try:
-        conn = get_db_connection()
-        cursor = conn.cursor()
-        cursor.execute("EXEC spVerUsuarios ?, ?", EmpresaID, EstatusID)
-        
-        # Si hay múltiples resultados, avanzar al siguiente conjunto
-        while cursor.description is None:
-            cursor.nextset()
+    sp = 'spLeerPersonas'
+    params = [
+         data.get('SucursalID'),
+         data.get('EstatusID'),
+         data.get('EmpresaID'),
+    ]
 
-        if cursor.description is None:
-            return jsonify({"error": "No data returned from the procedure."}), 500
+    return execute_stored_procedure(sp, params)
 
-        columns = [column[0] for column in cursor.description]
-        results = [dict(zip(columns, row)) for row in cursor.fetchall()]
-        return jsonify(results)
-    except pyodbc.Error as e:
-        return jsonify({"error": str(e)}), 500
-    finally:
-        if conn:
-            close_db_connection(conn)
-            
-def VerUsuariosResumen(ID):
-    conn = None
-    try:
-        conn = get_db_connection()
-        cursor = conn.cursor()
-        cursor.execute("EXEC spVerUsuarioResumen ?", ID)
-        
-        while cursor.description is None:
-            cursor.nextset()
+def verPersonasPorID(id):
+    
+        sp = 'spLeerPersonasDetalle'
+        params = [id]
+    
+        return execute_stored_procedure(sp, params)
 
-        if cursor.description is None:
-            return jsonify({"error": "No data returned from the procedure."}), 500
+#store procedure to insert or update a user
+def actPersonas(data):
 
-        columns = [column[0] for column in cursor.description]
-        results = [dict(zip(columns, row)) for row in cursor.fetchall()]
-        return jsonify(results)
-    except pyodbc.Error as e:
-        return jsonify({"error": str(e)}), 500
-    finally:
-        if conn:
-            close_db_connection(conn)
+    print(data)
+    sp ='spActPersonas'
 
+    """
+    @PersonaID = 10,
+    @EstatusID = 1,
+    @Usuario = 'prueba',
+    @Correo = 'prueba@example.com',
+    @Contra = 'password123',
+    @Contra2 = 'password123',
+    @MultiEmpresa = 1,
+    @EmpresaID = 1,
+    @SucursalID = 1,
+    @AlmacenID = NULL,
+    @PerfilID = 2,
+    @Nombre = 'John',
+    @ApellidoPaterno = 'doe',
+    @ApellidoMaterno = 'smith',
+    @Imagen = 'path/to/image.jpg',
+    @ImagenFondo = 'path/to/background.jpg',
+    @Notas = 'New user',
+    @Empresas = '101,102,103';
 
+    """
+    params = [
+        data.get('PersonaID'),
+        data.get('EstatusID'),
+        data.get('Usuario'),
+        data.get('Correo'),
+        data.get('Contra'),
+        data.get('Contra2'),
+        data.get('MultiEmpresa'),
+        data.get('EmpresaID'),
+        data.get('SucursalID'),
+        data.get('AlmacenID'),
+        data.get('PerfilID'),
+        data.get('Nombre'),
+        data.get('ApellidoPaterno'),
+        data.get('ApellidoMaterno'),
+        data.get('Imagen'),
+        data.get('ImagenFondo'),
+        data.get('Notas'),
+        data.get('Empresas')
+    ]
 
+    return execute_stored_procedure(sp, params)
 
-def actUsuario(data):
-    conn = None
-    try:
-        conn = get_db_connection()
-        cursor = conn.cursor()
-        conn.autocommit = True  # Asegúrate de que las transacciones se confirmen automáticamente
-
-        query = "EXEC spActUsuarioERP ?,?,?,?,? ,?,?,?,?,? ,?,?,?,?,? ,?,?,?"
-        cursor.execute(query, data.get("ID"), data.get("Estatus"), data.get("Usuario"), data.get("Correo"), data.get("Contra"),
-                       data.get("Notas"), data.get("MultiEmpresa"), data.get("LoginUsuario"), data.get("EmpresaID"), data.get("EmpresasID"),
-                       data.get("Sucursales"), data.get("Almacenes"), data.get("PerfilID"), data.get("PersonalID"), data.get("Nombre"), 
-                       data.get("ApellidoPaterno"), data.get("ApellidoMaterno"), data.get("ClienteID"))
-        
-
-        while cursor.description is None:
-            logging.info("Checking for more result sets...")
-            cursor.nextset()
-
-        if cursor.description is None:
-            logging.error("No data returned from the procedure.")
-            return {"error": "No data returned from the procedure."}, 500
-
-        columns = [column[0] for column in cursor.description]
-        results = [dict(zip(columns, row)) for row in cursor.fetchall()]
-        logging.info("Returning results...")
-        return results, 200  
-    except pyodbc.Error as e:
-        logging.error(f"Database error: {str(e)}")
-        if conn:
-            conn.rollback()  # En caso de error, revertir la transacción
-        return {"error": str(e)}, 500  
-    finally:
-        if conn:
-            logging.info("Closing the database connection...")
-            close_db_connection(conn)
-
-
-
-def verUsuarioID(ID):
-    conn = None
-    try:
-        conn = get_db_connection()
-        cursor = conn.cursor()
-
-        query = "EXEC spVerUsuarioID ?"
-        cursor.execute(query, ID)
-        
-        while cursor.description is None:
-            cursor.nextset()
-
-        if cursor.description is None:
-            return jsonify({"error": "No data returned from the procedure."}), 500
-
-        columns = [column[0] for column in cursor.description]
-        results = [dict(zip(columns, row)) for row in cursor.fetchall()]
-        return results
-    except pyodbc.Error as e:
-        return jsonify({"error": str(e)}), 500
-    finally:
-        if conn:
-            close_db_connection(conn)

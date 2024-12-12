@@ -26,6 +26,7 @@ from app.routes.Logistica.PreciosRuta.PreciosRuta import *
 from app.routes.Catalogos.Pasajeros import *
 from app.routes.Catalogos.Clientes import *
 
+
 def register_routes(app: Flask):
     # Login
     app.register_blueprint(login_bp)
@@ -41,10 +42,7 @@ def register_routes(app: Flask):
     # Catalogo Usuarios
 
     app.register_blueprint(usuarios_bp)
-    app.register_blueprint(usuariosResumen_bp)
-    app.register_blueprint(actUsuario_bp)
-    app.register_blueprint(verUsuarioID_bp)
-
+    
     ##Catalogo Perfiles
 
     app.register_blueprint(verPerfiles_bp)  

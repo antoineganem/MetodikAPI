@@ -1,13 +1,11 @@
-from app.procedures.Catalogos.Usuarios.usuarios_procedures import VerUsuarios, VerUsuariosResumen, actUsuario, verUsuarioID
+from app.procedures.Catalogos.Usuarios.usuarios_procedures import *
 
-def verUsuarios(EmpresaID, EstatusID):
-    return VerUsuarios(EmpresaID, EstatusID)
+def verPersonas_service(data):
+    return verPersonas(data)
 
-def verUsuariosResumen(ID):
-    return VerUsuariosResumen(ID)
+def verPersonasPorID_service(id):
+    return verPersonasPorID(id)
 
-def ActualizarUsuarios(data):
-    return actUsuario(data)
+def actPersonas_service(data):
+    return actPersonas(data)
 
-def VerUsuarioID(ID):
-    return verUsuarioID(ID)
